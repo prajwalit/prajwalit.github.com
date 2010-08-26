@@ -84,14 +84,13 @@ header .title {
 header .title a {
   color: #000;
   text-decoration: none;
-  text-shadow: white -1px -1px 2px;
 }
-/* line 28, ../src/screen.scss */
+/* line 27, ../src/screen.scss */
 header .title a:hover {
   color: #800;
 }
 
-/* line 35, ../src/screen.scss */
+/* line 34, ../src/screen.scss */
 .page .coming-soon {
   text-align: center;
   font-size: 2em;
@@ -100,12 +99,12 @@ header .title a:hover {
   text-shadow: #FA0 0px 0px 6px;
 }
 
-/* line 43, ../src/screen.scss */
+/* line 42, ../src/screen.scss */
 footer {
   border-top: 1px solid #333;
   padding: 10px 0;
 }
-/* line 47, ../src/screen.scss */
+/* line 46, ../src/screen.scss */
 footer .footnote {
   width: 960px;
   margin: auto;
