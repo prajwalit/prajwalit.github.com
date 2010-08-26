@@ -97,14 +97,15 @@ header .title a:hover {
   font-size: 2em;
   padding: 250px 0;
   color: #FFF;
+  text-shadow: #FA0 0px 0px 6px;
 }
 
-/* line 42, ../src/screen.scss */
+/* line 43, ../src/screen.scss */
 footer {
   border-top: 1px solid #333;
   padding: 10px 0;
 }
-/* line 46, ../src/screen.scss */
+/* line 47, ../src/screen.scss */
 footer .footnote {
   width: 960px;
   margin: auto;
