@@ -62,9 +62,14 @@ a img {
   border: none;
 }
 
+/* line 8, ../src/screen.scss */
+body {
+  background: #000;
+}
+
 /* line 12, ../src/screen.scss */
 header {
-  background: #CCC;
+  background: #AAA;
   font-size: 3em;
   padding: 20px 0;
   color: #000;
@@ -79,7 +84,7 @@ header .title {
 header .title a {
   color: #000;
   text-decoration: none;
-  text-shadow: white 1px 1px 2px;
+  text-shadow: white -1px -1px 2px;
 }
 /* line 28, ../src/screen.scss */
 header .title a:hover {
@@ -90,18 +95,19 @@ header .title a:hover {
 .page .coming-soon {
   text-align: center;
   font-size: 2em;
-  padding: 200px 0;
+  padding: 250px 0;
+  color: #FFF;
 }
 
-/* line 41, ../src/screen.scss */
+/* line 42, ../src/screen.scss */
 footer {
-  border-top: 1px solid #AAA;
+  border-top: 1px solid #333;
   padding: 10px 0;
 }
-/* line 45, ../src/screen.scss */
+/* line 46, ../src/screen.scss */
 footer .footnote {
   width: 960px;
   margin: auto;
-  color: #444;
+  color: #888;
   font-size: 0.85em;
 }
