@@ -65,7 +65,8 @@ h3 {
             }
         }
 
-        .blogs, .social {
+        .blogs, .social, .aboutme {
+            overflow: hidden;
             background: #444;
             border: 1px solid #444;
             -moz-border-radius: 5px;
@@ -80,15 +81,22 @@ h3 {
                 font-size: 1.5em;
                 text-shadow: #111 1px 1px 1px;
             }
-            img {
+            img.blogpics {
                 display: block;
                 margin: 10px auto 30px;
+            }
+            img.about {
+                float: right;
+                padding: 10px;
             }
             a {
                 color: #080;
                 font-weight: bold;
             }
-        }   
+        }
+        .aboutme p {
+            padding-left: 10px;
+        }
     }
 
     footer {
