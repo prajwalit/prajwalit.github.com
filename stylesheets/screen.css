@@ -64,7 +64,7 @@ a img {
 
 /* line 9, ../src/screen.scss */
 body {
-  background: #222;
+  background: #222222 url("../images/apple.png") repeat;
   font-family: serif;
 }
 
