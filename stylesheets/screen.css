@@ -62,59 +62,125 @@ a img {
   border: none;
 }
 
-/* line 9, ../src/screen.scss */
+/* line 10, ../src/screen.scss */
 body {
-  background: #222222 url("../images/apple.png") repeat;
-  font-family: serif;
+  background: #222222 url("../images/bgtexture.png") repeat;
+  font-family: sans-serif;
+  line-height: 1.3em;
+  color: #ccc;
 }
 
-/* line 14, ../src/screen.scss */
+/* line 16, ../src/screen.scss */
+a {
+  color: #ccc;
+  text-decoration: none;
+}
+
+/* line 21, ../src/screen.scss */
+h3 {
+  border-bottom: 3px solid #600;
+  color: #080;
+  font-size: 1.3em;
+  font-weight: bold;
+  margin-bottom: 5px;
+  padding: 2px;
+}
+
+/* line 30, ../src/screen.scss */
 .container {
   width: 960px;
   margin: auto;
 }
-
-/* line 18, ../src/screen.scss */
-header {
+/* line 33, ../src/screen.scss */
+.container header {
   font-size: 3em;
   padding: 85px 0;
   color: #000;
   display: block;
 }
-/* line 24, ../src/screen.scss */
-header .title a {
+/* line 39, ../src/screen.scss */
+.container header h1 a {
   text-decoration: none;
   display: block;
   width: 384px;
   margin: auto;
   padding-right: 50px;
 }
-
-/* line 33, ../src/screen.scss */
-.page {
+/* line 49, ../src/screen.scss */
+.container .page h2 {
+  display: block;
+  padding: 10px 0;
+  margin-bottom: 10px;
+}
+/* line 53, ../src/screen.scss */
+.container .page h2 span {
+  background: #999;
+  color: #800;
+  -webkit-box-shadow: #333 2px 2px 1px;
+  -moz-box-shadow: #333 2px 2px 1px;
+  border-bottom-right-radius: 5px 5px;
+  border-top-left-radius: 5px 5px;
+  -moz-border-radius-bottomright: 5px 5px;
+  -moz-border-radius-topleft: 5px 5px;
+  font-size: 1.2em;
+  font-weight: bold;
+  padding: 10px;
+}
+/* line 68, ../src/screen.scss */
+.container .page .blogs, .container .page .social {
   background: #444;
   border: 1px solid #444;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   -moz-box-shadow: #111 2px 1px 2px;
   -webkit-box-shadow: #111 2px 1px 2px;
-  padding: 200px 0;
+  margin-bottom: 20px;
+  padding: 0 0 10px;
 }
-/* line 41, ../src/screen.scss */
-.page .coming-soon {
+/* line 77, ../src/screen.scss */
+.container .page .blogs .coming-soon, .container .page .social .coming-soon {
   text-align: center;
   color: white;
   font-size: 1.5em;
   text-shadow: #111 1px 1px 1px;
 }
-
-/* line 49, ../src/screen.scss */
-footer {
-  margin: 30px 0 15px;
+/* line 83, ../src/screen.scss */
+.container .page .blogs img, .container .page .social img {
+  display: block;
+  margin: 10px auto 30px;
 }
-/* line 52, ../src/screen.scss */
-footer .footnote {
+/* line 87, ../src/screen.scss */
+.container .page .blogs a, .container .page .social a {
+  color: #080;
+  font-weight: bold;
+}
+/* line 94, ../src/screen.scss */
+.container footer {
+  margin: 15px 0;
+}
+/* line 97, ../src/screen.scss */
+.container footer .footnote {
   text-align: center;
   color: #888;
   font-size: 0.85em;
+}
+
+/* line 106, ../src/screen.scss */
+.cols {
+  width: 100%;
+  overflow: hidden;
+}
+/* line 109, ../src/screen.scss */
+.cols .col1_3, .cols .col2_3, .cols .col3_3 {
+  float: left;
+  width: 31%;
+  padding: 0 10px;
+}
+/* line 114, ../src/screen.scss */
+.cols .col1_3, .cols .col2_3 {
+  border-right: 1px solid #000;
+}
+/* line 117, ../src/screen.scss */
+.cols .col2_3, .cols .col3_3 {
+  border-left: 1px solid #666;
 }
