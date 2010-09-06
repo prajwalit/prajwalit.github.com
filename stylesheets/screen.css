@@ -104,15 +104,14 @@ h3 {
   display: block;
   width: 384px;
   margin: auto;
-  padding-right: 50px;
 }
-/* line 49, ../src/screen.scss */
+/* line 48, ../src/screen.scss */
 .container .page h2 {
   display: block;
   padding: 10px 0;
   margin-bottom: 10px;
 }
-/* line 53, ../src/screen.scss */
+/* line 52, ../src/screen.scss */
 .container .page h2 span {
   background: #EEE;
   color: #800;
@@ -126,7 +125,7 @@ h3 {
   font-weight: bold;
   padding: 10px;
 }
-/* line 68, ../src/screen.scss */
+/* line 67, ../src/screen.scss */
 .container .page .blogs, .container .page .social, .container .page .aboutme {
   overflow: hidden;
   background: #000;
@@ -138,68 +137,68 @@ h3 {
   margin-bottom: 20px;
   padding: 0 0 10px;
 }
-/* line 78, ../src/screen.scss */
+/* line 77, ../src/screen.scss */
 .container .page .blogs .coming-soon, .container .page .social .coming-soon, .container .page .aboutme .coming-soon {
   text-align: center;
   color: white;
   font-size: 1.5em;
   text-shadow: #111 1px 1px 1px;
 }
-/* line 84, ../src/screen.scss */
+/* line 83, ../src/screen.scss */
 .container .page .blogs img.blogpics, .container .page .social img.blogpics, .container .page .aboutme img.blogpics {
   display: block;
   margin: 10px auto 30px;
   border: 1px solid #666;
 }
-/* line 89, ../src/screen.scss */
+/* line 88, ../src/screen.scss */
 .container .page .blogs img.about, .container .page .social img.about, .container .page .aboutme img.about {
   float: right;
   margin: 10px 24px;
   border: 1px solid #666;
 }
-/* line 94, ../src/screen.scss */
+/* line 93, ../src/screen.scss */
 .container .page .blogs a, .container .page .social a, .container .page .aboutme a {
   font-weight: bold;
 }
-/* line 98, ../src/screen.scss */
+/* line 97, ../src/screen.scss */
 .container .page .aboutme p {
   padding-left: 10px;
 }
-/* line 103, ../src/screen.scss */
+/* line 102, ../src/screen.scss */
 .container footer {
   margin: 15px 0;
 }
-/* line 106, ../src/screen.scss */
+/* line 105, ../src/screen.scss */
 .container footer .footnote {
   text-align: center;
   color: #888;
   font-size: 0.85em;
 }
 
-/* line 115, ../src/screen.scss */
+/* line 114, ../src/screen.scss */
 .cols {
   width: 100%;
   overflow: hidden;
 }
-/* line 118, ../src/screen.scss */
+/* line 117, ../src/screen.scss */
 .cols .col1_3, .cols .col2_3, .cols .col3_3 {
   float: left;
   width: 31%;
   padding: 0 10px;
 }
-/* line 123, ../src/screen.scss */
+/* line 122, ../src/screen.scss */
 .cols .col1_3, .cols .col2_3 {
   border-right: 1px solid #000;
 }
-/* line 126, ../src/screen.scss */
+/* line 125, ../src/screen.scss */
 .cols .col2_3, .cols .col3_3 {
   border-left: 1px solid #666;
 }
-/* line 129, ../src/screen.scss */
+/* line 128, ../src/screen.scss */
 .cols ul.cols {
   text-align: center;
 }
-/* line 131, ../src/screen.scss */
+/* line 130, ../src/screen.scss */
 .cols ul.cols li {
   padding: 15px 0;
 }
