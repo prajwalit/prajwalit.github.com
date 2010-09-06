@@ -72,14 +72,14 @@ body {
 
 /* line 16, ../src/screen.scss */
 a {
-  color: #ccc;
+  color: #ACEB00;
   text-decoration: none;
 }
 
 /* line 21, ../src/screen.scss */
 h3 {
   border-bottom: 3px solid #600;
-  color: #080;
+  color: #ACEB00;
   font-size: 1.3em;
   font-weight: bold;
   margin-bottom: 5px;
@@ -114,7 +114,7 @@ h3 {
 }
 /* line 53, ../src/screen.scss */
 .container .page h2 span {
-  background: #999;
+  background: #EEE;
   color: #800;
   -webkit-box-shadow: #333 2px 2px 1px;
   -moz-box-shadow: #333 2px 2px 1px;
@@ -129,7 +129,7 @@ h3 {
 /* line 68, ../src/screen.scss */
 .container .page .blogs, .container .page .social, .container .page .aboutme {
   overflow: hidden;
-  background: #444;
+  background: #000;
   border: 1px solid #444;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -149,48 +149,57 @@ h3 {
 .container .page .blogs img.blogpics, .container .page .social img.blogpics, .container .page .aboutme img.blogpics {
   display: block;
   margin: 10px auto 30px;
+  border: 1px solid #666;
 }
-/* line 88, ../src/screen.scss */
+/* line 89, ../src/screen.scss */
 .container .page .blogs img.about, .container .page .social img.about, .container .page .aboutme img.about {
   float: right;
-  padding: 10px;
+  margin: 10px 24px;
+  border: 1px solid #666;
 }
-/* line 92, ../src/screen.scss */
+/* line 94, ../src/screen.scss */
 .container .page .blogs a, .container .page .social a, .container .page .aboutme a {
-  color: #080;
   font-weight: bold;
 }
-/* line 97, ../src/screen.scss */
+/* line 98, ../src/screen.scss */
 .container .page .aboutme p {
   padding-left: 10px;
 }
-/* line 102, ../src/screen.scss */
+/* line 103, ../src/screen.scss */
 .container footer {
   margin: 15px 0;
 }
-/* line 105, ../src/screen.scss */
+/* line 106, ../src/screen.scss */
 .container footer .footnote {
   text-align: center;
   color: #888;
   font-size: 0.85em;
 }
 
-/* line 114, ../src/screen.scss */
+/* line 115, ../src/screen.scss */
 .cols {
   width: 100%;
   overflow: hidden;
 }
-/* line 117, ../src/screen.scss */
+/* line 118, ../src/screen.scss */
 .cols .col1_3, .cols .col2_3, .cols .col3_3 {
   float: left;
   width: 31%;
   padding: 0 10px;
 }
-/* line 122, ../src/screen.scss */
+/* line 123, ../src/screen.scss */
 .cols .col1_3, .cols .col2_3 {
   border-right: 1px solid #000;
 }
-/* line 125, ../src/screen.scss */
+/* line 126, ../src/screen.scss */
 .cols .col2_3, .cols .col3_3 {
   border-left: 1px solid #666;
+}
+/* line 129, ../src/screen.scss */
+.cols ul.cols {
+  text-align: center;
+}
+/* line 131, ../src/screen.scss */
+.cols ul.cols li {
+  padding: 15px 0;
 }

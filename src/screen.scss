@@ -14,13 +14,13 @@ body {
      color: #ccc;
 }
 a {
-  color: #ccc;
+  color: #ACEB00;
   text-decoration: none;
 }
 
 h3 {
     border-bottom: 3px solid #600;
-    color: #080;
+    color: #ACEB00;
     font-size: 1.3em;
     font-weight: bold;
     margin-bottom: 5px;
@@ -51,7 +51,7 @@ h3 {
             padding: 10px 0;
             margin-bottom: 10px;
             span {
-                background: #999;
+                background: #EEE;
                 color: #800;
                 -webkit-box-shadow: #333 2px 2px 1px;
                 -moz-box-shadow: #333 2px 2px 1px;
@@ -67,7 +67,7 @@ h3 {
 
         .blogs, .social, .aboutme {
             overflow: hidden;
-            background: #444;
+            background: #000;
             border: 1px solid #444;
             -moz-border-radius: 5px;
             -webkit-border-radius: 5px;
@@ -84,13 +84,14 @@ h3 {
             img.blogpics {
                 display: block;
                 margin: 10px auto 30px;
+                border: 1px solid #666;                
             }
             img.about {
                 float: right;
-                padding: 10px;
+                margin: 10px 24px;
+                border: 1px solid #666;
             }
             a {
-                color: #080;
                 font-weight: bold;
             }
         }
@@ -124,5 +125,11 @@ h3 {
     }
     .col2_3, .col3_3 {
         border-left: 1px solid #666;
+    }
+    ul.cols {
+      text-align: center;
+      li {
+        padding: 15px 0;
+      }
     }
 }
