@@ -156,49 +156,45 @@ h3 {
   margin: 10px 24px;
   border: 1px solid #666;
 }
-/* line 93, ../src/screen.scss */
-.container .page .blogs a, .container .page .social a, .container .page .aboutme a {
-  font-weight: bold;
-}
-/* line 97, ../src/screen.scss */
+/* line 94, ../src/screen.scss */
 .container .page .aboutme p {
   padding-left: 10px;
 }
-/* line 102, ../src/screen.scss */
+/* line 99, ../src/screen.scss */
 .container footer {
   margin: 15px 0;
 }
-/* line 105, ../src/screen.scss */
+/* line 102, ../src/screen.scss */
 .container footer .footnote {
   text-align: center;
   color: #888;
   font-size: 0.85em;
 }
 
-/* line 114, ../src/screen.scss */
+/* line 111, ../src/screen.scss */
 .cols {
   width: 100%;
   overflow: hidden;
 }
-/* line 117, ../src/screen.scss */
+/* line 114, ../src/screen.scss */
 .cols .col1_3, .cols .col2_3, .cols .col3_3 {
   float: left;
   width: 31%;
   padding: 0 10px;
 }
-/* line 122, ../src/screen.scss */
+/* line 119, ../src/screen.scss */
 .cols .col1_3, .cols .col2_3 {
   border-right: 1px solid #000;
 }
-/* line 125, ../src/screen.scss */
+/* line 122, ../src/screen.scss */
 .cols .col2_3, .cols .col3_3 {
   border-left: 1px solid #666;
 }
-/* line 128, ../src/screen.scss */
+/* line 125, ../src/screen.scss */
 .cols ul.cols {
   text-align: center;
 }
-/* line 130, ../src/screen.scss */
+/* line 127, ../src/screen.scss */
 .cols ul.cols li {
   padding: 15px 0;
 }
