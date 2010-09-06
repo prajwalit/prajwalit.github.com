@@ -79,7 +79,7 @@ a {
 /* line 21, ../src/screen.scss */
 h3 {
   border-bottom: 3px solid #600;
-  color: #ACEB00;
+  color: #CFEB00;
   font-size: 1.3em;
   font-weight: bold;
   margin-bottom: 5px;
@@ -196,5 +196,5 @@ h3 {
 }
 /* line 127, ../src/screen.scss */
 .cols ul.cols li {
-  padding: 15px 0;
+  padding: 15px 10px;
 }
