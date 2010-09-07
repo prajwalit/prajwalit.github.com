@@ -23,12 +23,11 @@ a {
 }
 
 h3 {
-    border-bottom: 3px solid #600;
     color: #CFEB00;
     font-size: 1.3em;
     font-weight: bold;
     margin-bottom: 5px;
-    padding: 2px;
+    padding: 2px 0;
 }
 
 .container {
@@ -78,12 +77,7 @@ h3 {
             -webkit-box-shadow: #111 2px 1px 2px;
             margin-bottom: 20px;
             padding: 0 0 10px;
-            .coming-soon {
-                text-align: center;
-                color: white;
-                font-size: 1.5em;
-                text-shadow: #111 1px 1px 1px;
-            }
+
             img.blogpics {
                 display: block;
                 margin: 10px auto 30px;
