@@ -86,31 +86,36 @@ h3 {
 }
 
 /* line 33, ../src/screen.scss */
+p, a {
+  font-family: Helvetica;
+}
+
+/* line 37, ../src/screen.scss */
 .container {
   width: 960px;
   margin: auto;
 }
-/* line 36, ../src/screen.scss */
+/* line 40, ../src/screen.scss */
 .container header {
   font-size: 3em;
   padding: 85px 0;
   color: #000;
   display: block;
 }
-/* line 42, ../src/screen.scss */
+/* line 46, ../src/screen.scss */
 .container header h1 a {
   text-decoration: none;
   display: block;
   width: 384px;
   margin: auto;
 }
-/* line 51, ../src/screen.scss */
+/* line 55, ../src/screen.scss */
 .container .page h2 {
   display: block;
   padding: 10px 0;
   margin-bottom: 10px;
 }
-/* line 55, ../src/screen.scss */
+/* line 59, ../src/screen.scss */
 .container .page h2 span {
   background: #EEE;
   color: #800;
@@ -121,10 +126,9 @@ h3 {
   -moz-border-radius-bottomright: 5px 5px;
   -moz-border-radius-topleft: 5px 5px;
   font-size: 1.2em;
-  font-weight: bold;
   padding: 10px;
 }
-/* line 70, ../src/screen.scss */
+/* line 73, ../src/screen.scss */
 .container .page .blogs, .container .page .social, .container .page .aboutme {
   overflow: hidden;
   background: #000;
@@ -136,103 +140,103 @@ h3 {
   margin-bottom: 20px;
   padding: 0 0 10px;
 }
-/* line 81, ../src/screen.scss */
+/* line 84, ../src/screen.scss */
 .container .page .blogs img.blogpics, .container .page .social img.blogpics, .container .page .aboutme img.blogpics {
   display: block;
   margin: 10px auto 30px;
   border: 1px solid #666;
 }
-/* line 86, ../src/screen.scss */
+/* line 89, ../src/screen.scss */
 .container .page .blogs img.about, .container .page .social img.about, .container .page .aboutme img.about {
   float: right;
   margin: 10px 24px;
   border: 1px solid #666;
 }
-/* line 92, ../src/screen.scss */
-.container .page .aboutme p {
-  padding-left: 10px;
-}
 /* line 95, ../src/screen.scss */
+.container .page .aboutme p {
+  padding: 5px 10px;
+}
+/* line 98, ../src/screen.scss */
 .container .page div.social-media-wrapper {
   display: block;
   overflow: hidden;
   margin: 10px auto 0;
   width: 360px;
 }
-/* line 102, ../src/screen.scss */
+/* line 105, ../src/screen.scss */
 .container .page ul.social-icons li {
   float: left;
 }
-/* line 104, ../src/screen.scss */
+/* line 107, ../src/screen.scss */
 .container .page ul.social-icons li a {
   display: block;
   width: 32px;
   height: 32px;
   margin-left: 8px;
 }
-/* line 110, ../src/screen.scss */
+/* line 113, ../src/screen.scss */
 .container .page ul.social-icons li a.twitter {
   background: black url("../images/icons/twitter_32.png") repeat 0 0;
 }
-/* line 111, ../src/screen.scss */
+/* line 114, ../src/screen.scss */
 .container .page ul.social-icons li a.github {
   background: black url("../images/icons/github_32.png") repeat 0 0;
 }
-/* line 112, ../src/screen.scss */
+/* line 115, ../src/screen.scss */
 .container .page ul.social-icons li a.email {
   background: black url("../images/icons/email_32.png") repeat 0 0;
 }
-/* line 113, ../src/screen.scss */
+/* line 116, ../src/screen.scss */
 .container .page ul.social-icons li a.linkedin {
   background: black url("../images/icons/linkedin_32.png") repeat 0 0;
 }
-/* line 114, ../src/screen.scss */
+/* line 117, ../src/screen.scss */
 .container .page ul.social-icons li a.flickr {
   background: black url("../images/icons/flickr_32.png") repeat 0 0;
 }
-/* line 115, ../src/screen.scss */
+/* line 118, ../src/screen.scss */
 .container .page ul.social-icons li a.facebook {
   background: black url("../images/icons/facebook_32.png") repeat 0 0;
 }
-/* line 116, ../src/screen.scss */
+/* line 119, ../src/screen.scss */
 .container .page ul.social-icons li a.posterous {
   background: black url("../images/icons/posterous_32.png") repeat 0 0;
 }
-/* line 117, ../src/screen.scss */
+/* line 120, ../src/screen.scss */
 .container .page ul.social-icons li a.googlebuzz {
   background: black url("../images/icons/google_buzz_32.png") repeat 0 0;
 }
-/* line 118, ../src/screen.scss */
+/* line 121, ../src/screen.scss */
 .container .page ul.social-icons li a.picasa {
   background: black url("../images/icons/picasa_32.png") repeat 0 0;
 }
-/* line 125, ../src/screen.scss */
+/* line 128, ../src/screen.scss */
 .container footer {
   margin: 15px 0;
 }
-/* line 128, ../src/screen.scss */
+/* line 131, ../src/screen.scss */
 .container footer .footnote {
   text-align: center;
   color: #888;
   font-size: 0.85em;
 }
 
-/* line 137, ../src/screen.scss */
+/* line 140, ../src/screen.scss */
 .cols {
   width: 100%;
   overflow: hidden;
 }
-/* line 140, ../src/screen.scss */
+/* line 143, ../src/screen.scss */
 .cols .col1_3, .cols .col2_3, .cols .col3_3 {
   float: left;
   width: 31%;
   padding: 0 10px;
 }
-/* line 145, ../src/screen.scss */
-.cols .col1_3, .cols .col2_3 {
-  border-right: 1px solid #000;
-}
 /* line 148, ../src/screen.scss */
+.cols .col1_3, .cols .col2_3 {
+  border-right: 1px solid #222;
+}
+/* line 151, ../src/screen.scss */
 .cols .col2_3, .cols .col3_3 {
   border-left: 1px solid #666;
 }
