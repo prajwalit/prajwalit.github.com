@@ -30,6 +30,10 @@ h3 {
     padding: 2px 0;
 }
 
+p, a {
+   font-family: Helvetica;
+}
+
 .container {
    @include page-width;
 
@@ -62,7 +66,6 @@ h3 {
                 -moz-border-radius-bottomright: 5px 5px;
                 -moz-border-radius-topleft: 5px 5px;
                 font-size: 1.2em;
-                font-weight: bold;
                 padding: 10px;
             }
         }
@@ -90,7 +93,7 @@ h3 {
             }
         }
         .aboutme p {
-            padding-left: 10px;
+            padding: 5px 10px;
         }
         div.social-media-wrapper {
           display: block;
@@ -143,9 +146,10 @@ h3 {
         padding: 0 10px;
     }
     .col1_3, .col2_3 {
-        border-right: 1px solid #000;
+        border-right: 1px solid #222;
     }
     .col2_3, .col3_3 {
         border-left: 1px solid #666;
     }
 }
+
