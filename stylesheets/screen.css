@@ -65,7 +65,7 @@ a img {
 /* line 14, ../src/screen.scss */
 body {
   background: #222222 url("../images/bgtexture.png") repeat;
-  font-family: 'Trebuche MS';
+  font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Verdana, sans-serif;
   line-height: 1.2em;
   color: #AAA;
   font-size: 15px;
@@ -160,7 +160,7 @@ img {
 }
 /* line 99, ../src/screen.scss */
 .container .page .aboutme p {
-  padding: 5px 10px;
+  padding: 5px 20px;
 }
 /* line 102, ../src/screen.scss */
 .container .page div.social-media-wrapper {
