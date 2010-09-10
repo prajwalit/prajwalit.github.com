@@ -127,18 +127,16 @@ img {
 }
 /* line 67, ../src/screen.scss */
 .container .page h2 span {
-  background: #EEE;
-  color: #800;
-  -webkit-box-shadow: #333 2px 2px 1px;
-  -moz-box-shadow: #333 2px 2px 1px;
-  border-bottom-right-radius: 5px 5px;
-  border-top-left-radius: 5px 5px;
-  -moz-border-radius-bottomright: 5px 5px;
-  -moz-border-radius-topleft: 5px 5px;
+  margin-left: 10px;
+  border-bottom: 5px solid #A00;
+  background: #800;
+  color: #DDD;
+  -webkit-box-shadow: #333 0px 1px 1px;
+  -moz-box-shadow: #333 0px 1px 1px;
   font-size: 1.2em;
-  padding: 10px;
+  padding: 10px 10px 8px;
 }
-/* line 81, ../src/screen.scss */
+/* line 79, ../src/screen.scss */
 .container .page .blogs, .container .page .social, .container .page .aboutme {
   overflow: hidden;
   background: #111;
@@ -150,101 +148,101 @@ img {
   margin-bottom: 20px;
   padding: 0 0 10px;
 }
-/* line 92, ../src/screen.scss */
+/* line 90, ../src/screen.scss */
 .container .page .blogs img.blogpics, .container .page .social img.blogpics, .container .page .aboutme img.blogpics {
   display: block;
   margin: 10px auto 30px;
 }
-/* line 96, ../src/screen.scss */
+/* line 94, ../src/screen.scss */
 .container .page .blogs img.about, .container .page .social img.about, .container .page .aboutme img.about {
   float: right;
   margin: 10px 24px;
 }
-/* line 101, ../src/screen.scss */
+/* line 99, ../src/screen.scss */
 .container .page .aboutme p {
   padding: 5px 10px;
 }
-/* line 104, ../src/screen.scss */
+/* line 102, ../src/screen.scss */
 .container .page div.social-media-wrapper {
   display: block;
   overflow: hidden;
   margin: 10px auto 0;
   width: 360px;
 }
-/* line 111, ../src/screen.scss */
+/* line 109, ../src/screen.scss */
 .container .page ul.social-icons li {
   float: left;
 }
-/* line 113, ../src/screen.scss */
+/* line 111, ../src/screen.scss */
 .container .page ul.social-icons li a {
   display: block;
   width: 32px;
   height: 32px;
   margin-left: 8px;
 }
-/* line 119, ../src/screen.scss */
+/* line 117, ../src/screen.scss */
 .container .page ul.social-icons li a.twitter {
   background: black url("../images/icons/twitter_32.png") repeat 0 0;
 }
-/* line 120, ../src/screen.scss */
+/* line 118, ../src/screen.scss */
 .container .page ul.social-icons li a.github {
   background: black url("../images/icons/github_32.png") repeat 0 0;
 }
-/* line 121, ../src/screen.scss */
+/* line 119, ../src/screen.scss */
 .container .page ul.social-icons li a.email {
   background: black url("../images/icons/email_32.png") repeat 0 0;
 }
-/* line 122, ../src/screen.scss */
+/* line 120, ../src/screen.scss */
 .container .page ul.social-icons li a.linkedin {
   background: black url("../images/icons/linkedin_32.png") repeat 0 0;
 }
-/* line 123, ../src/screen.scss */
+/* line 121, ../src/screen.scss */
 .container .page ul.social-icons li a.flickr {
   background: black url("../images/icons/flickr_32.png") repeat 0 0;
 }
-/* line 124, ../src/screen.scss */
+/* line 122, ../src/screen.scss */
 .container .page ul.social-icons li a.facebook {
   background: black url("../images/icons/facebook_32.png") repeat 0 0;
 }
-/* line 125, ../src/screen.scss */
+/* line 123, ../src/screen.scss */
 .container .page ul.social-icons li a.posterous {
   background: black url("../images/icons/posterous_32.png") repeat 0 0;
 }
-/* line 126, ../src/screen.scss */
+/* line 124, ../src/screen.scss */
 .container .page ul.social-icons li a.googlebuzz {
   background: black url("../images/icons/google_buzz_32.png") repeat 0 0;
 }
-/* line 127, ../src/screen.scss */
+/* line 125, ../src/screen.scss */
 .container .page ul.social-icons li a.picasa {
   background: black url("../images/icons/picasa_32.png") repeat 0 0;
 }
-/* line 134, ../src/screen.scss */
+/* line 132, ../src/screen.scss */
 .container footer {
   margin: 15px 0;
 }
-/* line 137, ../src/screen.scss */
+/* line 135, ../src/screen.scss */
 .container footer .footnote {
   text-align: center;
   color: #888;
   font-size: 0.85em;
 }
 
-/* line 146, ../src/screen.scss */
+/* line 144, ../src/screen.scss */
 .cols {
   width: 100%;
   overflow: hidden;
 }
-/* line 149, ../src/screen.scss */
+/* line 147, ../src/screen.scss */
 .cols .col1_3, .cols .col2_3, .cols .col3_3 {
   float: left;
   width: 31%;
   padding: 0 10px;
 }
-/* line 154, ../src/screen.scss */
+/* line 152, ../src/screen.scss */
 .cols .col1_3, .cols .col2_3 {
   border-right: 2px solid #000;
 }
-/* line 157, ../src/screen.scss */
+/* line 155, ../src/screen.scss */
 .cols .col2_3, .cols .col3_3 {
   border-left: 1px solid #333;
 }

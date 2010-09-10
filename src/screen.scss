@@ -65,16 +65,14 @@ img {
          padding: 10px 0;
          margin-bottom: 10px;
          span {
-            background: #EEE;
-            color: #800;
-            -webkit-box-shadow: #333 2px 2px 1px;
-            -moz-box-shadow: #333 2px 2px 1px;
-            border-bottom-right-radius: 5px 5px;
-            border-top-left-radius: 5px 5px;
-            -moz-border-radius-bottomright: 5px 5px;
-            -moz-border-radius-topleft: 5px 5px;
+            margin-left: 10px;
+            border-bottom: 5px solid #A00;
+            background: #800;
+            color: #DDD;
+            -webkit-box-shadow: #333 0px 1px 1px;
+            -moz-box-shadow: #333 0px 1px 1px;
             font-size: 1.2em;
-            padding: 10px;
+            padding: 10px 10px 8px;
          }
       }
 
