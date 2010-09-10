@@ -8,103 +8,109 @@
 @mixin page-width {width: 960px;margin:auto; }
 
 @mixin bg-img($clr, $src, $repeat: repeat, $x: 0, $y: 0) {
-    background: $clr url('../images/'+$src) $repeat $x $y;
+   background: $clr url('../images/'+$src) $repeat $x $y;
 }
 
 body {
-     background: #222 url("../images/bgtexture.png") repeat;
-     font-family: sans-serif;
-     line-height:1.3em;
-     color: #ccc;
+   background: #222 url("../images/bgtexture.png") repeat;
+   font-family: 'Trebuche MS';
+   line-height:1.2em;
+   color: #AAA;
+   font-size: 15px;
 }
 a {
-  color: #A8A565;
-  text-decoration: none;
+   color: #A8A565;
+   text-decoration: none;
+   &:hover {
+color: #CFEB00;
+   }
 }
 
 h3 {
-    color: #CFEB00;
-    font-size: 1.3em;
-    font-weight: bold;
-    margin-bottom: 5px;
-    padding: 2px 0;
+   color: #CFEB00;
+   font-size: 1.3em;
+   font-weight: bold;
+   margin-bottom: 5px;
+   padding: 2px 0;
 }
 
 p, a {
    font-family: Helvetica;
 }
 
+img {
+   border: 1px solid #333;
+}
+
 .container {
    @include page-width;
 
-    header {
-        font-size: 3em;
-        padding: 85px 0;
-        color: #000;
-        display: block;
-        h1 {
-            a {
-                text-decoration: none;
-                display: block;
-                width: 384px;
-                margin: auto;
-            }
-        }
-    }
-    .page {
-        h2 {
+   header {
+      font-size: 3em;
+      padding: 75px 0;
+      color: #000;
+      display: block;
+      h1 {
+         a {
+            text-decoration: none;
             display: block;
-            padding: 10px 0;
-            margin-bottom: 10px;
-            span {
-                background: #EEE;
-                color: #800;
-                -webkit-box-shadow: #333 2px 2px 1px;
-                -moz-box-shadow: #333 2px 2px 1px;
-                border-bottom-right-radius: 5px 5px;
-                border-top-left-radius: 5px 5px;
-                -moz-border-radius-bottomright: 5px 5px;
-                -moz-border-radius-topleft: 5px 5px;
-                font-size: 1.2em;
-                padding: 10px;
-            }
-        }
+            width: 384px;
+            margin: auto;
+         }
+      }
+   }
+   .page {
+      h2 {
+         display: block;
+         padding: 10px 0;
+         margin-bottom: 10px;
+         span {
+            background: #EEE;
+            color: #800;
+            -webkit-box-shadow: #333 2px 2px 1px;
+            -moz-box-shadow: #333 2px 2px 1px;
+            border-bottom-right-radius: 5px 5px;
+            border-top-left-radius: 5px 5px;
+            -moz-border-radius-bottomright: 5px 5px;
+            -moz-border-radius-topleft: 5px 5px;
+            font-size: 1.2em;
+            padding: 10px;
+         }
+      }
 
-        .blogs, .social, .aboutme {
-            overflow: hidden;
-            background: #000;
-            border: 1px solid #444;
-            -moz-border-radius: 5px;
-            -webkit-border-radius: 5px;
-            -moz-box-shadow: #111 2px 1px 2px;
-            -webkit-box-shadow: #111 2px 1px 2px;
-            margin-bottom: 20px;
-            padding: 0 0 10px;
+      .blogs, .social, .aboutme {
+         overflow: hidden;
+         background: #111;
+         border: 1px solid #333;
+         -moz-border-radius: 5px;
+         -webkit-border-radius: 5px;
+         -moz-box-shadow: #111 2px 2px 2px;
+         -webkit-box-shadow: #111 2px 2px 2px;
+         margin-bottom: 20px;
+         padding: 0 0 10px;
 
-            img.blogpics {
-                display: block;
-                margin: 10px auto 30px;
-                border: 1px solid #666;                
-            }
-            img.about {
-                float: right;
-                margin: 10px 24px;
-                border: 1px solid #666;
-            }
-        }
-        .aboutme p {
-            padding: 5px 10px;
-        }
-        div.social-media-wrapper {
-          display: block;
-          overflow: hidden;
-          margin: 10px auto 0;
-          width: 360px;
-        }
-        ul.social-icons {
-          li {
-             float: left;
-             a {
+         img.blogpics {
+            display: block;
+            margin: 10px auto 30px;
+         }
+         img.about {
+            float: right;
+            margin: 10px 24px;
+         }
+      }
+      .aboutme p {
+         padding: 5px 10px;
+      }
+      div.social-media-wrapper {
+         display: block;
+         overflow: hidden;
+         margin: 10px auto 0;
+         width: 360px;
+      }
+      ul.social-icons {
+         li {
+            float: left;
+            a {
                display:block;
                width: 32px;
                height: 32px;
@@ -119,37 +125,38 @@ p, a {
                &.posterous {@include bg-img (#000, "icons/posterous_32.png", repeat, 0, 0);}
                &.googlebuzz {@include bg-img (#000, "icons/google_buzz_32.png", repeat, 0, 0);}
                &.picasa {@include bg-img (#000, "icons/picasa_32.png", repeat, 0, 0);}                              
-             }
-          }
+            }
+         }
 
-        }
-    }
+      }
+   }
 
-    footer {
-        margin: 15px 0;
+   footer {
+      margin: 15px 0;
 
-        .footnote {
-            text-align: center;
-            color: #888;
-            font-size: 0.85em;
-        }
-    }
+      .footnote {
+         text-align: center;
+         color: #888;
+         font-size: 0.85em;
+      }
+   }
 }
 
 
 .cols {
-    width: 100%;
-    overflow: hidden;
-    .col1_3, .col2_3, .col3_3 {
-        float: left;
-        width: 31%;
-        padding: 0 10px;
-    }
-    .col1_3, .col2_3 {
-        border-right: 1px solid #222;
-    }
-    .col2_3, .col3_3 {
-        border-left: 1px solid #666;
-    }
+   width: 100%;
+   overflow: hidden;
+   .col1_3, .col2_3, .col3_3 {
+      float: left;
+      width: 31%;
+      padding: 0 10px;
+   }
+   .col1_3, .col2_3 {
+      border-right: 2px solid #000;
+   }
+   .col2_3, .col3_3 {
+      border-left: 1px solid #333;
+   }
+
 }
 
