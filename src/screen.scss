@@ -114,15 +114,15 @@ img {
                height: 32px;
                margin-left: 8px;
 
-               &.twitter {@include bg-img (#000, "icons/twitter_32.png", repeat, 0, 0);}
-               &.github {@include bg-img (#000, "icons/github_32.png", repeat, 0, 0);}
-               &.email {@include bg-img (#000, "icons/email_32.png", repeat, 0, 0);}
-               &.linkedin {@include bg-img (#000, "icons/linkedin_32.png", repeat, 0, 0);}
-               &.flickr {@include bg-img (#000, "icons/flickr_32.png", repeat, 0, 0);}
-               &.facebook {@include bg-img (#000, "icons/facebook_32.png", repeat, 0, 0);}
-               &.posterous {@include bg-img (#000, "icons/posterous_32.png", repeat, 0, 0);}
-               &.googlebuzz {@include bg-img (#000, "icons/google_buzz_32.png", repeat, 0, 0);}
-               &.picasa {@include bg-img (#000, "icons/picasa_32.png", repeat, 0, 0);}                              
+               &.twitter {@include bg-img (transparent, "icons/twitter_32.png", repeat, 0, 0);}
+               &.github {@include bg-img (transparent, "icons/github_32.png", repeat, 0, 0);}
+               &.email {@include bg-img (transparent, "icons/email_32.png", repeat, 0, 0);}
+               &.linkedin {@include bg-img (transparent, "icons/linkedin_32.png", repeat, 0, 0);}
+               &.flickr {@include bg-img (transparent, "icons/flickr_32.png", repeat, 0, 0);}
+               &.facebook {@include bg-img (transparent, "icons/facebook_32.png", repeat, 0, 0);}
+               &.posterous {@include bg-img (transparent, "icons/posterous_32.png", repeat, 0, 0);}
+               &.googlebuzz {@include bg-img (transparent, "icons/google_buzz_32.png", repeat, 0, 0);}
+               &.picasa {@include bg-img (transparent, "icons/picasa_32.png", repeat, 0, 0);}                              
             }
          }
 
