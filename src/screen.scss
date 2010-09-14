@@ -11,8 +11,10 @@
    background: $clr url('../images/'+$src) $repeat $x $y;
 }
 
+$sprite: "sprite.png";
+
 body {
-   background: #222 url("../images/bgtexture.png") repeat;
+   @include bg-img (#222, "bgtexture.png", repeat, 0, 0);
    font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Verdana, sans-serif;
    line-height:1.2em;
    color: #AAA;
@@ -22,7 +24,7 @@ a {
    color: #A8A565;
    text-decoration: none;
    &:hover {
-color: #CFEB00;
+      color: #CFEB00;
    }
 }
 
@@ -38,10 +40,6 @@ p, a {
    font-family: Helvetica;
 }
 
-img {
-   border: 1px solid #333;
-}
-
 .container {
    @include page-width;
 
@@ -55,7 +53,9 @@ img {
             text-decoration: none;
             display: block;
             width: 384px;
+            height: 150px;
             margin: auto;
+            @include bg-img (transparent, $sprite, no-repeat, 0, 0);      
          }
       }
    }
@@ -77,6 +77,7 @@ img {
       }
 
       .blogs, .social, .aboutme {
+         display: block;
          overflow: hidden;
          background: #111;
          border: 1px solid #333;
@@ -86,19 +87,32 @@ img {
          -webkit-box-shadow: #111 2px 2px 2px;
          margin-bottom: 20px;
          padding: 0 0 10px;
-
-         img.blogpics {
-            display: block;
-            margin: 10px auto 30px;
-         }
-         img.about {
-            float: right;
-            margin: 10px 24px;
-         }
       }
+      
       .aboutme p {
          padding: 5px 20px;
       }
+      .about {
+         @include bg-img (transparent, $sprite, no-repeat, 0, -162px);
+         display: block;
+         width: 246px;
+         height: 250px;
+         margin: 10px 24px;
+         float: right;
+         border: 1px solid #333;
+      }
+      
+      .blog {
+         display: block;
+         width: 279px;
+         height: 187px;
+         margin: 10px auto 30px;
+         border: 1px solid #333;
+      }
+      .photography {@include bg-img (transparent, $sprite, no-repeat, 0, -417px);}
+      .technology {@include bg-img (transparent, $sprite, no-repeat, 0, -606px);}
+      .reflexions {@include bg-img (transparent, $sprite, no-repeat, 0, -795px);}
+      
       div.social-media-wrapper {
          display: block;
          overflow: hidden;
@@ -114,15 +128,15 @@ img {
                height: 32px;
                margin-left: 8px;
 
-               &.twitter {@include bg-img (transparent, "icons/twitter_32.png", repeat, 0, 0);}
-               &.github {@include bg-img (transparent, "icons/github_32.png", repeat, 0, 0);}
-               &.email {@include bg-img (transparent, "icons/email_32.png", repeat, 0, 0);}
-               &.linkedin {@include bg-img (transparent, "icons/linkedin_32.png", repeat, 0, 0);}
-               &.flickr {@include bg-img (transparent, "icons/flickr_32.png", repeat, 0, 0);}
-               &.facebook {@include bg-img (transparent, "icons/facebook_32.png", repeat, 0, 0);}
-               &.posterous {@include bg-img (transparent, "icons/posterous_32.png", repeat, 0, 0);}
-               &.googlebuzz {@include bg-img (transparent, "icons/google_buzz_32.png", repeat, 0, 0);}
-               &.picasa {@include bg-img (transparent, "icons/picasa_32.png", repeat, 0, 0);}                              
+               &.twitter {@include bg-img (transparent, $sprite, no-repeat, -352px, -162px);}
+               &.github {@include bg-img (transparent, $sprite, repeat, -352px, -196px);}
+               &.email {@include bg-img (transparent, $sprite, repeat, -352px, -229px);}
+               &.linkedin {@include bg-img (transparent, $sprite, repeat, -352px, -263px);}
+               &.flickr {@include bg-img (transparent, $sprite, repeat, -352px, -297px);}
+               &.facebook {@include bg-img (transparent, $sprite, repeat, -352px, -332px);}
+               &.posterous {@include bg-img (transparent, $sprite, repeat, -352px, -365px);}
+               &.googlebuzz {@include bg-img (transparent, $sprite, repeat, -352px, -399px);}
+               &.picasa {@include bg-img (transparent, $sprite, repeat, -352px, -434px);}                              
             }
          }
 

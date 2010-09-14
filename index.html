@@ -4,7 +4,7 @@
     <title>Prajwalit.com</title>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <link href="stylesheets/screen.css?v=201009131715" media="screen, projection" rel="stylesheet" type="text/css" />
+    <link href="stylesheets/screen.css?v=201009142040" media="screen, projection" rel="stylesheet" type="text/css" />
     
     <!--[if IE]>
     <link rel="stylesheet" type="text/css" href="stylesheets/ie.css?v=201009131715" media="screen, projection" />
@@ -19,15 +19,13 @@
     <div class="container">
       <header>
         <h1>
-          <a href="http://prajwalit.com" title="Prajwalit.com">
-            <img src="images/logo.png?v=201009062300" alt="prajwalit" />
-          </a>
+          <a href="http://prajwalit.com" title="Prajwalit.com"></a>
         </h1>
       </header>
       <div class="page">
-        <div class="aboutme">
+        <section class="aboutme">
           <h2><span>About me&hellip;</span></h2>
-          <img class="about" src="images/praj.jpg?v=201009062300" />
+          <figure class="about"></figure>
           <div class="description">
             <p>
               I'm Prajwalit. A software engineer from
@@ -65,12 +63,14 @@
               Infosys' HR department). Have a look at my <a class="resume" href="/resume/">résumé</a> if you're interested.
             </p>
           </div>
-        </div>
+        </section>
         
-        <div class="blogs cols">
+        <section class="blogs cols">
           <h2><span>Blogs I write&hellip;</span></h2>
           <div class="col1_3">
-            <a href="http://photography.prajwalit.com" title="Go to photography.prajwalit.com"><img class="blogpics" src="images/photoblog.jpg?v=201009062300" /></a>
+            <figure>
+              <a href="http://photography.prajwalit.com" title="Go to photography.prajwalit.com" class="blog photography"></a>
+            </figure>
             <h3>Photography</h3>
             <p>My new passion.<br>Instead of spending every second in
             front of the computer screen, I spend little bit of
@@ -79,7 +79,9 @@
             <a href="http://photography.prajwalit.com">Go to my photo blog &raquo;</a>
           </div>
           <div class="col2_3">
-            <a href="http://techblog.prajwalit.com" title="Go to techblog.prajwalit.com"><img class="blogpics" src="images/technology.jpg?v=201009062300" /></a>
+            <figure>
+              <a href="http://techblog.prajwalit.com" title="Go to techblog.prajwalit.com" class="blog technology"></a>
+            </figure>
             <h3>Technology</h3>
             <p>I'm tech savvy enough to have an opinion about it. Here's
             the blog where I share things related to technology that
@@ -87,15 +89,17 @@
             <a href="http://techblog.prajwalit.com">Go to my tech blog &raquo;</a>
           </div>
           <div class="col3_3">
-            <a href="http://reflexions.prajwalit.com" title="Go to reflexions.prajwalit.com"><img class="blogpics" src="images/reflexions.jpg?v=201009062300" /></a>
+            <figure>
+              <a href="http://reflexions.prajwalit.com" title="Go to reflexions.prajwalit.com" class="blog reflexions"></a>
+            </figure>
             <h3>Reflexions</h3>
             <p>I think my life's interesting enough. I share bits n
             pieces of my life here, on my personal blog. I try to
             maintain it as simple and tech free as possible.</p><br/>
             <a href="http://reflexions.prajwalit.com">Go to my reflexions blog &raquo;</a>
           </div>          
-        </div>
-        <div class="cols social">
+        </section>
+        <section class="cols social">
           <div class="social-media-wrapper">
             <ul class="social-icons horizontal">
               <li><a class="twitter" href="http://twitter.com/Prajwalit" title="Twitter Profile">&nbsp;</a></li>
@@ -110,7 +114,7 @@
               <!-- Icons from - http://www.webdesignerdepot.com/2010/08/buddycons-vector-social-media-icons/ -->
             </ul>
           </div>
-        </div>
+        </section>
       </div>
       <footer>
         <div class="footnote">Copyright © 2010 Prajwalit.com &#149; All rights reserved</div>
