@@ -5,6 +5,11 @@
 
 @import "compass/reset";
 
+section, article, aside, header, footer, nav, dialog, figure {
+    display: block;
+    margin: 0;
+}
+
 @mixin page-width {width: 960px;margin:auto; }
 
 @mixin bg-img($clr, $src, $repeat: repeat, $x: 0, $y: 0) {
