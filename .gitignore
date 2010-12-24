@@ -1,0 +1,8 @@
+.DS_Store
+.localized
+._.DS_Store
+*.scssc
+*.*~
+problems.org
+*.pyc
+.ropeproject/

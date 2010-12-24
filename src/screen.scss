@@ -16,7 +16,7 @@ section, article, aside, header, footer, nav, dialog, figure {
    background: $clr url('../images/'+$src) $repeat $x $y;
 }
 
-$sprite: "sprite.png";
+$sprite: "sprite.png?v=201012250200";
 
 body {
    @include bg-img (#222, "bgtexture.png", repeat, 0, 0);
@@ -97,9 +97,8 @@ p, a {
          padding: 5px 20px;
       }
       .about {
-         @include bg-img (transparent, $sprite, no-repeat, 0, -162px);
          display: block;
-         width: 246px;
+         width: 250px;
          height: 250px;
          margin: 10px 24px;
          float: right;
@@ -113,9 +112,9 @@ p, a {
          margin: 10px auto 30px;
          border: 1px solid #333;
       }
-      .photography {@include bg-img (transparent, $sprite, no-repeat, 0, -417px);}
-      .technology {@include bg-img (transparent, $sprite, no-repeat, 0, -606px);}
-      .reflexions {@include bg-img (transparent, $sprite, no-repeat, 0, -795px);}
+      .photography {@include bg-img (transparent, $sprite, no-repeat, 0, -160px);}
+      .technology {@include bg-img (transparent, $sprite, no-repeat, 0, -349px);}
+      .reflexions {@include bg-img (transparent, $sprite, no-repeat, 0, -538px);}
       
       div.social-media-wrapper {
          display: block;

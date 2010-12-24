@@ -119,7 +119,7 @@ p, a {
   width: 384px;
   height: 150px;
   margin: auto;
-  background: transparent url("../images/sprite.png") no-repeat 0 0;
+  background: transparent url("../images/sprite.png?v=201012250200") no-repeat 0 0;
 }
 /* line 67, ../src/screen.scss */
 .container .page h2 {
@@ -157,15 +157,14 @@ p, a {
 }
 /* line 99, ../src/screen.scss */
 .container .page .about {
-  background: transparent url("../images/sprite.png") no-repeat 0 -162px;
   display: block;
-  width: 246px;
+  width: 250px;
   height: 250px;
   margin: 10px 24px;
   float: right;
   border: 1px solid #333;
 }
-/* line 109, ../src/screen.scss */
+/* line 108, ../src/screen.scss */
 .container .page .blog {
   display: block;
   width: 279px;
@@ -173,99 +172,99 @@ p, a {
   margin: 10px auto 30px;
   border: 1px solid #333;
 }
-/* line 116, ../src/screen.scss */
+/* line 115, ../src/screen.scss */
 .container .page .photography {
-  background: transparent url("../images/sprite.png") no-repeat 0 -417px;
+  background: transparent url("../images/sprite.png?v=201012250200") no-repeat 0 -160px;
+}
+/* line 116, ../src/screen.scss */
+.container .page .technology {
+  background: transparent url("../images/sprite.png?v=201012250200") no-repeat 0 -349px;
 }
 /* line 117, ../src/screen.scss */
-.container .page .technology {
-  background: transparent url("../images/sprite.png") no-repeat 0 -606px;
-}
-/* line 118, ../src/screen.scss */
 .container .page .reflexions {
-  background: transparent url("../images/sprite.png") no-repeat 0 -795px;
+  background: transparent url("../images/sprite.png?v=201012250200") no-repeat 0 -538px;
 }
-/* line 120, ../src/screen.scss */
+/* line 119, ../src/screen.scss */
 .container .page div.social-media-wrapper {
   display: block;
   overflow: hidden;
   margin: 10px auto 0;
   width: 360px;
 }
-/* line 127, ../src/screen.scss */
+/* line 126, ../src/screen.scss */
 .container .page ul.social-icons li {
   float: left;
 }
-/* line 129, ../src/screen.scss */
+/* line 128, ../src/screen.scss */
 .container .page ul.social-icons li a {
   display: block;
   width: 32px;
   height: 32px;
   margin-left: 8px;
 }
-/* line 135, ../src/screen.scss */
+/* line 134, ../src/screen.scss */
 .container .page ul.social-icons li a.twitter {
-  background: transparent url("../images/sprite.png") no-repeat -352px -162px;
+  background: transparent url("../images/sprite.png?v=201012250200") no-repeat -352px -162px;
+}
+/* line 135, ../src/screen.scss */
+.container .page ul.social-icons li a.github {
+  background: transparent url("../images/sprite.png?v=201012250200") repeat -352px -196px;
 }
 /* line 136, ../src/screen.scss */
-.container .page ul.social-icons li a.github {
-  background: transparent url("../images/sprite.png") repeat -352px -196px;
+.container .page ul.social-icons li a.email {
+  background: transparent url("../images/sprite.png?v=201012250200") repeat -352px -229px;
 }
 /* line 137, ../src/screen.scss */
-.container .page ul.social-icons li a.email {
-  background: transparent url("../images/sprite.png") repeat -352px -229px;
+.container .page ul.social-icons li a.linkedin {
+  background: transparent url("../images/sprite.png?v=201012250200") repeat -352px -263px;
 }
 /* line 138, ../src/screen.scss */
-.container .page ul.social-icons li a.linkedin {
-  background: transparent url("../images/sprite.png") repeat -352px -263px;
+.container .page ul.social-icons li a.flickr {
+  background: transparent url("../images/sprite.png?v=201012250200") repeat -352px -297px;
 }
 /* line 139, ../src/screen.scss */
-.container .page ul.social-icons li a.flickr {
-  background: transparent url("../images/sprite.png") repeat -352px -297px;
+.container .page ul.social-icons li a.facebook {
+  background: transparent url("../images/sprite.png?v=201012250200") repeat -352px -332px;
 }
 /* line 140, ../src/screen.scss */
-.container .page ul.social-icons li a.facebook {
-  background: transparent url("../images/sprite.png") repeat -352px -332px;
+.container .page ul.social-icons li a.posterous {
+  background: transparent url("../images/sprite.png?v=201012250200") repeat -352px -365px;
 }
 /* line 141, ../src/screen.scss */
-.container .page ul.social-icons li a.posterous {
-  background: transparent url("../images/sprite.png") repeat -352px -365px;
+.container .page ul.social-icons li a.googlebuzz {
+  background: transparent url("../images/sprite.png?v=201012250200") repeat -352px -399px;
 }
 /* line 142, ../src/screen.scss */
-.container .page ul.social-icons li a.googlebuzz {
-  background: transparent url("../images/sprite.png") repeat -352px -399px;
-}
-/* line 143, ../src/screen.scss */
 .container .page ul.social-icons li a.picasa {
-  background: transparent url("../images/sprite.png") repeat -352px -434px;
+  background: transparent url("../images/sprite.png?v=201012250200") repeat -352px -434px;
 }
-/* line 150, ../src/screen.scss */
+/* line 149, ../src/screen.scss */
 .container footer {
   margin: 15px 0;
 }
-/* line 153, ../src/screen.scss */
+/* line 152, ../src/screen.scss */
 .container footer .footnote {
   text-align: center;
   color: #888;
   font-size: 0.85em;
 }
 
-/* line 162, ../src/screen.scss */
+/* line 161, ../src/screen.scss */
 .cols {
   width: 100%;
   overflow: hidden;
 }
-/* line 165, ../src/screen.scss */
+/* line 164, ../src/screen.scss */
 .cols .col1_3, .cols .col2_3, .cols .col3_3 {
   float: left;
   width: 31%;
   padding: 0 10px;
 }
-/* line 170, ../src/screen.scss */
+/* line 169, ../src/screen.scss */
 .cols .col1_3, .cols .col2_3 {
   border-right: 2px solid #000;
 }
-/* line 173, ../src/screen.scss */
+/* line 172, ../src/screen.scss */
 .cols .col2_3, .cols .col3_3 {
   border-left: 1px solid #333;
 }
