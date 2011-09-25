@@ -2,64 +2,69 @@
  * In this file you should write your main styles. (or centralize your imports)
  * Import this file using the following HTML or equivalent:
  * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
-/* line 14, ../../../../../../var/lib/gems/1.8/gems/compass-0.10.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 17, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
-del, dfn, em, font, img, ins, kbd, q, s, samp,
+del, dfn, em, img, ins, kbd, q, s, samp,
 small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
 dl, dt, dd, ol, ul, li,
 fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td {
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
   margin: 0;
   padding: 0;
   border: 0;
-  outline: 0;
-  font-weight: inherit;
-  font-style: inherit;
   font-size: 100%;
-  font-family: inherit;
+  font: inherit;
   vertical-align: baseline;
 }
 
-/* line 17, ../../../../../../var/lib/gems/1.8/gems/compass-0.10.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 20, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 body {
   line-height: 1;
-  color: black;
-  background: white;
 }
 
-/* line 19, ../../../../../../var/lib/gems/1.8/gems/compass-0.10.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 22, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 ol, ul {
   list-style: none;
 }
 
-/* line 21, ../../../../../../var/lib/gems/1.8/gems/compass-0.10.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 24, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 table {
-  border-collapse: separate;
+  border-collapse: collapse;
   border-spacing: 0;
-  vertical-align: middle;
 }
 
-/* line 23, ../../../../../../var/lib/gems/1.8/gems/compass-0.10.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 26, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 caption, th, td {
   text-align: left;
   font-weight: normal;
   vertical-align: middle;
 }
 
-/* line 25, ../../../../../../var/lib/gems/1.8/gems/compass-0.10.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 28, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 q, blockquote {
-  quotes: "" "";
+  quotes: none;
 }
-/* line 96, ../../../../../../var/lib/gems/1.8/gems/compass-0.10.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 101, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 q:before, q:after, blockquote:before, blockquote:after {
   content: "";
+  content: none;
 }
 
-/* line 27, ../../../../../../var/lib/gems/1.8/gems/compass-0.10.2/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+/* line 30, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
 a img {
   border: none;
+}
+
+/* line 114, ../../../../../../var/lib/gems/1.8/gems/compass-0.11.5/frameworks/compass/stylesheets/compass/reset/_utilities.scss */
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary {
+  display: block;
 }
 
 /* line 8, ../src/screen.scss */
@@ -71,7 +76,7 @@ section, article, aside, header, footer, nav, dialog, figure {
 /* line 21, ../src/screen.scss */
 body {
   background: #222222 url("../images/bgtexture.png") repeat 0 0;
-  font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Verdana, sans-serif;
+  font-family: 'Ubuntu', sans-serif;
   line-height: 1.2em;
   color: #AAA;
   font-size: 15px;
@@ -79,12 +84,12 @@ body {
 
 /* line 28, ../src/screen.scss */
 a {
-  color: #A8A565;
+  color: #25D1E8;
   text-decoration: none;
 }
 /* line 31, ../src/screen.scss */
 a:hover {
-  color: #CFEB00;
+  color: cyan;
 }
 
 /* line 36, ../src/screen.scss */
@@ -96,23 +101,18 @@ h3 {
 }
 
 /* line 43, ../src/screen.scss */
-p, a {
-  font-family: Helvetica;
-}
-
-/* line 47, ../src/screen.scss */
 .container {
   width: 960px;
   margin: auto;
 }
-/* line 50, ../src/screen.scss */
+/* line 46, ../src/screen.scss */
 .container header {
   font-size: 3em;
   padding: 75px 0;
   color: #000;
   display: block;
 }
-/* line 56, ../src/screen.scss */
+/* line 52, ../src/screen.scss */
 .container header h1 a {
   text-decoration: none;
   display: block;
@@ -121,13 +121,13 @@ p, a {
   margin: auto;
   background: transparent url("../images/sprite.png?v=201012250200") no-repeat 0 0;
 }
-/* line 67, ../src/screen.scss */
+/* line 63, ../src/screen.scss */
 .container .page h2 {
   display: block;
   padding: 10px 0;
   margin-bottom: 10px;
 }
-/* line 71, ../src/screen.scss */
+/* line 67, ../src/screen.scss */
 .container .page h2 span {
   margin-left: 10px;
   border-bottom: 5px solid #A00;
@@ -138,7 +138,7 @@ p, a {
   font-size: 1.2em;
   padding: 10px 10px 8px;
 }
-/* line 83, ../src/screen.scss */
+/* line 79, ../src/screen.scss */
 .container .page .blogs, .container .page .social, .container .page .aboutme {
   display: block;
   overflow: hidden;
@@ -151,11 +151,11 @@ p, a {
   margin-bottom: 20px;
   padding: 0 0 10px;
 }
-/* line 96, ../src/screen.scss */
+/* line 92, ../src/screen.scss */
 .container .page .aboutme p {
   padding: 5px 20px;
 }
-/* line 99, ../src/screen.scss */
+/* line 95, ../src/screen.scss */
 .container .page .about {
   display: block;
   width: 250px;
@@ -164,7 +164,7 @@ p, a {
   float: right;
   border: 1px solid #333;
 }
-/* line 108, ../src/screen.scss */
+/* line 104, ../src/screen.scss */
 .container .page .blog {
   display: block;
   width: 279px;
@@ -172,99 +172,99 @@ p, a {
   margin: 10px auto 30px;
   border: 1px solid #333;
 }
-/* line 115, ../src/screen.scss */
+/* line 111, ../src/screen.scss */
 .container .page .photography {
   background: transparent url("../images/sprite.png?v=201012250200") no-repeat 0 -160px;
 }
-/* line 116, ../src/screen.scss */
+/* line 112, ../src/screen.scss */
 .container .page .technology {
   background: transparent url("../images/sprite.png?v=201012250200") no-repeat 0 -349px;
 }
-/* line 117, ../src/screen.scss */
+/* line 113, ../src/screen.scss */
 .container .page .reflexions {
   background: transparent url("../images/sprite.png?v=201012250200") no-repeat 0 -538px;
 }
-/* line 119, ../src/screen.scss */
+/* line 115, ../src/screen.scss */
 .container .page div.social-media-wrapper {
   display: block;
   overflow: hidden;
   margin: 10px auto 0;
   width: 360px;
 }
-/* line 126, ../src/screen.scss */
+/* line 122, ../src/screen.scss */
 .container .page ul.social-icons li {
   float: left;
 }
-/* line 128, ../src/screen.scss */
+/* line 124, ../src/screen.scss */
 .container .page ul.social-icons li a {
   display: block;
   width: 32px;
   height: 32px;
   margin-left: 8px;
 }
-/* line 134, ../src/screen.scss */
+/* line 130, ../src/screen.scss */
 .container .page ul.social-icons li a.twitter {
   background: transparent url("../images/sprite.png?v=201012250200") no-repeat -352px -162px;
 }
-/* line 135, ../src/screen.scss */
+/* line 131, ../src/screen.scss */
 .container .page ul.social-icons li a.github {
   background: transparent url("../images/sprite.png?v=201012250200") repeat -352px -196px;
 }
-/* line 136, ../src/screen.scss */
+/* line 132, ../src/screen.scss */
 .container .page ul.social-icons li a.email {
   background: transparent url("../images/sprite.png?v=201012250200") repeat -352px -229px;
 }
-/* line 137, ../src/screen.scss */
+/* line 133, ../src/screen.scss */
 .container .page ul.social-icons li a.linkedin {
   background: transparent url("../images/sprite.png?v=201012250200") repeat -352px -263px;
 }
-/* line 138, ../src/screen.scss */
+/* line 134, ../src/screen.scss */
 .container .page ul.social-icons li a.flickr {
   background: transparent url("../images/sprite.png?v=201012250200") repeat -352px -297px;
 }
-/* line 139, ../src/screen.scss */
+/* line 135, ../src/screen.scss */
 .container .page ul.social-icons li a.facebook {
   background: transparent url("../images/sprite.png?v=201012250200") repeat -352px -332px;
 }
-/* line 140, ../src/screen.scss */
+/* line 136, ../src/screen.scss */
 .container .page ul.social-icons li a.posterous {
   background: transparent url("../images/sprite.png?v=201012250200") repeat -352px -365px;
 }
-/* line 141, ../src/screen.scss */
+/* line 137, ../src/screen.scss */
 .container .page ul.social-icons li a.googlebuzz {
   background: transparent url("../images/sprite.png?v=201012250200") repeat -352px -399px;
 }
-/* line 142, ../src/screen.scss */
+/* line 138, ../src/screen.scss */
 .container .page ul.social-icons li a.picasa {
   background: transparent url("../images/sprite.png?v=201012250200") repeat -352px -434px;
 }
-/* line 149, ../src/screen.scss */
+/* line 145, ../src/screen.scss */
 .container footer {
   margin: 15px 0;
 }
-/* line 152, ../src/screen.scss */
+/* line 148, ../src/screen.scss */
 .container footer .footnote {
   text-align: center;
   color: #888;
   font-size: 0.85em;
 }
 
-/* line 161, ../src/screen.scss */
+/* line 157, ../src/screen.scss */
 .cols {
   width: 100%;
   overflow: hidden;
 }
-/* line 164, ../src/screen.scss */
+/* line 160, ../src/screen.scss */
 .cols .col1_3, .cols .col2_3, .cols .col3_3 {
   float: left;
   width: 31%;
   padding: 0 10px;
 }
-/* line 169, ../src/screen.scss */
+/* line 165, ../src/screen.scss */
 .cols .col1_3, .cols .col2_3 {
   border-right: 2px solid #000;
 }
-/* line 172, ../src/screen.scss */
+/* line 168, ../src/screen.scss */
 .cols .col2_3, .cols .col3_3 {
   border-left: 1px solid #333;
 }

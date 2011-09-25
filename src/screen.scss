@@ -13,165 +13,160 @@ section, article, aside, header, footer, nav, dialog, figure {
 @mixin page-width {width: 960px;margin:auto; }
 
 @mixin bg-img($clr, $src, $repeat: repeat, $x: 0, $y: 0) {
-   background: $clr url('../images/'+$src) $repeat $x $y;
+    background: $clr url('../images/'+$src) $repeat $x $y;
 }
 
 $sprite: "sprite.png?v=201012250200";
 
 body {
-   @include bg-img (#222, "bgtexture.png", repeat, 0, 0);
-   font-family: 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Verdana, sans-serif;
-   line-height:1.2em;
-   color: #AAA;
-   font-size: 15px;
+    @include bg-img (#222, "bgtexture.png", repeat, 0, 0);
+    font-family: 'Ubuntu', sans-serif;
+    line-height:1.2em;
+    color: #AAA;
+    font-size: 15px;
 }
 a {
-   color: #A8A565;
-   text-decoration: none;
-   &:hover {
-      color: #CFEB00;
-   }
+    color: #25D1E8;
+    text-decoration: none;
+    &:hover {
+        color: cyan;
+    }
 }
 
 h3 {
-   color: #CFEB00;
-   font-size: 1.3em;
-   margin-bottom: 5px;
-   padding: 2px 0;
-}
-
-p, a {
-   font-family: Helvetica;
+    color: #CFEB00;
+    font-size: 1.3em;
+    margin-bottom: 5px;
+    padding: 2px 0;
 }
 
 .container {
-   @include page-width;
+    @include page-width;
 
-   header {
-      font-size: 3em;
-      padding: 75px 0;
-      color: #000;
-      display: block;
-      h1 {
-         a {
-            text-decoration: none;
-            display: block;
-            width: 384px;
-            height: 150px;
-            margin: auto;
-            @include bg-img (transparent, $sprite, no-repeat, 0, 0);      
-         }
-      }
-   }
-   .page {
-      h2 {
-         display: block;
-         padding: 10px 0;
-         margin-bottom: 10px;
-         span {
-            margin-left: 10px;
-            border-bottom: 5px solid #A00;
-            background: #800;
-            color: #DDD;
-            -webkit-box-shadow: #333 0px 1px 1px;
-            -moz-box-shadow: #333 0px 1px 1px;
-            font-size: 1.2em;
-            padding: 10px 10px 8px;
-         }
-      }
-
-      .blogs, .social, .aboutme {
-         display: block;
-         overflow: hidden;
-         background: #111;
-         border: 1px solid #333;
-         -moz-border-radius: 5px;
-         -webkit-border-radius: 5px;
-         -moz-box-shadow: #111 2px 2px 2px;
-         -webkit-box-shadow: #111 2px 2px 2px;
-         margin-bottom: 20px;
-         padding: 0 0 10px;
-      }
-      
-      .aboutme p {
-         padding: 5px 20px;
-      }
-      .about {
-         display: block;
-         width: 250px;
-         height: 250px;
-         margin: 10px 24px;
-         float: right;
-         border: 1px solid #333;
-      }
-      
-      .blog {
-         display: block;
-         width: 279px;
-         height: 187px;
-         margin: 10px auto 30px;
-         border: 1px solid #333;
-      }
-      .photography {@include bg-img (transparent, $sprite, no-repeat, 0, -160px);}
-      .technology {@include bg-img (transparent, $sprite, no-repeat, 0, -349px);}
-      .reflexions {@include bg-img (transparent, $sprite, no-repeat, 0, -538px);}
-      
-      div.social-media-wrapper {
-         display: block;
-         overflow: hidden;
-         margin: 10px auto 0;
-         width: 360px;
-      }
-      ul.social-icons {
-         li {
-            float: left;
+    header {
+        font-size: 3em;
+        padding: 75px 0;
+        color: #000;
+        display: block;
+        h1 {
             a {
-               display:block;
-               width: 32px;
-               height: 32px;
-               margin-left: 8px;
-
-               &.twitter {@include bg-img (transparent, $sprite, no-repeat, -352px, -162px);}
-               &.github {@include bg-img (transparent, $sprite, repeat, -352px, -196px);}
-               &.email {@include bg-img (transparent, $sprite, repeat, -352px, -229px);}
-               &.linkedin {@include bg-img (transparent, $sprite, repeat, -352px, -263px);}
-               &.flickr {@include bg-img (transparent, $sprite, repeat, -352px, -297px);}
-               &.facebook {@include bg-img (transparent, $sprite, repeat, -352px, -332px);}
-               &.posterous {@include bg-img (transparent, $sprite, repeat, -352px, -365px);}
-               &.googlebuzz {@include bg-img (transparent, $sprite, repeat, -352px, -399px);}
-               &.picasa {@include bg-img (transparent, $sprite, repeat, -352px, -434px);}                              
+                text-decoration: none;
+                display: block;
+                width: 384px;
+                height: 150px;
+                margin: auto;
+                @include bg-img (transparent, $sprite, no-repeat, 0, 0);      
             }
-         }
+        }
+    }
+    .page {
+        h2 {
+            display: block;
+            padding: 10px 0;
+            margin-bottom: 10px;
+            span {
+                margin-left: 10px;
+                border-bottom: 5px solid #A00;
+                background: #800;
+                color: #DDD;
+                -webkit-box-shadow: #333 0px 1px 1px;
+                -moz-box-shadow: #333 0px 1px 1px;
+                font-size: 1.2em;
+                padding: 10px 10px 8px;
+            }
+        }
 
-      }
-   }
+        .blogs, .social, .aboutme {
+            display: block;
+            overflow: hidden;
+            background: #111;
+            border: 1px solid #333;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            -moz-box-shadow: #111 2px 2px 2px;
+            -webkit-box-shadow: #111 2px 2px 2px;
+            margin-bottom: 20px;
+            padding: 0 0 10px;
+        }
+        
+        .aboutme p {
+            padding: 5px 20px;
+        }
+        .about {
+            display: block;
+            width: 250px;
+            height: 250px;
+            margin: 10px 24px;
+            float: right;
+            border: 1px solid #333;
+        }
+        
+        .blog {
+            display: block;
+            width: 279px;
+            height: 187px;
+            margin: 10px auto 30px;
+            border: 1px solid #333;
+        }
+        .photography {@include bg-img (transparent, $sprite, no-repeat, 0, -160px);}
+        .technology {@include bg-img (transparent, $sprite, no-repeat, 0, -349px);}
+        .reflexions {@include bg-img (transparent, $sprite, no-repeat, 0, -538px);}
+        
+        div.social-media-wrapper {
+            display: block;
+            overflow: hidden;
+            margin: 10px auto 0;
+            width: 360px;
+        }
+        ul.social-icons {
+            li {
+                float: left;
+                a {
+                    display:block;
+                    width: 32px;
+                    height: 32px;
+                    margin-left: 8px;
 
-   footer {
-      margin: 15px 0;
+                    &.twitter {@include bg-img (transparent, $sprite, no-repeat, -352px, -162px);}
+                    &.github {@include bg-img (transparent, $sprite, repeat, -352px, -196px);}
+                    &.email {@include bg-img (transparent, $sprite, repeat, -352px, -229px);}
+                    &.linkedin {@include bg-img (transparent, $sprite, repeat, -352px, -263px);}
+                    &.flickr {@include bg-img (transparent, $sprite, repeat, -352px, -297px);}
+                    &.facebook {@include bg-img (transparent, $sprite, repeat, -352px, -332px);}
+                    &.posterous {@include bg-img (transparent, $sprite, repeat, -352px, -365px);}
+                    &.googlebuzz {@include bg-img (transparent, $sprite, repeat, -352px, -399px);}
+                    &.picasa {@include bg-img (transparent, $sprite, repeat, -352px, -434px);}                              
+                }
+            }
 
-      .footnote {
-         text-align: center;
-         color: #888;
-         font-size: 0.85em;
-      }
-   }
+        }
+    }
+
+    footer {
+        margin: 15px 0;
+
+        .footnote {
+            text-align: center;
+            color: #888;
+            font-size: 0.85em;
+        }
+    }
 }
 
 
 .cols {
-   width: 100%;
-   overflow: hidden;
-   .col1_3, .col2_3, .col3_3 {
-      float: left;
-      width: 31%;
-      padding: 0 10px;
-   }
-   .col1_3, .col2_3 {
-      border-right: 2px solid #000;
-   }
-   .col2_3, .col3_3 {
-      border-left: 1px solid #333;
-   }
+    width: 100%;
+    overflow: hidden;
+    .col1_3, .col2_3, .col3_3 {
+        float: left;
+        width: 31%;
+        padding: 0 10px;
+    }
+    .col1_3, .col2_3 {
+        border-right: 2px solid #000;
+    }
+    .col2_3, .col3_3 {
+        border-left: 1px solid #333;
+    }
 
 }
-
