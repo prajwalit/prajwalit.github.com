@@ -17,6 +17,10 @@ section, article, aside, header, footer, nav, dialog, figure {
 $sprite: "icons.png?v=201112120121";
 $bgtexture: "bgtexture.png?v=201012250200";
 
+html {
+    border-top: 4px solid #0C8CF5;
+}
+
 body {
     @include bg-img (#fff, $bgtexture, repeat, 0, 0);
     font-family: 'Jura', sans-serif;
@@ -59,7 +63,7 @@ h1 {
             color: #0C8CF5;
         }
         &:hover {
-            color: blue;
+            color: #005EFF;
         }
     }
 }
