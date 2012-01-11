@@ -23,10 +23,10 @@ html {
 
 body {
     @include bg-img (#fff, $bgtexture, repeat, 0, 0);
-    font-family: 'Jura', sans-serif;
+    font-family: 'Ubuntu', sans-serif;
     line-height:1.2em;
     color: #AAA;
-    font-size: 18px;
+    font-size: 17px;
     width: 800px;
     margin: auto;
     color: #333;
@@ -78,6 +78,7 @@ h2 {
 h3 {
     font-size: 1.2em;
     color: #222;
+    margin-bottom: 10px;
 }
 
 .blog-wrapper {
