@@ -53,6 +53,10 @@ h1 {
         &:visited {
             color: #9AFF00;
         }
+        &:hover {
+            text-decoration: none;
+            text-shadow: black 1px 1px 5px;
+        }
     }
 }
 
