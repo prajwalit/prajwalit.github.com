@@ -15,36 +15,27 @@ section, article, aside, header, footer, nav, dialog, figure {
 }
 
 $sprite: "icons.png?v=201112120121";
-$bgtexture: "bgtexture.png?v=201012250200";
-
-html {
-    border-top: 4px solid #0C8CF5;
-}
 
 body {
-    @include bg-img (#fff, $bgtexture, repeat, 0, 0);
+    @include bg-img (#382B09, "praj.jpg?v=201202030000", repeat, 0, 0);
     font-family: 'Ubuntu', sans-serif;
     line-height:1.2em;
     color: #AAA;
     font-size: 17px;
-    width: 800px;
+    width: 1200px;
     margin: auto;
-    color: #555;
+    color: #eee;
 }
 
 a {
     text-decoration: none;
-    color: green;
+    color: #FF9500;
     &:visited {
-        color: green;
+        color: #FF9500;
     }
     &:hover {
-        color: red;
+        text-decoration: underline;
     }
-}
-
-p {
-    line-height: 1.5em;
 }
 
 section {
@@ -55,47 +46,30 @@ h1 {
     font-size: 5em;
     padding: 0.5em 0 0.4em;
     line-height: 1em;
-    font-family: "Gruppo", sans-serif;
-    text-align: center;
+    font-family: "Spicy Rice", sans-serif;
     a {
-        color: #0C8CF5;
+        color: #9AFF00;
+        text-shadow: black 2px 2px 5px;
         &:visited {
-            color: #0C8CF5;
-        }
-        &:hover {
-            color: #005EFF;
+            color: #9AFF00;
         }
     }
 }
 
 h2 {
-    font-size: 2em;
+    font-size: 1.5em;
     line-height: 1em;
     padding: 0 0 0.5em;
-    color: #666;
+    color: white;
 }
 
-h3 {
-    font-size: 1.2em;
-    color: #222;
-    margin-bottom: 10px;
-}
-
-.blog-wrapper {
-    overflow: hidden;
-}
-
-.blog {
-    float: right;
-    display: block;
-    overflow: hidden;
-    margin: 10px 0 30px 30px;
+div.about-me {
+    margin-bottom: 1em;
 }
 
 div.social-media-wrapper {
     display: block;
     overflow: hidden;
-    margin: 10px auto 0;
     width: 360px;
 }
 
@@ -118,16 +92,20 @@ ul.social-icons {
             &.googlebuzz {@include bg-img (transparent, $sprite, repeat, 0px, -240px);}
             &.picasa {@include bg-img (transparent, $sprite, repeat, 0px, -274px);}
         }
-    }
 
+        &:first-child a {
+            margin-left: 0;
+        }
+    }
+    
 }
 
 footer {
     margin: 15px 0;
-
+    position: fixed;
+    bottom: 0;
     .footnote {
-        text-align: center;
         color: #888;
-        font-size: 0.85em;
+        font-size: 0.6em;
     }
 }
