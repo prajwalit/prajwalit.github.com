@@ -48,14 +48,14 @@ h1 {
     line-height: 1em;
     font-family: "Spicy Rice", sans-serif;
     a {
-        color: #9AFF00;
-        text-shadow: black 2px 2px 5px;
+        color: #FFE787;
+        text-shadow: rgba(0,0,0,0.5) 2px 2px 5px;
         &:visited {
-            color: #9AFF00;
+            color: #FFE787;
         }
         &:hover {
             text-decoration: none;
-            text-shadow: black 1px 1px 5px;
+            text-shadow: rgba(0,0,0,0.5) 1px 1px 5px;
         }
     }
 }
