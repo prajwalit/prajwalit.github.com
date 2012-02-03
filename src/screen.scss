@@ -95,6 +95,10 @@ ul.social-icons {
             &.posterous {@include bg-img (transparent, $sprite, repeat, 0px, -206px);}
             &.googlebuzz {@include bg-img (transparent, $sprite, repeat, 0px, -240px);}
             &.picasa {@include bg-img (transparent, $sprite, repeat, 0px, -274px);}
+
+            &:hover {
+                text-decoration: none;
+            }
         }
 
         &:first-child a {
