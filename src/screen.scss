@@ -17,7 +17,7 @@ section, article, aside, header, footer, nav, dialog, figure {
 $sprite: "icons.png?v=201112120121";
 
 body {
-    @include bg-img (#382B09, "praj.jpg?v=201202030000", repeat, 0, 0);
+    @include bg-img (#382B09, "kili.jpg?v=201202030000", no-repeat, center, -100px);
     font-family: 'Ubuntu', sans-serif;
     line-height:1.2em;
     color: #AAA;
@@ -105,7 +105,7 @@ ul.social-icons {
             margin-left: 0;
         }
     }
-    
+
 }
 
 footer {
