@@ -8,7 +8,6 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:b
 .slide-1, .slide-3 {
   background: #F5EEDC;
   color: #454545;
-  background-image: url("../images/square-tiles.png");
   width: 100%;
   height: 100dvh;
 }
@@ -16,15 +15,13 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:b
 .slide-2 {
   background: #C0D8C0;
   color: #454545;
-  background-image: url("../images/square-tiles.png");
   width: 100%;
   height: 100dvh;
 }
 
 footer {
-  background: #C0D8C0;
-  color: #454545;
-  background-image: url("../images/square-tiles.png");
+  background: #454545;
+  color: #F5EEDC;
   width: 100%;
   height: 20dvh;
 }
@@ -70,4 +67,59 @@ section {
   margin: 8px;
   color: #DD4A48;
   font-weight: 400;
+}
+
+
+.profession {
+  margin: 0;
+  font-size: 2em;
+  font-weight: 600;
+  font-family: 'Raleway';
+}
+
+.slide-2 {
+  display: flex;
+  flex-direction: column;
+}
+
+.top-flex, .bottom-flex {
+  flex-grow: 1;
+}
+
+.slide-content {
+  max-width: 800px;
+  margin: auto;
+  margin-top: 1em;
+}
+
+.profile-box {
+  display: flex;
+}
+
+.profile-info {
+  margin-right: 8em;
+}
+
+.profile-pic img {
+  width: 240px;
+  height: 240px;
+}
+
+
+.icon-button {
+  background-color: #454545;
+  border-radius: 0.1em;
+  display: inline-block;
+  padding: 0.5em;
+  color: #EEE;
+  text-decoration: none;
+  min-width: 6em;
+  display: inline-flex;
+  align-items: center;
+}
+
+.icon-button-img {
+  width: 1.2em;
+  height: 1.2em;
+  margin-right: 0.5em;
 }
