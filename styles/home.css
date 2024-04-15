@@ -111,6 +111,7 @@ section {
   border-radius: 0.1em;
   display: inline-block;
   padding: 0.5em;
+  margin-right: 0.25em;
   color: #EEE;
   text-decoration: none;
   min-width: 6em;
@@ -122,4 +123,32 @@ section {
   width: 1.2em;
   height: 1.2em;
   margin-right: 0.5em;
+}
+
+@media only screen and (max-device-width: 480px) {
+  .slide-2 .profile-box {
+    flex-direction: column-reverse;
+  }
+
+  .slide-2 .slide-content {
+    margin: 0 1em;
+  }
+
+  .profile-info {
+    margin: 0;
+  }
+
+  .profile-pic {
+    text-align: center;
+  }
+
+  .profile-pic img {
+    margin: 1em auto;
+    width: 200px;
+    height: 200px;
+  }
+  
+  .icon-button {
+    min-width: auto;
+  }
 }
