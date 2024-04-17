@@ -75,7 +75,7 @@ h1.accent {
   font-family: 'Raleway';
 }
 
-.slide-2 {
+.slide-2, .slide-3 {
   display: flex;
   flex-direction: column;
 }
@@ -103,6 +103,9 @@ h1.accent {
   height: 240px;
 }
 
+.link {
+  color: #DD4A48;
+}
 
 .icon-button {
   background-color: #454545;
@@ -158,7 +161,7 @@ footer {
     flex-direction: column-reverse;
   }
 
-  .slide-2 .slide-content {
+  .slide-2 .slide-content, .slide-3 .slide-content {
     margin: 0 1em;
   }
 
