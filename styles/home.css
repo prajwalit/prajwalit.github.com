@@ -1,6 +1,7 @@
 /* Normalize CSS */
 html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:block}h1{font-size:2em;margin:.67em 0}hr{box-sizing:content-box;height:0;overflow:visible}pre{font-family:monospace,monospace;font-size:1em}a{background-color:transparent}abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,samp{font-family:monospace,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,input{overflow:visible}button,select{text-transform:none}button,[type="button"],[type="reset"],[type="submit"]{-webkit-appearance:button}button::-moz-focus-inner,[type="button"]::-moz-focus-inner,[type="reset"]::-moz-focus-inner,[type="submit"]::-moz-focus-inner{border-style:none;padding:0}button:-moz-focusring,[type="button"]:-moz-focusring,[type="reset"]:-moz-focusring,[type="submit"]:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}progress{vertical-align:baseline}textarea{overflow:auto}[type="checkbox"],[type="radio"]{box-sizing:border-box;padding:0}[type="number"]::-webkit-inner-spin-button,[type="number"]::-webkit-outer-spin-button{height:auto}[type="search"]{-webkit-appearance:textfield;outline-offset:-2px}[type="search"]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}details{display:block}summary{display:list-item}template{display:none}[hidden]{display:none}
 
+/* Standard tags*/
 html {
   scroll-snap-type: y mandatory;
 }
@@ -11,25 +12,88 @@ body {
   color: #454545;
 }
 
-.slide-1, .slide-2, .slide-3, .slide-4 {
+/* Slide common */
+.slide-intro, .slide-unravel, .slide-coach, .slide-leader {
   position: relative;
   scroll-snap-align: start;
-
 }
 
-.slide-1, .slide-3 {
+.slide-unravel, .slide-coach, .slide-leader {
+  display: flex;
+  flex-direction: column;
+}
+
+.slide-intro, .slide-coach {
   background: #F5EEDC;
   width: 100%;
   height: 100dvh;
 }
 
-.slide-2, .slide-4 {
+.slide-unravel, .slide-leader {
   background: #C0D8C0;
   width: 100%;
   height: 100dvh;
 }
+/* Slide Common End */
 
-h1 {
+/* Slide Content Common */
+.top-flex, .bottom-flex {
+  flex-grow: 1;
+}
+
+.slide-content {
+  max-width: 800px;
+  margin: auto;
+  margin-top: 1em;
+}
+
+.slider-title {
+  margin: 0;
+  font-size: 2em;
+  font-weight: 600;
+  font-family: 'Raleway';
+}
+/* Slide Content Common End */
+
+
+/* Common Components */
+
+.button-link {
+  background-color: #454545;
+  border-radius: 0.1em;
+  display: inline-block;
+  padding: 0.5em 0.8em;
+  margin-right: 0.25em;
+  color: #EEE;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.button-link-icon {
+  width: 1.2em;
+  height: 1.2em;
+  margin-right: 0.5em;
+}
+
+.link {
+  color: #DD4A48;
+}
+
+.link-plain {
+  text-decoration: none;
+}
+
+/* Common Components End */
+
+/* Intro Slide */
+.name-box {
+  top: 30dvh;
+  width: 100%;
+  position: relative;
+}
+
+.intro, .name {
   margin: 0 0.2em;
   font-family: 'Raleway';
   font-weight: 600;
@@ -37,15 +101,8 @@ h1 {
   text-align: center;
 }
 
-h1.accent {
+.name {
   color: #DD4A48;
-}
-
-.name-box {
-  top: 30dvh;
-  width: 100%;
-  position: relative;
-
 }
 
 .quote {
@@ -54,7 +111,7 @@ h1.accent {
   position: absolute;
 }
 
-.quote-content {
+.quote .quote-content {
   font-size: 18px;
   width: 300px;
   margin: auto;
@@ -66,27 +123,17 @@ h1.accent {
   color: #DD4A48;
   font-weight: 400;
 }
+/* Intro Slide End */
 
-.profession {
-  margin: 0;
-  font-size: 2em;
-  font-weight: 600;
-  font-family: 'Raleway';
+
+/* Unravel Slide */
+.unravel-logo {
+  font-family: "Saira";
+  color: #364E68;
 }
 
-.slide-2, .slide-3, .slide-4 {
-  display: flex;
-  flex-direction: column;
-}
-
-.top-flex, .bottom-flex {
-  flex-grow: 1;
-}
-
-.slide-content {
-  max-width: 800px;
-  margin: auto;
-  margin-top: 1em;
+.unravel-logo .unravel-logo-hl {
+  color: #3282B8;
 }
 
 .offering-header {
@@ -99,45 +146,26 @@ h1.accent {
   width: 1.5em;
   height: 1.5em;
 }
+/* Unravel Slide End */
 
-.profile-box {
+/* Coach Slide */
+
+.coach-profile-box {
   display: flex;
 }
 
-.profile-info {
+.coach-profile-info {
   margin-right: 8em;
-}
-
-.slide-3 .profile-info {
   margin-right: 0;
 }
 
-.profile-pic img {
+.coach-profile-pic {
   width: 240px;
   height: 240px;
 }
 
-.link {
-  color: #DD4A48;
-}
+/* Coach Slide End */
 
-.icon-button {
-  background-color: #454545;
-  border-radius: 0.1em;
-  display: inline-block;
-  padding: 0.5em 0.8em;
-  margin-right: 0.25em;
-  color: #EEE;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-}
-
-.icon-button-img {
-  width: 1.2em;
-  height: 1.2em;
-  margin-right: 0.5em;
-}
 
 footer {
   display: flex;
@@ -158,43 +186,35 @@ footer {
   margin: 1em;
 }
 
-.social-icons .icon-button {
+.social-icons .button-link {
   padding: 0.25em;
 }
 
-.social-icons .icon-button-img {
+.social-icons .button-link-icon {
   margin-right: 0;
   width: 1.5em;
   height: 1.5em;
 }
 
-.unravel-logo {
-  font-family: "Saira";
-  color: #364E68;
-}
-
-.unravel-logo .unravel-logo-hl {
-  color: #3282B8;
-}
 
 @media only screen and (max-device-width: 480px) {
-  .slide-2 .profile-box {
-    flex-direction: column-reverse;
-  }
-
-  .slide-2 .slide-content, .slide-3 .slide-content, .slide-4 .slide-content {
+  .slide-unravel .slide-content, .slide-coach .slide-content, .slide-leader .slide-content {
     margin: 0 1em;
   }
 
-  .profile-info {
+  .slide-coach .coach-profile-box {
+    flex-direction: column-reverse;
+  }
+
+  .coach-profile-info {
     margin: 0;
   }
 
-  .profile-pic {
+  .coach-profile-pic-box {
     text-align: center;
   }
 
-  .profile-pic img {
+  .coach-profile-pic {
     margin: 1em auto;
     width: 200px;
     height: 200px;
