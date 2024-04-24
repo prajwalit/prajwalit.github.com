@@ -180,6 +180,62 @@ body {
 
 /* Mentor Slide End */
 
+/* Testimonial Slide */
+.testimonials-box {
+  display: flex;
+  overflow-x: auto;
+  width: 100%;
+  flex-flow: row nowrap;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+}
+
+.testimonial {
+  width: 100%;
+  flex: none;
+  scroll-snap-align: center;
+}
+
+.t-name {
+  font-size: 1.2em;
+  color: #DD4A48;
+  text-align: right;
+  margin-bottom: 0.1em;
+}
+
+.t-company {
+  text-align: right;
+  margin-top: 0.1em;
+}
+
+/* Testimonial Slide End */
+
+/* Scroll visible and stylized (For Testimonials) */ 
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+::-webkit-scrollbar:vertical {
+  width: 10px;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #757575;
+  border-radius: 8px;
+  border: 2px solid #EEE;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 8px;
+  background-color: #EEE;
+}
+/* Scroll visible and stylized (For Testimonials) End */ 
+
+
 /* Footer */
 footer {
   display: flex;
