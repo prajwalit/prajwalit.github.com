@@ -13,23 +13,23 @@ body {
 }
 
 /* Slide common */
-.slide-intro, .slide-unravel, .slide-coach, .slide-leader {
+.slide-intro, .slide-unravel, .slide-coach, .slide-leader, .slide-mentor, .slide-testimonials {
   position: relative;
   scroll-snap-align: start;
 }
 
-.slide-unravel, .slide-coach, .slide-leader {
+.slide-unravel, .slide-coach, .slide-leader, .slide-mentor, .slide-testimonials {
   display: flex;
   flex-direction: column;
 }
 
-.slide-intro, .slide-coach {
+.slide-intro, .slide-coach, .slide-mentor {
   background: #F5EEDC;
   width: 100%;
   height: 100dvh;
 }
 
-.slide-unravel, .slide-leader {
+.slide-unravel, .slide-leader, .slide-testimonials {
   background: #C0D8C0;
   width: 100%;
   height: 100dvh;
@@ -166,7 +166,21 @@ body {
 
 /* Coach Slide End */
 
+/* Mentor Slide */
+.mentor-info-box {
+  display: flex;
+  gap: 1em;
+}
 
+.session-link {
+  margin-top: 1em;
+  padding: 0 1em;
+  background: #EEE;
+}
+
+/* Mentor Slide End */
+
+/* Footer */
 footer {
   display: flex;
   align-items: center;
@@ -196,9 +210,10 @@ footer {
   height: 1.5em;
 }
 
+/* Footer End */
 
 @media only screen and (max-device-width: 480px) {
-  .slide-unravel .slide-content, .slide-coach .slide-content, .slide-leader .slide-content {
+  .slide-content {
     margin: 0 1em;
   }
 
@@ -218,6 +233,14 @@ footer {
     margin: 1em auto;
     width: 200px;
     height: 200px;
+  }
+
+  .mentor-info-box {
+    flex-direction: column;
+  }
+
+  .session-link {
+    margin-top: auto;
   }
 
   footer {
