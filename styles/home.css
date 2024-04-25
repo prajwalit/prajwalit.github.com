@@ -23,13 +23,13 @@ body {
   flex-direction: column;
 }
 
-.slide-intro, .slide-coach, .slide-mentor {
+.slide-intro, .slide-unravel, .slide-mentor {
   background: #F5EEDC;
   width: 100%;
   height: 100dvh;
 }
 
-.slide-unravel, .slide-leader, .slide-testimonials {
+.slide-coach, .slide-leader, .slide-testimonials {
   background: #C0D8C0;
   width: 100%;
   height: 100dvh;
