@@ -188,6 +188,7 @@ body {
   flex-flow: row nowrap;
   overflow-y: hidden;
   scroll-snap-type: x mandatory;
+  gap: 1.5em;
 }
 
 .testimonial {
