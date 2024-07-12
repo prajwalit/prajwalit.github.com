@@ -129,11 +129,12 @@ body {
 /* Unravel Slide */
 .unravel-logo {
   font-family: "Saira";
-  color: #364E68;
+  font-weight: 400 !important; /* due to logo style */
+  color: #118AB2;
 }
 
 .unravel-logo .unravel-logo-hl {
-  color: #3282B8;
+  color: #3AB211;
 }
 
 .offering-header {
