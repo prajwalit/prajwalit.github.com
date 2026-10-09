@@ -1,12 +1,17 @@
+import { createExplorer } from "./explore.js?v=2";
 import { createScreenWakeLock } from "./screen-wake-lock.js";
 import * as THREE from "../assets/vendor/three.module.js";
-import { cameraProgress, journeyScrollDistance } from "./camera-progress.js?v=2";
+import {
+  cameraProgress,
+  journeyScrollDistance,
+} from "./camera-progress.js?v=2";
 import { Water } from "../assets/vendor/Water.js";
 import { advancePanorama, panoramaAngle } from "./panorama.js";
-import { addVegetation, habitat } from "./vegetation.js?v=4";
+import { addVegetation, habitat, sampleGround } from "./vegetation.js?v=4";
 
 const $ = (s) => document.querySelector(s);
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let explorer = null;
 let autoplayTarget = null;
 let automatic = false,
   position = 0,
@@ -26,13 +31,19 @@ function setText(element, text) {
   if (element.textContent !== text) element.textContent = text;
 }
 function updateJourneyControl() {
-  screenWakeLock.setActive(automatic && !summitReady && !document.querySelector("dialog[open]"));
+  screenWakeLock.setActive(
+    automatic && !summitReady && !document.querySelector("dialog[open]"),
+  );
+  const exploring = Boolean(explorer?.active);
+  $("#explore-toggle").hidden = !summitReady || exploring;
+  play.hidden = exploring;
   let label, aria;
   const nextState = [
     journeyStarted,
     summitReady,
     panoramaPaused,
     automatic,
+    exploring,
   ].join(":");
   if (nextState === controlState) return;
   controlState = nextState;
@@ -83,9 +94,18 @@ play.onclick = () => {
   }
   updateJourneyControl();
 };
+$("#explore-toggle").onclick = () => {
+  if (!summitReady || !explorer) return;
+  journeyStarted = true;
+  // Exploration may be the first click after a manually scrolled journey.
+  // Retry blocked audio inside that gesture; the audio controller honors mute.
+  document.dispatchEvent(new Event("journey:start"));
+  explorer.enter();
+};
 let restarting = false;
 restartJourney.onclick = async () => {
   if (restarting) return;
+  explorer?.leave(true);
   restarting = true;
   screenWakeLock.setActive(false);
   autoplayTarget = null;
@@ -136,10 +156,11 @@ restartJourney.onclick = async () => {
   }
 };
 function noteJourneyInput(event) {
+  if (explorer?.active) return;
   // Activating a footer control is not a request to take over page scrolling.
   // Let each control handle its own action (including the pause button).
   const control = event.target?.closest?.(
-    "#sound-toggle, #play, #restart-journey",
+    "#sound-toggle, #play, #restart-journey, #explore-toggle",
   );
   if (control && ["pointerdown", "touchstart", "keydown"].includes(event.type))
     return;
@@ -162,6 +183,7 @@ for (const event of [
   addEventListener(event, noteJourneyInput, { passive: true });
 document.querySelectorAll('a[href^="#"]').forEach((link) =>
   link.addEventListener("click", () => {
+    if (explorer?.active) explorer.leave(true);
     if (link.hash !== "#home") {
       journeyStarted = true;
       updateJourneyControl();
@@ -173,7 +195,12 @@ document.querySelectorAll('a[href^="#"]').forEach((link) =>
 addEventListener(
   "wheel",
   (event) => {
-    if (!summitReady || event.ctrlKey || document.querySelector("dialog[open]"))
+    if (
+      explorer?.active ||
+      !summitReady ||
+      event.ctrlKey ||
+      document.querySelector("dialog[open]")
+    )
       return;
     const horizontal =
       event.shiftKey && event.deltaX === 0 ? event.deltaY : event.deltaX;
@@ -191,6 +218,7 @@ addEventListener(
   { passive: false },
 );
 $("#back-top").onclick = () => {
+  explorer?.leave(true);
   stopPlayback();
   window.scrollTo({ top: 0, behavior: reduced ? "instant" : "smooth" });
 };
@@ -356,9 +384,11 @@ async function start() {
       170 * Math.exp(-(((x + 440) / 230) ** 2 + ((z + 1900) / 400) ** 2))
     );
   }
-  const terrainGeometry = new THREE.PlaneGeometry(14000, 16000, 480, 520);
+  // Extend the grid around free-flight bounds, retaining the original vertex
+  // spacing and alignment so the existing mountains keep their shape.
+  const terrainGeometry = new THREE.PlaneGeometry(17500, 20000, 600, 650);
   terrainGeometry.rotateX(-Math.PI / 2);
-  terrainGeometry.translate(0, 0, -2800);
+  terrainGeometry.translate(0, 0, -4800);
   const vertices = terrainGeometry.attributes.position,
     colors = [];
   const summit = new THREE.Vector3(0, -Infinity, -5000);
@@ -409,11 +439,21 @@ async function start() {
     groundColor.fromBufferAttribute(groundColors, i);
     meadowWeights[i] = meadow;
     vegetationColor.copy(mossColor).lerp(meadowColor, patch);
-    vegetationColor.lerp(heathColor, THREE.MathUtils.smoothstep(fbm(x * .005 - 19, z * .005 + 37), .48, .72) * .65);
-    groundColor.lerp(vegetationColor, meadow * .93);
+    vegetationColor.lerp(
+      heathColor,
+      THREE.MathUtils.smoothstep(
+        fbm(x * 0.005 - 19, z * 0.005 + 37),
+        0.48,
+        0.72,
+      ) * 0.65,
+    );
+    groundColor.lerp(vegetationColor, meadow * 0.93);
     groundColors.setXYZ(i, groundColor.r, groundColor.g, groundColor.b);
   }
-  terrainGeometry.setAttribute("meadow", new THREE.BufferAttribute(meadowWeights, 1));
+  terrainGeometry.setAttribute(
+    "meadow",
+    new THREE.BufferAttribute(meadowWeights, 1),
+  );
   const textureLoader = new THREE.TextureLoader();
   const [rockTexture, normals] = await Promise.all([
     textureLoader.loadAsync("assets/alpine-rock.jpg"),
@@ -421,7 +461,7 @@ async function start() {
   ]);
   rockTexture.colorSpace = THREE.SRGBColorSpace;
   rockTexture.wrapS = rockTexture.wrapT = THREE.RepeatWrapping;
-  rockTexture.repeat.set(82, 82);
+  rockTexture.repeat.set(102.5, 102.5);
   rockTexture.anisotropy = Math.min(
     8,
     renderer.capabilities.getMaxAnisotropy(),
@@ -566,6 +606,19 @@ async function start() {
     [0.6, 0.66, 0.77, 0.84],
     [0.9, 0.97, 1, 1.1],
   ];
+  explorer = createExplorer(
+    camera,
+    (x, z) => sampleGround(terrainGeometry, x, z)?.height ?? 0,
+    {
+      reduced,
+      onChange: () => {
+        automatic = false;
+        autoplayTarget = null;
+        panoramaPaused = true;
+        updateJourneyControl();
+      },
+    },
+  );
   function render(now) {
     requestAnimationFrame(render);
     if (document.hidden) {
@@ -581,7 +634,11 @@ async function start() {
       1,
       document.documentElement.scrollHeight - innerHeight,
     );
-    let target = THREE.MathUtils.clamp(scrollY / maxScroll, 0, 1);
+    if (explorer.active && scrollY !== maxScroll)
+      window.scrollTo({ top: maxScroll, behavior: "instant" });
+    let target = explorer.active
+      ? 1
+      : THREE.MathUtils.clamp(scrollY / maxScroll, 0, 1);
     if (automatic && !document.querySelector("dialog[open]")) {
       // Keep the camera clock in floating-point route space. DOM scroll positions
       // can round to pixels, so they must not feed back into automatic motion.
@@ -598,7 +655,11 @@ async function start() {
     const followSpeed = target > 0.92 ? 6 : 4;
     position = reduced
       ? target
-      : THREE.MathUtils.lerp(position, target, 1 - Math.exp(-frameSeconds * followSpeed));
+      : THREE.MathUtils.lerp(
+          position,
+          target,
+          1 - Math.exp(-frameSeconds * followSpeed),
+        );
     const ascent = cameraProgress(position);
     path.getPointAt(ascent, camera.position);
     const clearance = terrainHeight(camera.position.x, camera.position.z) + 65;
@@ -639,6 +700,7 @@ async function start() {
       .add(camera.position);
     gaze.copy(approachGaze).lerp(panoramaGaze, arrival);
     camera.lookAt(gaze);
+    explorer.update(dt);
     updateJourneyControl();
     sky.position.copy(camera.position);
     water.material.uniforms.time.value = reduced ? 0 : elapsed * 0.2;
@@ -653,7 +715,7 @@ async function start() {
       panel.style.transform = panel.matches(".hero-content")
         ? `translateY(${entrance}px)`
         : `translateY(calc(-50% + ${entrance}px))`;
-      panel.inert = opacity < 0.5;
+      panel.inert = explorer.active || opacity < 0.5;
     });
     sceneCaption.style.opacity =
       1 - THREE.MathUtils.smoothstep(position, 0.1, 0.2);

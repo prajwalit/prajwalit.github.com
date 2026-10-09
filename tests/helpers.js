@@ -139,6 +139,6 @@ export function environment({
     animations,
     run: (source) => vm.runInContext(source, context),
     load: (file) =>
-      vm.runInContext(read(file).replace(/^import .*;\n/gm, ""), context),
+      vm.runInContext(read(file).replace(/^import[\s\S]*?;\n/gm, ""), context),
   };
 }

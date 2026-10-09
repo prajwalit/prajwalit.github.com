@@ -98,7 +98,7 @@
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Italiana&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles/journey.css?v=20261009-23" />
+    <link rel="stylesheet" href="styles/journey.css?v=20261009-27" />
   </head>
   <body class="no-webgl">
     <div id="restart-fade" aria-hidden="true"></div>
@@ -302,6 +302,23 @@
         </button>
       </div>
     </footer>
+    <button id="explore-toggle" type="button" hidden>Explore freely <span aria-hidden="true">⊕</span></button>
+    <div id="explore-ui" hidden>
+      <div id="explore-look" tabindex="0" role="region" aria-label="Explore landscape. Drag to look, W A S D or arrow keys to move, E to rise, Q to descend. Escape returns to summit."></div>
+      <div class="explore-hint" aria-live="polite">
+        <strong>A view of your own.</strong>
+        <span class="explore-desktop">Drag to look · WASD / arrows to move · E / Q to rise / descend</span>
+        <span class="explore-touch">Drag to look · Joystick to move · + / − to rise / descend</span>
+      </div>
+      <div id="explore-stick" role="group" aria-label="Movement controls. W A S D or arrow keys also move."><span></span>
+        <div class="explore-keys" aria-hidden="true"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></div>
+      </div>
+      <div class="explore-altitude">
+        <button id="explore-up" type="button" aria-label="Rise (hold)">+</button>
+        <button id="explore-down" type="button" aria-label="Descend (hold)">−</button>
+      </div>
+      <button id="explore-exit" type="button">Return to summit</button>
+    </div>
     <dialog id="about" aria-labelledby="about-title">
       <button class="close" aria-label="Close about">×</button>
       <div class="eyebrow">A LITTLE ABOUT ME</div>
@@ -340,6 +357,6 @@
       loop
     ></audio>
     <script type="module" src="scripts/ambience.js?v=20261009-8"></script>
-    <script type="module" src="scripts/journey.js?v=20261009-35"></script>
+    <script type="module" src="scripts/journey.js?v=20261009-38"></script>
   </body>
 </html>

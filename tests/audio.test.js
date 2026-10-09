@@ -46,3 +46,21 @@ test('unavailable local storage does not break the sound control', async () => {
   await settle();
   assert.equal(env.audio.muted, true);
 });
+
+test("entering exploration retries blocked audio and preserves saved mute", async () => {
+  for (const muted of [false, true]) {
+    const env = environment({ blockedAudio: true, storedMute: String(muted) });
+    env.load("scripts/ambience.js");
+    env.load("scripts/journey.js");
+    await settle();
+    const before = env.audio.playCount;
+    env.audio.blocked = false;
+    env.run("summitReady=true; explorer={active:false,enter(){this.active=true;}};");
+    env.get("#explore-toggle").onclick();
+    await settle();
+    assert.equal(env.audio.playCount, before + (muted ? 0 : 1));
+    assert.equal(env.audio.muted, muted);
+    assert.equal(env.run("explorer.active"), true);
+    if (!muted) assert.equal(env.get("#sound-toggle").getAttribute("aria-pressed"), "true");
+  }
+});

@@ -80,3 +80,18 @@ Screen wake lock
   panorama does not keep the display awake. Unsupported browsers, battery-saving
   denials, and OS revocation are handled quietly without a repeated retry loop.
   Unit tests mock the browser API; verify actual dimming behaviour on a phone.
+
+Optional exploration (experiment)
+  At the summit, Explore freely opens a bounded free-flight camera. Drag to look;
+  WASD/arrows move relative to the view, E/Q rise/descend. The on-screen joystick
+  and +/- controls work with pointer/touch input. Escape or Return to summit
+  restores the guided summit pose in 1.8 seconds (instant with reduced motion).
+  Terrain clearance samples rendered triangles; altitude and horizontal bounds
+  keep the camera above the lake and inside the scenery. Inputs clear on blur,
+  hidden tabs, pointer cancellation, and dialogs. The guided journey stays at
+  the summit while exploring; returning leaves the automatic panorama paused.
+  No wake lock is held in free exploration. Music preference is preserved.
+
+  Exploration bounds: x ±7,800; z -13,500 to +4,200; altitude cap 3,300.
+  The extended terrain grid preserves the original spacing and vertex alignment,
+  with clearance sampled from the same visible mesh throughout the larger area.
