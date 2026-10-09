@@ -197,6 +197,7 @@ p {
   gap: 25px;
 }
 .begin span {
+  flex-shrink: 0;
   width: 34px;
   height: 34px;
   border: 1px solid #fff5;
@@ -249,6 +250,10 @@ p {
   font-size: 16px;
 }
 #back-top {
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  text-align: left;
   margin: 24px 0 0;
   padding: 0;
   font-size: 11px;
