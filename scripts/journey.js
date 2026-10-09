@@ -1,3 +1,4 @@
+import { createScreenWakeLock } from "./screen-wake-lock.js";
 import * as THREE from "../assets/vendor/three.module.js";
 import { cameraProgress, journeyScrollDistance } from "./camera-progress.js?v=2";
 import { Water } from "../assets/vendor/Water.js";
@@ -19,11 +20,13 @@ let summitReady = false,
 const play = $("#play");
 const soundToggle = $("#sound-toggle");
 const restartJourney = $("#restart-journey");
+const screenWakeLock = createScreenWakeLock(navigator, document);
 let controlState = "";
 function setText(element, text) {
   if (element.textContent !== text) element.textContent = text;
 }
 function updateJourneyControl() {
+  screenWakeLock.setActive(automatic && !summitReady && !document.querySelector("dialog[open]"));
   let label, aria;
   const nextState = [
     journeyStarted,
@@ -84,6 +87,7 @@ let restarting = false;
 restartJourney.onclick = async () => {
   if (restarting) return;
   restarting = true;
+  screenWakeLock.setActive(false);
   autoplayTarget = null;
   automatic = false;
   const fade = $("#restart-fade");

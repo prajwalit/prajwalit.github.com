@@ -72,3 +72,11 @@ Validation
   git diff --check
   Preview the five chapters, sound controls, dialog, and summit pan.
   Also check with JavaScript disabled and at a narrow viewport.
+
+Screen wake lock
+  Automatic travel requests a screen wake lock on supporting secure browsers.
+  Pause, manual navigation, hidden tabs, and summit arrival release it. Returning
+  to the tab reacquires it only if automatic travel is still active. The summit
+  panorama does not keep the display awake. Unsupported browsers, battery-saving
+  denials, and OS revocation are handled quietly without a repeated retry loop.
+  Unit tests mock the browser API; verify actual dimming behaviour on a phone.

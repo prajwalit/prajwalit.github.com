@@ -1,3 +1,4 @@
+import { createScreenWakeLock } from "../scripts/screen-wake-lock.js";
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
 
@@ -96,6 +97,8 @@ export function environment({
   const scrolls = [];
   const context = vm.createContext({
     document,
+    navigator: {},
+    createScreenWakeLock,
     Event,
     location: { hash: "" },
     localStorage: {
