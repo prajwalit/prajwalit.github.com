@@ -17,6 +17,9 @@ Implementation
   scripts/journey.js — deterministic procedural terrain, sky shader,
     planar-reflection water, scroll camera, chapter fades, and dialogs.
   styles/journey.css — desktop/mobile layout with fixed chapter panels.
+  scripts/vegetation.js — instanced conifers and grass, with slope/height limits
+    and roots sampled from the rendered terrain triangles. Meadow color fades
+    into exposed rock higher up; trees become smaller and sparser at the treeline.
   assets/trolltunga-prajwalit.jpg — retained original photo; not loaded by the site.
   assets/water-normal.jpg — water normal map from the Three.js examples.
   assets/vendor — locally vendored Three.js 0.170.0 and Water; MIT license.

@@ -1,6 +1,7 @@
 import * as THREE from "../assets/vendor/three.module.js";
 import { Water } from "../assets/vendor/Water.js";
 import { advancePanorama, panoramaAngle } from "./panorama.js";
+import { addVegetation, habitat } from "./vegetation.js?v=2";
 
 const $ = (s) => document.querySelector(s);
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -319,6 +320,23 @@ async function start() {
     new THREE.Float32BufferAttribute(colors, 3),
   );
   terrainGeometry.computeVertexNormals();
+  const groundNormals = terrainGeometry.attributes.normal;
+  const meadowColor = new THREE.Color("#626d40");
+  const groundColors = terrainGeometry.attributes.color;
+  const groundColor = new THREE.Color();
+  for (let i = 0; i < vertices.count; i++) {
+    const x = vertices.getX(i),
+      z = vertices.getZ(i),
+      y = vertices.getY(i);
+    const slope =
+      Math.sqrt(Math.max(0, 1 - groundNormals.getY(i) ** 2)) /
+      Math.max(0.01, groundNormals.getY(i));
+    const patch = fbm(x * 0.002 + 63, z * 0.002 - 41);
+    const meadow = habitat(y, slope, patch).meadow;
+    groundColor.fromBufferAttribute(groundColors, i);
+    groundColor.lerp(meadowColor, meadow * (0.32 + patch * 0.55));
+    groundColors.setXYZ(i, groundColor.r, groundColor.g, groundColor.b);
+  }
   const textureLoader = new THREE.TextureLoader();
   const [rockTexture, normals] = await Promise.all([
     textureLoader.loadAsync("assets/alpine-rock.jpg"),
@@ -380,6 +398,7 @@ async function start() {
   terrain.castShadow = true;
   terrain.receiveShadow = true;
   scene.add(terrain);
+  addVegetation(scene, terrainGeometry, fbm, hash);
   normals.wrapS = normals.wrapT = THREE.RepeatWrapping;
   normals.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
   function reflectionSize() {
