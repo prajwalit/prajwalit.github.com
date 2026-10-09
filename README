@@ -48,8 +48,6 @@ Current scope
   heading. Vertical scrolling still moves back down the journey.
 
 Background music
-  Six optional sound styles: the Silent Trail track, soft pads, felt piano, two
-  gentle lo-fi beats, and low tide. The song plays as a level-adjusted AAC track;
-  synthesized styles use the Web Audio API. WAV previews are in sounds/. Sound starts off; the footer
-  control fades playback in and out. Hidden tabs pause playback. No third-party
-  music files or services are used.
+  Silent Trail is the only soundtrack. The 108-second, volume-reduced AAC clip
+  loops in the background and attempts to play on page load. Browsers that block
+  autoplay show a start control. Mute preference is saved in local storage.

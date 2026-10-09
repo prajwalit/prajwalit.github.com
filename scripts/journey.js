@@ -4,15 +4,44 @@ import { Water } from '../assets/vendor/Water.js';
 
 const $ = s => document.querySelector(s);
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-let automatic = false, position = 0;
+let automatic = false, position = 0, journeyStarted = Boolean(location.hash && location.hash !== '#home');
 let panoramaPaused=reduced, panoramaElapsed=0;
 let summitReady=false, panTarget=0, panOffset=0;
-const panoramaToggle=$('#panorama-toggle');
-panoramaToggle.onclick=()=>{if(panoramaElapsed>=90){panoramaElapsed=0;panoramaPaused=false;}else panoramaPaused=!panoramaPaused;};
 const play = $('#play');
-function stopPlayback(){automatic=false;play.innerHTML='▷ <span>Let it unfold</span>';play.setAttribute('aria-label','Play automatic journey');}
-play.onclick=()=>{automatic=!automatic;play.innerHTML=automatic?'Ⅱ <span>Pause journey</span>':'▷ <span>Let it unfold</span>';play.setAttribute('aria-label',automatic?'Pause automatic journey':'Play automatic journey');if(automatic&&scrollY>=document.documentElement.scrollHeight-innerHeight-5)window.scrollTo({top:0,behavior:'instant'});};
-for(const event of ['wheel','touchstart','keydown'])addEventListener(event,stopPlayback,{passive:true});
+function updateJourneyControl(){
+ let label,aria;
+ $('#sound-toggle').hidden=!journeyStarted;
+ play.classList.toggle('start-journey',!journeyStarted);
+ if(summitReady){
+  if(panoramaElapsed>=90){label='↻ <span>Turn again</span>';aria='Turn the panorama again';}
+  else if(panoramaPaused){label='▷ <span>Resume panorama</span>';aria='Resume the summit panorama';}
+  else{label='Ⅱ <span>Pause panorama</span>';aria='Pause the summit panorama';}
+ }else if(automatic){label='Ⅱ <span>Pause journey</span>';aria='Pause automatic journey';}
+ else if(journeyStarted){label='▷ <span>Resume journey</span>';aria='Resume automatic journey';}
+ else{label='▷ <span>Start the journey</span>';aria='Start the journey with background music';}
+ if(play.innerHTML!==label)play.innerHTML=label;
+ play.setAttribute('aria-label',aria);
+}
+function stopPlayback(){automatic=false;updateJourneyControl();}
+play.onclick=()=>{
+ if(!journeyStarted){
+  journeyStarted=true;
+  document.dispatchEvent(new Event('journey:start'));
+  automatic=true;
+ }else if(summitReady){if(panoramaElapsed>=90){panoramaElapsed=0;panoramaPaused=false;}else panoramaPaused=!panoramaPaused;}
+ else{automatic=!automatic;if(automatic&&scrollY>=document.documentElement.scrollHeight-innerHeight-5)window.scrollTo({top:0,behavior:'instant'});}
+ updateJourneyControl();
+};
+function noteJourneyInput(){
+ stopPlayback();
+ if(!journeyStarted)requestAnimationFrame(()=>{
+  if(scrollY>0){journeyStarted=true;updateJourneyControl();}
+ });
+}
+for(const event of ['wheel','touchstart','touchmove','keydown','pointerdown'])addEventListener(event,noteJourneyInput,{passive:true});
+document.querySelectorAll('a[href^="#"]').forEach(link=>link.addEventListener('click',()=>{
+ if(link.hash!=='#home'){journeyStarted=true;updateJourneyControl();}
+}));
 // Only sideways gestures at the summit take over the camera. Vertical input
 // remains native page scrolling, and pinch-to-zoom remains a browser gesture.
 addEventListener('wheel',event=>{
@@ -25,7 +54,7 @@ addEventListener('wheel',event=>{
  panoramaPaused=true;
 },{passive:false});
 $('#back-top').onclick=()=>{stopPlayback();window.scrollTo({top:0,behavior:reduced?'instant':'smooth'});};
-for(const [trigger,modal] of [['#about-button','#about'],['#credits-button','#credits']]){
+for(const [trigger,modal] of [['#about-button','#about']]){
  $(trigger).onclick=()=>{stopPlayback();$(modal).showModal();};
  $(modal).querySelector('.close').onclick=()=>$(modal).close();
  $(modal).onclick=e=>{if(e.target===$(modal)){const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close();}};
@@ -40,14 +69,20 @@ async function start(){
  const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
  renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));renderer.setSize(innerWidth,innerHeight);
  renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;
+ renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
  $('#world').append(renderer.domElement);
  const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0xc49aa2,.00014);
  // The route stays at least 38 units above the terrain. A 10-unit near
  // plane preserves depth precision at distant shorelines during the orbit.
  const camera=new THREE.PerspectiveCamera(54,innerWidth/innerHeight,10,160000);
- scene.add(new THREE.HemisphereLight(0xbacff1,0x203c49,2.0));
+ scene.add(new THREE.HemisphereLight(0xbacff1,0x203c49,1.35));
  const sunDirection=new THREE.Vector3(.16,.24,-1).normalize();
- const sun=new THREE.DirectionalLight(0xffc397,3.1);sun.position.copy(sunDirection).multiplyScalar(8000);scene.add(sun);
+ const sun=new THREE.DirectionalLight(0xffc397,3.4);
+ sun.position.copy(sunDirection).multiplyScalar(10000);
+ sun.target.position.set(0,0,-2800);
+ sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);
+ Object.assign(sun.shadow.camera,{left:-9000,right:9000,top:9000,bottom:-9000,near:100,far:30000});
+ sun.shadow.bias=-.00012;sun.shadow.normalBias=2.5;scene.add(sun,sun.target);
  const clock={value:0};
  const sky=new THREE.Mesh(new THREE.SphereGeometry(80000,40,24),new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,uniforms:{uTime:clock,sunDirection:{value:sunDirection}},vertexShader:`varying vec3 vDirection;void main(){vDirection=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:`
  varying vec3 vDirection;uniform vec3 sunDirection;uniform float uTime;
@@ -73,24 +108,63 @@ async function start(){
  function terrainHeight(x,z){
   let mountain=0;
   for(const [px,pz,height,wx,wz] of peaks){const r=((x-px*1.28)/wx)**2+((z-pz)/wz)**2;mountain=Math.max(mountain,height*Math.exp(-r*1.55));}
-  const ridges=1-Math.abs(2*fbm(x*.0024,z*.0024)-1);
-  return mountain*(.62+ridges*.56)+(fbm(x*.008,z*.008)-.5)*mountain*.16-85
+  // Wind and glacial cuts interrupt the broad, sculpted mass with broken
+  // ridgelines and smaller exposed-rock folds at several scales.
+  const warpX=(fbm(x*.0018+17,z*.0018+33)-.5)*360;
+  const warpZ=(fbm(x*.0018-44,z*.0018+13)-.5)*360;
+  const ridges=1-Math.abs(2*fbm((x+warpX)*.0038,(z+warpZ)*.0038)-1);
+  const fineRock=fbm(x*.014+warpX*.008,z*.014+warpZ*.008)-.5;
+  const strata=Math.sin((x*.004+z*.0015+warpX*.003)*Math.PI*2);
+  return mountain*(.68+ridges*.30)+fineRock*mountain*.08+strata*mountain*.012-85
    +170*Math.exp(-(((x+440)/230)**2+((z+1900)/400)**2));
  }
- const terrainGeometry=new THREE.PlaneGeometry(14000,16000,360,400);terrainGeometry.rotateX(-Math.PI/2);terrainGeometry.translate(0,0,-2800);
+ const terrainGeometry=new THREE.PlaneGeometry(14000,16000,480,520);terrainGeometry.rotateX(-Math.PI/2);terrainGeometry.translate(0,0,-2800);
  const vertices=terrainGeometry.attributes.position,colors=[];
  const summit=new THREE.Vector3(0,-Infinity,-5000);
- const low=new THREE.Color('#203e49'),rock=new THREE.Color('#546179'),high=new THREE.Color('#d3c5cb');
+ const low=new THREE.Color('#1d3942'),rock=new THREE.Color('#596477'),high=new THREE.Color('#ded1ce'),shore=new THREE.Color('#87766e');
  for(let i=0;i<vertices.count;i++){
   const x=vertices.getX(i),z=vertices.getZ(i),y=terrainHeight(x,z);
   if(Math.abs(x)<900&&Math.abs(z+5000)<1000&&y>summit.y)summit.set(x,y,z);
   vertices.setY(i,y);
-  const c=low.clone().lerp(rock,THREE.MathUtils.smoothstep(y,20,650));
-  c.lerp(high,THREE.MathUtils.smoothstep(y+(fbm(x*.006,z*.006)-.5)*200,1050,1900));
-  c.multiplyScalar(.88+fbm(x*.012,z*.012)*.23);colors.push(c.r,c.g,c.b);
+  const surfaceNoise=fbm(x*.014,z*.014);
+  const c=low.clone().lerp(rock,THREE.MathUtils.smoothstep(y,10,620));
+  c.lerp(shore,(1-THREE.MathUtils.smoothstep(y,15,180))*.55);
+  const snowline=y+(fbm(x*.003,z*.003)-.5)*260+(surfaceNoise-.5)*130;
+  c.lerp(high,THREE.MathUtils.smoothstep(snowline,1240,2040));
+  const mineralBands=1+Math.sin((x*.004+z*.0015)*Math.PI*2)*.035;
+  c.multiplyScalar((.78+surfaceNoise*.42)*mineralBands);colors.push(c.r,c.g,c.b);
  }
  terrainGeometry.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));terrainGeometry.computeVertexNormals();
- scene.add(new THREE.Mesh(terrainGeometry,new THREE.MeshStandardMaterial({vertexColors:true,roughness:.94,metalness:0})));
+ const rockTexture=await new THREE.TextureLoader().loadAsync('assets/alpine-rock.jpg');
+ rockTexture.colorSpace=THREE.SRGBColorSpace;rockTexture.wrapS=rockTexture.wrapT=THREE.RepeatWrapping;
+ rockTexture.repeat.set(82,82);rockTexture.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
+ const terrainMaterial=new THREE.MeshStandardMaterial({vertexColors:true,map:rockTexture,roughness:.97,metalness:0});
+ // World-space color grain breaks the smooth, plastic look without tiling a
+ // recognisable bitmap texture across the mountains.
+ terrainMaterial.onBeforeCompile=shader=>{
+  shader.vertexShader=shader.vertexShader
+   .replace('#include <common>','#include <common>\nvarying vec3 vTerrainWorld;')
+   .replace('#include <worldpos_vertex>','#include <worldpos_vertex>\nvTerrainWorld=worldPosition.xyz;');
+  shader.fragmentShader=shader.fragmentShader
+   .replace('#include <map_fragment>',`#ifdef USE_MAP
+    vec4 sampledDiffuseColor=texture2D(map,vMapUv);
+    sampledDiffuseColor.rgb=min(sampledDiffuseColor.rgb*3.2+vec3(.10),vec3(1.));
+    diffuseColor *= sampledDiffuseColor;
+   #endif`)
+   .replace('#include <common>',`#include <common>
+    varying vec3 vTerrainWorld;
+    float terrainHash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+    float terrainNoise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(terrainHash(i),terrainHash(i+vec2(1,0)),f.x),mix(terrainHash(i+vec2(0,1)),terrainHash(i+vec2(1)),f.x),f.y);}
+   `)
+   .replace('#include <color_fragment>',`#include <color_fragment>
+    float rockGrain=terrainNoise(vTerrainWorld.xz*.026);
+    float fineGrain=terrainNoise(vTerrainWorld.xz*.071+vec2(21.7,8.3));
+    diffuseColor.rgb *= .80 + rockGrain*.30 + fineGrain*.16;
+   `);
+ };
+ terrainMaterial.customProgramCacheKey=()=> 'terrain-world-grain-v1';
+ const terrain=new THREE.Mesh(terrainGeometry,terrainMaterial);
+ terrain.castShadow=true;terrain.receiveShadow=true;scene.add(terrain);
  const normals=await new THREE.TextureLoader().loadAsync('assets/water-normal.jpg');normals.wrapS=normals.wrapT=THREE.RepeatWrapping;normals.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
  function reflectionSize(){
   const scale=Math.min(renderer.getPixelRatio(),1536/Math.max(innerWidth,innerHeight));
@@ -129,16 +203,18 @@ async function start(){
   const dt=Math.min((now-previous)/1000,.05);previous=now;elapsed+=dt;clock.value=reduced?0:elapsed;
   const maxScroll=Math.max(1,document.documentElement.scrollHeight-innerHeight);
   if(automatic&&!document.querySelector('dialog[open]')){window.scrollBy({top:dt*42,behavior:'instant'});if(scrollY>=maxScroll-2)stopPlayback();}
-  const target=THREE.MathUtils.clamp(scrollY/maxScroll,0,1);position=reduced?target:THREE.MathUtils.lerp(position,target,1-Math.exp(-dt*4));
+  const target=THREE.MathUtils.clamp(scrollY/maxScroll,0,1);
+  const followSpeed=target>.92?6:4;
+  position=reduced?target:THREE.MathUtils.lerp(position,target,1-Math.exp(-dt*followSpeed));
   const ascent=THREE.MathUtils.smootherstep(position,0,.96);
   path.getPointAt(ascent,camera.position);
   const clearance=terrainHeight(camera.position.x,camera.position.z)+65;
   // Smooth maximum avoids abrupt terrain-following kicks during the climb.
   const delta=camera.position.y-clearance;
   camera.position.y=(camera.position.y+clearance+Math.sqrt(delta*delta+900))*.5;
-  const arrival=THREE.MathUtils.smootherstep(position,.84,.96);
+  const arrival=THREE.MathUtils.smootherstep(position,.84,.95);
   camera.position.lerp(summitEye,arrival);
-  const atSummit=target>.999&&position>.997;
+  const atSummit=target>.999&&position>.99;
   summitReady=atSummit;
   if(position<.84){panoramaElapsed=0;panTarget=0;panOffset=0;}
   panOffset=reduced?panTarget:THREE.MathUtils.lerp(panOffset,panTarget,1-Math.exp(-dt*12));
@@ -148,12 +224,9 @@ async function start(){
   approachGaze.set(camera.position.x*.2,THREE.MathUtils.lerp(230,summit.y+120,lift),camera.position.z-2300);
   panoramaGaze.copy(camera.position).add(new THREE.Vector3(Math.sin(turn)*3000,-620,-Math.cos(turn)*3000));
   gaze.copy(approachGaze).lerp(panoramaGaze,arrival);camera.lookAt(gaze);
-  panoramaToggle.hidden=!atSummit;
-  panoramaToggle.setAttribute('aria-pressed',String(panoramaPaused));
-  const panoramaLabel=panoramaElapsed>=90?'↻ <span>Turn again</span>':panoramaPaused?'▷ <span>Resume panorama</span>':'Ⅱ <span>Pause panorama</span>';
-  if(panoramaToggle.innerHTML!==panoramaLabel)panoramaToggle.innerHTML=panoramaLabel;
+  updateJourneyControl();
   sky.position.copy(camera.position);water.material.uniforms.time.value=reduced?0:elapsed*.20;
-  panels.forEach((panel,i)=>{const [a,b,c,d]=ranges[i];const opacity=(i===0?1:THREE.MathUtils.smoothstep(position,a,b))*(1-THREE.MathUtils.smoothstep(position,c,d));panel.style.opacity=opacity;panel.style.visibility=opacity>.005?'visible':'hidden';panel.style.transform=`translateY(${(1-opacity)*18}px)`;panel.inert=opacity<.5;});
+  panels.forEach((panel,i)=>{const [a,b,c,d]=ranges[i];const opacity=(i===0?1:THREE.MathUtils.smoothstep(position,a,b))*(1-THREE.MathUtils.smoothstep(position,c,d));panel.style.opacity=opacity;panel.style.visibility=opacity>.005?'visible':'hidden';const entrance=(1-opacity)*18;panel.style.transform=panel.matches('.hero-content')?`translateY(${entrance}px)`:`translateY(calc(-50% + ${entrance}px))`;panel.inert=opacity<.5;});
   $('.scene-caption').style.opacity=1-THREE.MathUtils.smoothstep(position,.10,.20);
   $('#progress').style.width=`${target*100}%`;$('#chapter-number').textContent=String(Math.min(panels.length,Math.floor(target*panels.length)+1)).padStart(2,'0');
   $('#place-name').textContent=atSummit?'THE SUMMIT':position>.60?'A LITTLE HIGHER':'BY THE LAKE';
