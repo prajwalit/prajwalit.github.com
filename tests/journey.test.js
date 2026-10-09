@@ -142,3 +142,13 @@ test("reduced-motion replay skips the fade and leaves audio alone", async () => 
   assert.equal(env.audio.playCount, plays);
   assert.equal(env.audio.pauseCount, 0);
 });
+
+test("pause and replay discard the previous automatic camera target", async () => {
+  const env = await setup({ reduced: true });
+  env.run("journeyStarted=true; automatic=true; autoplayTarget=.6;");
+  env.get("#play").onclick();
+  assert.equal(env.run("autoplayTarget"), null);
+  env.run("autoplayTarget=.8;");
+  await env.get("#restart-journey").onclick();
+  assert.equal(env.run("autoplayTarget"), null);
+});

@@ -1,10 +1,12 @@
 import * as THREE from "../assets/vendor/three.module.js";
+import { cameraProgress, journeyScrollDistance } from "./camera-progress.js?v=2";
 import { Water } from "../assets/vendor/Water.js";
 import { advancePanorama, panoramaAngle } from "./panorama.js";
-import { addVegetation, habitat } from "./vegetation.js?v=2";
+import { addVegetation, habitat } from "./vegetation.js?v=4";
 
 const $ = (s) => document.querySelector(s);
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+let autoplayTarget = null;
 let automatic = false,
   position = 0,
   journeyStarted = Boolean(location.hash && location.hash !== "#home");
@@ -56,10 +58,12 @@ function updateJourneyControl() {
   play.setAttribute("aria-label", aria);
 }
 function stopPlayback() {
+  autoplayTarget = null;
   automatic = false;
   updateJourneyControl();
 }
 play.onclick = () => {
+  autoplayTarget = null;
   if (!journeyStarted) {
     journeyStarted = true;
     document.dispatchEvent(new Event("journey:start"));
@@ -80,6 +84,7 @@ let restarting = false;
 restartJourney.onclick = async () => {
   if (restarting) return;
   restarting = true;
+  autoplayTarget = null;
   automatic = false;
   const fade = $("#restart-fade");
   let cover, reveal;
@@ -381,7 +386,11 @@ async function start() {
   );
   terrainGeometry.computeVertexNormals();
   const groundNormals = terrainGeometry.attributes.normal;
-  const meadowColor = new THREE.Color("#626d40");
+  const meadowColor = new THREE.Color("#788352");
+  const heathColor = new THREE.Color("#8b7755");
+  const mossColor = new THREE.Color("#526b43");
+  const meadowWeights = new Float32Array(vertices.count);
+  const vegetationColor = new THREE.Color();
   const groundColors = terrainGeometry.attributes.color;
   const groundColor = new THREE.Color();
   for (let i = 0; i < vertices.count; i++) {
@@ -394,9 +403,13 @@ async function start() {
     const patch = fbm(x * 0.002 + 63, z * 0.002 - 41);
     const meadow = habitat(y, slope, patch).meadow;
     groundColor.fromBufferAttribute(groundColors, i);
-    groundColor.lerp(meadowColor, meadow * (0.32 + patch * 0.55));
+    meadowWeights[i] = meadow;
+    vegetationColor.copy(mossColor).lerp(meadowColor, patch);
+    vegetationColor.lerp(heathColor, THREE.MathUtils.smoothstep(fbm(x * .005 - 19, z * .005 + 37), .48, .72) * .65);
+    groundColor.lerp(vegetationColor, meadow * .93);
     groundColors.setXYZ(i, groundColor.r, groundColor.g, groundColor.b);
   }
+  terrainGeometry.setAttribute("meadow", new THREE.BufferAttribute(meadowWeights, 1));
   const textureLoader = new THREE.TextureLoader();
   const [rockTexture, normals] = await Promise.all([
     textureLoader.loadAsync("assets/alpine-rock.jpg"),
@@ -421,11 +434,11 @@ async function start() {
     shader.vertexShader = shader.vertexShader
       .replace(
         "#include <common>",
-        "#include <common>\nvarying vec3 vTerrainWorld;",
+        "#include <common>\nvarying vec3 vTerrainWorld; attribute float meadow; varying float vMeadow;",
       )
       .replace(
         "#include <worldpos_vertex>",
-        "#include <worldpos_vertex>\nvTerrainWorld=worldPosition.xyz;",
+        "#include <worldpos_vertex>\nvTerrainWorld=worldPosition.xyz; vMeadow=meadow;",
       );
     shader.fragmentShader = shader.fragmentShader
       .replace(
@@ -433,6 +446,7 @@ async function start() {
         `#ifdef USE_MAP
     vec4 sampledDiffuseColor=texture2D(map,vMapUv);
     sampledDiffuseColor.rgb=min(sampledDiffuseColor.rgb*3.2+vec3(.10),vec3(1.));
+    sampledDiffuseColor.rgb=mix(sampledDiffuseColor.rgb,vec3(.96),vMeadow*.86);
     diffuseColor *= sampledDiffuseColor;
    #endif`,
       )
@@ -440,6 +454,7 @@ async function start() {
         "#include <common>",
         `#include <common>
     varying vec3 vTerrainWorld;
+    varying float vMeadow;
     float terrainHash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
     float terrainNoise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(terrainHash(i),terrainHash(i+vec2(1,0)),f.x),mix(terrainHash(i+vec2(0,1)),terrainHash(i+vec2(1)),f.x),f.y);}
    `,
@@ -453,7 +468,7 @@ async function start() {
    `,
       );
   };
-  terrainMaterial.customProgramCacheKey = () => "terrain-world-grain-v1";
+  terrainMaterial.customProgramCacheKey = () => "terrain-meadow-grain-v2";
   const terrain = new THREE.Mesh(terrainGeometry, terrainMaterial);
   terrain.castShadow = true;
   terrain.receiveShadow = true;
@@ -553,7 +568,8 @@ async function start() {
       previous = now;
       return;
     }
-    const dt = Math.min((now - previous) / 1000, 0.05);
+    const frameSeconds = Math.max(0, (now - previous) / 1000);
+    const dt = Math.min(frameSeconds, 0.05);
     previous = now;
     elapsed += dt;
     clock.value = reduced ? 0 : elapsed;
@@ -561,16 +577,25 @@ async function start() {
       1,
       document.documentElement.scrollHeight - innerHeight,
     );
+    let target = THREE.MathUtils.clamp(scrollY / maxScroll, 0, 1);
     if (automatic && !document.querySelector("dialog[open]")) {
-      window.scrollBy({ top: dt * 42, behavior: "instant" });
-      if (scrollY >= maxScroll - 2) stopPlayback();
+      // Keep the camera clock in floating-point route space. DOM scroll positions
+      // can round to pixels, so they must not feed back into automatic motion.
+      autoplayTarget = Math.min(
+        1,
+        (autoplayTarget ?? target) + journeyScrollDistance(frameSeconds, 1),
+      );
+      target = autoplayTarget;
+      window.scrollTo({ top: target * maxScroll, behavior: "instant" });
+      if (target >= 1) stopPlayback();
+    } else {
+      autoplayTarget = null;
     }
-    const target = THREE.MathUtils.clamp(scrollY / maxScroll, 0, 1);
     const followSpeed = target > 0.92 ? 6 : 4;
     position = reduced
       ? target
-      : THREE.MathUtils.lerp(position, target, 1 - Math.exp(-dt * followSpeed));
-    const ascent = THREE.MathUtils.smootherstep(position, 0, 0.96);
+      : THREE.MathUtils.lerp(position, target, 1 - Math.exp(-frameSeconds * followSpeed));
+    const ascent = cameraProgress(position);
     path.getPointAt(ascent, camera.position);
     const clearance = terrainHeight(camera.position.x, camera.position.z) + 65;
     // Smooth maximum avoids abrupt terrain-following kicks during the climb.

@@ -140,8 +140,8 @@ export function addVegetation(scene, terrainGeometry, noise, random) {
     grass = [],
     shrubs = [];
   // Jittered candidates with broad patches leave open shoreline and rock.
-  for (let z = -9000; z < 3900; z += 34)
-    for (let x = -5700; x < 5700; x += 34) {
+  for (let z = -9000; z < 3900; z += 48)
+    for (let x = -5700; x < 5700; x += 48) {
       const px = x + (random(x + 9, z) - 0.5) * 30,
         pz = z + (random(x, z + 19) - 0.5) * 30;
       const ground = sampleGround(terrainGeometry, px, pz);
@@ -150,10 +150,16 @@ export function addVegetation(scene, terrainGeometry, noise, random) {
       const { forest, meadow } = habitat(ground.height, ground.slope, patch);
       const grove = noise(px * 0.006 + 9, pz * 0.006 - 7);
       const density =
-        0.015 +
-        THREE.MathUtils.smoothstep(patch, 0.32, 0.62) *
-          THREE.MathUtils.smoothstep(grove, 0.35, 0.61);
-      if (random(x + 147, z - 45) < forest * density * 0.95) {
+        THREE.MathUtils.smoothstep(patch, 0.48, 0.65) *
+        THREE.MathUtils.smoothstep(grove, 0.48, 0.67);
+      const lakeside =
+        (1 - THREE.MathUtils.smoothstep(ground.height, 140, 280)) *
+        (1 - THREE.MathUtils.smoothstep(Math.abs(px), 1800, 2800));
+      if (
+        pz > -4500 &&
+        pz < 2600 &&
+        random(x + 147, z - 45) < forest * density * lakeside * 0.85
+      ) {
         const height =
           (12 + random(x - 7, z + 4) * 23) *
           (1 - THREE.MathUtils.smoothstep(ground.height, 300, 740) * 0.48);
@@ -165,7 +171,7 @@ export function addVegetation(scene, terrainGeometry, noise, random) {
           seed: random(x + 91, z + 7),
         });
         // Mixed ages in small families give the grove an irregular edge.
-        for (let sapling = 0; sapling < 3; sapling++) {
+        for (let sapling = 0; sapling < 2; sapling++) {
           const sx = px + (random(x + sapling * 11, z + 83) - 0.5) * 42;
           const sz = pz + (random(x + 19, z + sapling * 23) - 0.5) * 42;
           const soil = sampleGround(terrainGeometry, sx, sz);
@@ -192,7 +198,7 @@ export function addVegetation(scene, terrainGeometry, noise, random) {
             z: pz,
             seed: random(px, pz),
           });
-        for (let i = 0; i < 9; i++) {
+        for (let i = 0; i < 3; i++) {
           const gx = px + (random(x + i * 13, z + 27) - 0.5) * 34,
             gz = pz + (random(x + 44, z + i * 17) - 0.5) * 34;
           const g = sampleGround(terrainGeometry, gx, gz);
@@ -281,7 +287,7 @@ export function addVegetation(scene, terrainGeometry, noise, random) {
     bushes.setColorAt(i, color);
   });
   bushes.receiveShadow = true;
-  scene.add(bushes);
+
   const tufts = new THREE.InstancedMesh(
     grassGeometry(),
     new THREE.MeshStandardMaterial({
@@ -301,10 +307,53 @@ export function addVegetation(scene, terrainGeometry, noise, random) {
     tufts.setColorAt(i, color);
   });
   tufts.receiveShadow = true;
-  scene.add(tufts);
+
   for (const mesh of [...crowns, trunks, tufts, bushes]) {
     mesh.instanceMatrix.needsUpdate = true;
     mesh.computeBoundingSphere();
   }
+  // Ground detail only matters nearby. Small tiles also let the reflected
+  // camera cull independently, while terrain colour carries distant meadows.
+  function addGroundTiles(source, items) {
+    const tiles = new Map();
+    items.forEach((item, index) => {
+      const x = (Math.floor(item.x / 500) + 0.5) * 500;
+      const z = (Math.floor(item.z / 500) + 0.5) * 500;
+      const key = x + ":" + z;
+      if (!tiles.has(key)) tiles.set(key, { x, z, indices: [] });
+      tiles.get(key).indices.push(index);
+    });
+    const matrix = new THREE.Matrix4(),
+      tint = new THREE.Color();
+    for (const tile of tiles.values()) {
+      const y =
+        tile.indices.reduce((sum, i) => sum + items[i].y, 0) /
+        tile.indices.length;
+      const mesh = new THREE.InstancedMesh(
+        source.geometry,
+        source.material,
+        tile.indices.length,
+      );
+      tile.indices.forEach((index, i) => {
+        source.getMatrixAt(index, matrix);
+        matrix.elements[12] -= tile.x;
+        matrix.elements[13] -= y;
+        matrix.elements[14] -= tile.z;
+        mesh.setMatrixAt(i, matrix);
+        source.getColorAt(index, tint);
+        mesh.setColorAt(i, tint);
+      });
+      mesh.receiveShadow = true;
+      mesh.computeBoundingSphere();
+      const lod = new THREE.LOD();
+      lod.position.set(tile.x, y, tile.z);
+      lod.addLevel(mesh, 0);
+      lod.addLevel(new THREE.Group(), 1100, 0.15);
+      scene.add(lod);
+    }
+    source.dispose();
+  }
+  addGroundTiles(bushes, shrubs);
+  addGroundTiles(tufts, grass);
   return { trees: trees.length, grass: grass.length };
 }
