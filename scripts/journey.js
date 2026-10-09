@@ -698,6 +698,7 @@ async function start() {
   });
   requestAnimationFrame(render);
   $("#loading").classList.add("done");
+  if (!reduced && !journeyStarted) play.classList.add("start-cue");
 }
 start().catch((error) => {
   console.error("Landscape unavailable; showing the readable page.", error);

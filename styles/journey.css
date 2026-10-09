@@ -735,3 +735,23 @@ dialog p {
 .no-webgl #perspective {
   scroll-margin-top: 70px;
 }
+
+/* One brief invitation after the loading screen's one-second fade. */
+@media (prefers-reduced-motion: no-preference) {
+  #play.start-journey.start-cue {
+    transform-origin: center;
+    animation: journey-invitation 3.2s ease-in-out 1.5s 1;
+  }
+}
+@keyframes journey-invitation {
+  0%, 100% {
+    transform: scale(1);
+    background-color: #1b293666;
+    box-shadow: 0 0 0 0 #efbc9500, 0 0 0 #efbc9500;
+  }
+  50% {
+    transform: scale(1.025);
+    background-color: #80634d88;
+    box-shadow: 0 0 0 2px #efbc9515, 0 0 9px #efbc9540;
+  }
+}
