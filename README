@@ -1,0 +1,54 @@
+Prajwalit
+
+Local preview
+  python3 -m http.server 8081 --bind 127.0.0.1
+  Open http://localhost:8081
+
+Static GitHub Pages site; no build step.
+Scroll, or use “Let it unfold”, to fly across an imagined mountain lake.
+Five chapters: introduction, current work, career background, journeys, and the summit.
+The terrain is intentionally sculptural, with coral sunset light, cool mountain
+silhouettes, reflective water, and a continuous camera route toward a summit.
+The camera climbs to the central summit, then makes one slow 90-second
+360-degree turn. The panorama can be paused, resumed, and replayed.
+No photographs, satellite imagery, or Trolltunga reconstruction are displayed.
+
+Implementation
+  scripts/journey.js — deterministic procedural terrain, sky shader,
+    planar-reflection water, scroll camera, chapter fades, and dialogs.
+  styles/journey.css — desktop/mobile layout with fixed chapter panels.
+  assets/trolltunga-prajwalit.jpg — retained original photo; not loaded by the site.
+  assets/water-normal.jpg — water normal map from the Three.js examples.
+  assets/vendor — locally vendored Three.js 0.170.0 and Water; MIT license.
+    Water includes a local extension for multisampled, mipmapped reflections
+    and viewport-aware render-target sizing (long edge capped at 1536).
+    Subpixel ripples fade with screen-space footprint; the 10-unit camera
+    near plane improves distant shoreline depth precision.
+  Typography — Google Fonts: Italiana and DM Sans.
+
+Accessibility and fallbacks
+  Reduced-motion preferences disable ambient animation and camera smoothing.
+  Inactive panels are inert and hidden. Dialogs use native modal focus handling.
+  Manual scrolling, touch, or key input stops automatic playback.
+  If WebGL cannot initialize, the text becomes a normal readable page.
+
+Previous direction
+  The discarded Trolltunga reconstruction is preserved locally in a git stash
+  named “Trolltunga prototype before imagined landscape redesign”.
+  It has not been committed or published.
+
+Current scope
+  One continuous landscape journey from lake level to a summit panorama.
+  The summit is derived from the actual central terrain vertices. The camera
+  uses terrain clearance during ascent and settles above the peak.
+  Reduced-motion mode starts the panorama paused. Scrolling away from the
+  summit stops the turn; dialogs and background tabs also pause its clock.
+  At the summit, horizontal trackpad scrolling (or Shift + mouse wheel) pans
+  the view and pauses the automatic turn. Resume panorama continues from that
+  heading. Vertical scrolling still moves back down the journey.
+
+Background music
+  Five optional original scores—soft pads, felt piano, two gentle lo-fi beats, and
+  low tide—synthesized locally with the Web Audio API. WAV previews are in sounds/. Sound starts off; the footer
+  control fades playback in and out. Hidden tabs pause playback. No third-party
+  music files or services are used.
