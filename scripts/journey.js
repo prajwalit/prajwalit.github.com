@@ -10,11 +10,13 @@ let automatic = false,
   journeyStarted = Boolean(location.hash && location.hash !== "#home");
 let panoramaPaused = reduced,
   panoramaElapsed = 0;
+let summitCaptionElapsed = 0;
 let summitReady = false,
   panTarget = 0,
   panOffset = 0;
 const play = $("#play");
 const soundToggle = $("#sound-toggle");
+const restartJourney = $("#restart-journey");
 let controlState = "";
 function setText(element, text) {
   if (element.textContent !== text) element.textContent = text;
@@ -30,6 +32,7 @@ function updateJourneyControl() {
   if (nextState === controlState) return;
   controlState = nextState;
   soundToggle.hidden = !journeyStarted;
+  restartJourney.hidden = !journeyStarted;
   play.classList.toggle("start-journey", !journeyStarted);
   if (summitReady) {
     if (panoramaPaused) {
@@ -73,7 +76,64 @@ play.onclick = () => {
   }
   updateJourneyControl();
 };
-function noteJourneyInput() {
+let restarting = false;
+restartJourney.onclick = async () => {
+  if (restarting) return;
+  restarting = true;
+  automatic = false;
+  const fade = $("#restart-fade");
+  let cover, reveal;
+  restartJourney.disabled = play.disabled = true;
+  fade.classList.add("active");
+  try {
+    if (!reduced) {
+      cover = fade.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: 160,
+        easing: "ease-in-out",
+        fill: "forwards",
+      });
+      await cover.finished;
+    }
+    position = 0;
+    summitCaptionElapsed = 0;
+    panoramaElapsed = 0;
+    panTarget = 0;
+    panOffset = 0;
+    summitReady = false;
+    panoramaPaused = reduced;
+    journeyStarted = true;
+    window.scrollTo({ top: 0, behavior: "instant" });
+    // Keep the playing soundtrack and its mute preference untouched.
+    if (!reduced) {
+      await new Promise((resolve) =>
+        requestAnimationFrame(() => requestAnimationFrame(resolve)),
+      );
+      reveal = fade.animate([{ opacity: 1 }, { opacity: 0 }], {
+        duration: 300,
+        easing: "ease-in-out",
+        fill: "forwards",
+      });
+      cover.cancel();
+      await reveal.finished;
+    }
+    automatic = true;
+  } finally {
+    cover?.cancel();
+    reveal?.cancel();
+    fade.classList.remove("active");
+    restartJourney.disabled = play.disabled = false;
+    restarting = false;
+    updateJourneyControl();
+  }
+};
+function noteJourneyInput(event) {
+  // Activating a footer control is not a request to take over page scrolling.
+  // Let each control handle its own action (including the pause button).
+  const control = event.target?.closest?.(
+    "#sound-toggle, #play, #restart-journey",
+  );
+  if (control && ["pointerdown", "touchstart", "keydown"].includes(event.type))
+    return;
   stopPlayback();
   if (!journeyStarted)
     requestAnimationFrame(() => {
@@ -473,6 +533,8 @@ async function start() {
     $("#perspective .story"),
     $(".closing"),
   ];
+  const ascentCaption = $("#ascent-caption"),
+    summitCaption = $("#summit-caption");
   const sceneCaption = $(".scene-caption"),
     progress = $("#progress"),
     chapterNumber = $("#chapter-number"),
@@ -520,6 +582,7 @@ async function start() {
     const atSummit = target > 0.999 && position > 0.99;
     summitReady = atSummit;
     if (position < 0.84) {
+      summitCaptionElapsed = 0;
       panoramaElapsed = 0;
       panTarget = 0;
       panOffset = 0;
@@ -534,6 +597,8 @@ async function start() {
     );
     // Constant angular speed keeps each revolution seamless at the wrap.
     const turn = panoramaAngle(panoramaElapsed, panOffset);
+    if (atSummit && !document.querySelector("dialog[open]"))
+      summitCaptionElapsed += dt;
     const lift = THREE.MathUtils.smoothstep(position, 0.42, 0.83);
     approachGaze.set(
       camera.position.x * 0.2,
@@ -563,6 +628,22 @@ async function start() {
     });
     sceneCaption.style.opacity =
       1 - THREE.MathUtils.smoothstep(position, 0.1, 0.2);
+    // A short aside after the background chapter settles into view, then a summit
+    // invitation that appears once and leaves the panorama clear.
+    const ascentOpacity =
+      THREE.MathUtils.smoothstep(position, 0.47, 0.5) *
+      (1 - THREE.MathUtils.smoothstep(position, 0.55, 0.59));
+    const summitOpacity =
+      THREE.MathUtils.smoothstep(summitCaptionElapsed, 5, 8) *
+      (1 - THREE.MathUtils.smoothstep(summitCaptionElapsed, 17, 21)) *
+      THREE.MathUtils.smoothstep(position, 0.97, 1);
+    for (const [caption, opacity] of [
+      [ascentCaption, ascentOpacity],
+      [summitCaption, summitOpacity],
+    ]) {
+      caption.style.opacity = opacity;
+      caption.style.visibility = opacity > 0.005 ? "visible" : "hidden";
+    }
     progress.style.width = `${target * 100}%`;
     setText(
       chapterNumber,

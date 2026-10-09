@@ -681,3 +681,57 @@ dialog p {
     color: black;
   }
 }
+
+/* Keep the progress track centered while placing replay beside it. */
+#restart-journey {
+  position: absolute;
+  right: calc(100% + 10px);
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  color: var(--muted);
+  border-radius: 50%;
+  transition:
+    color 0.2s,
+    background 0.2s;
+}
+#restart-journey:hover {
+  color: var(--ivory);
+  background: #ffffff12;
+}
+#restart-journey[hidden] {
+  display: none;
+}
+
+.journey-caption {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+#restart-fade {
+  position: fixed;
+  inset: 0;
+  z-index: 15;
+  background: linear-gradient(180deg, #8e707d 0%, #be8b77 55%, #8e878f 100%);
+  opacity: 0;
+  pointer-events: none;
+}
+#restart-fade.active {
+  pointer-events: auto;
+}
+@media print {
+  #restart-fade {
+    display: none;
+  }
+}
+
+/* Land the travel chapter at 66% of the route, before cresting the ridge. */
+#perspective {
+  scroll-margin-top: 27vh;
+}
+.no-webgl #perspective {
+  scroll-margin-top: 70px;
+}

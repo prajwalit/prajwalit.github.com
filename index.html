@@ -98,9 +98,10 @@
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Italiana&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles/journey.css?v=20261009-14" />
+    <link rel="stylesheet" href="styles/journey.css?v=20261009-20" />
   </head>
   <body class="no-webgl">
+    <div id="restart-fade" aria-hidden="true"></div>
     <div id="world" aria-hidden="true"></div>
     <div class="shade" aria-hidden="true"></div>
     <div class="grain" aria-hidden="true"></div>
@@ -235,6 +236,20 @@
         </div>
       </section>
     </main>
+    <div
+      class="scene-caption journey-caption"
+      id="ascent-caption"
+      aria-hidden="true"
+    >
+      <p>A little higher.<br />A little quieter.</p>
+    </div>
+    <div
+      class="scene-caption journey-caption"
+      id="summit-caption"
+      aria-hidden="true"
+    >
+      <p>Stay a little.<br />Take it all in.</p>
+    </div>
     <footer class="hud">
       <div class="location">
         <span class="location-dot"></span>
@@ -244,6 +259,28 @@
         </div>
       </div>
       <div class="journey-progress">
+        <button
+          id="restart-journey"
+          type="button"
+          aria-label="Restart the journey"
+          title="Restart the journey"
+          hidden
+        >
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M3 10a9 9 0 1 1 2.6 8.4" />
+            <path d="M3 4v6h6" />
+          </svg>
+        </button>
         <span id="chapter-number">01</span>
         <div class="track"><i id="progress"></i></div>
         <span>05</span>
@@ -303,6 +340,6 @@
       loop
     ></audio>
     <script type="module" src="scripts/ambience.js?v=20261009-8"></script>
-    <script type="module" src="scripts/journey.js?v=20261009-21"></script>
+    <script type="module" src="scripts/journey.js?v=20261009-28"></script>
   </body>
 </html>
