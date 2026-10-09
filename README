@@ -5,12 +5,12 @@ Local preview
   Open http://localhost:8081
 
 Static GitHub Pages site; no build step.
-Scroll, or use “Let it unfold”, to fly across an imagined mountain lake.
+Scroll, or use “Start the journey”, to fly across an imagined mountain lake.
 Five chapters: introduction, current work, career background, journeys, and the summit.
 The terrain is intentionally sculptural, with coral sunset light, cool mountain
 silhouettes, reflective water, and a continuous camera route toward a summit.
-The camera climbs to the central summit, then makes one slow 90-second
-360-degree turn. The panorama can be paused, resumed, and replayed.
+The camera climbs to the central summit, then turns continuously at one revolution
+every 90 seconds. The panorama can be paused and resumed.
 No photographs, satellite imagery, or Trolltunga reconstruction are displayed.
 
 Implementation
@@ -32,11 +32,6 @@ Accessibility and fallbacks
   Manual scrolling, touch, or key input stops automatic playback.
   If WebGL cannot initialize, the text becomes a normal readable page.
 
-Previous direction
-  The discarded Trolltunga reconstruction is preserved locally in a git stash
-  named “Trolltunga prototype before imagined landscape redesign”.
-  It has not been committed or published.
-
 Current scope
   One continuous landscape journey from lake level to a summit panorama.
   The summit is derived from the actual central terrain vertices. The camera
@@ -51,3 +46,26 @@ Background music
   Silent Trail is the only soundtrack. The 108-second, volume-reduced AAC clip
   loops in the background and attempts to play on page load. Browsers that block
   autoplay show a start control. Mute preference is saved in local storage.
+
+Maintenance and SEO
+  Content and metadata are delivered in index.html without JavaScript.
+  The default readable layout also handles unavailable JavaScript or WebGL.
+  A canonical URL, description, Open Graph/Twitter metadata, and ProfilePage
+  structured data identify the public site at https://prajwalit.com/.
+  images/social-preview.jpg supplies the landscape preview for shared links.
+  robots.txt advertises sitemap.xml; update both if the production domain changes.
+  Existing personal photos and legacy icons are retained but not requested by the page.
+  Keep the local Three.js license and Water customizations when updating the vendor.
+
+Validation
+  Requires Node.js 20 or newer; no npm install or build step is needed.
+  npm test
+  npm run check
+  The dependency-free Node tests cover panorama continuity, journey controls,
+  reduced motion, panning, audio/storage behavior, WebGL fallback, refresh reset,
+  metadata, sitemap consistency, and local asset/anchor references.
+  Browser boundaries are mocked; these tests do not validate GPU rendering,
+  browser autoplay policy, CSS layout, or actual search-engine indexing.
+  git diff --check
+  Preview the five chapters, sound controls, dialog, and summit pan.
+  Also check with JavaScript disabled and at a narrow viewport.

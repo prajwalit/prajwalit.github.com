@@ -1,0 +1,10 @@
+{
+  "name": "prajwalit-portfolio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "check": "node --check scripts/journey.js && node --check scripts/ambience.js && node --check scripts/panorama.js"
+  },
+  "engines": { "node": ">=20" }
+}

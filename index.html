@@ -1,37 +1,308 @@
 <!doctype html>
 <html lang="en">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#152b32"><title>Prajwalit</title>
-<script>
-if (performance.getEntriesByType('navigation')[0]?.type === 'reload') {
-  history.scrollRestoration = 'manual';
-  history.replaceState(history.state, '', location.pathname + location.search);
-  addEventListener('pageshow', () => {
-    scrollTo(0, 0);
-    history.scrollRestoration = 'auto';
-  }, { once: true });
-}
-</script>
-<link rel="icon" type="image/svg+xml" href="images/favicon.svg?v=20261009-1"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Italiana&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles/journey.css?v=20261009-13">
-</head>
-<body>
-<div id="world" aria-hidden="true"></div><div class="shade" aria-hidden="true"></div><div class="grain" aria-hidden="true"></div>
-<header><a class="wordmark" href="#home">prajwalit<span> / </span></a><nav><button id="about-button">A little about me</button><a href="mailto:contact@prajwalit.com">Say hello</a></nav></header>
-<div id="loading" role="status"><img class="loading-mark" src="images/favicon.svg?v=20261009-1" alt=""><p>On our way</p><span class="loading-line"></span></div>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#554e6b" />
+    <title>
+      Prajwalit — Founder at Unravel · Software, Product &amp; Design
+    </title>
+    <meta
+      name="description"
+      content="Prajwalit’s personal portfolio. Founder at Unravel, building software, AI agents, and products. Away from the desk: mountain trails and open views."
+    />
+    <link rel="canonical" href="https://prajwalit.com/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://prajwalit.com/" />
+    <meta property="og:site_name" content="Prajwalit" />
+    <meta
+      property="og:title"
+      content="Prajwalit — Founder, Builder &amp; Wanderer"
+    />
+    <meta
+      property="og:description"
+      content="Building software, AI agents, and products at Unravel. A personal journey through work, ideas, and mountain trails."
+    />
+    <meta
+      property="og:image"
+      content="https://prajwalit.com/images/social-preview.jpg"
+    />
+    <meta property="og:image:width" content="1512" />
+    <meta property="og:image:height" content="682" />
+    <meta
+      property="og:image:alt"
+      content="Prajwalit’s portfolio overlooking a mountain lake at sunset"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:image"
+      content="https://prajwalit.com/images/social-preview.jpg"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="Prajwalit’s portfolio overlooking a mountain lake at sunset"
+    />
+    <meta
+      name="twitter:title"
+      content="Prajwalit — Founder, Builder &amp; Wanderer"
+    />
+    <meta
+      name="twitter:description"
+      content="Building software, AI agents, and products at Unravel. A personal journey through work, ideas, and mountain trails."
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfilePage",
+        "url": "https://prajwalit.com/",
+        "name": "Prajwalit’s portfolio",
+        "mainEntity": {
+          "@type": "Person",
+          "name": "Prajwalit",
+          "url": "https://prajwalit.com/",
+          "jobTitle": "Founder",
+          "worksFor": {
+            "@type": "Organization",
+            "name": "Unravel",
+            "url": "https://unravel.tech"
+          },
+          "sameAs": ["https://www.linkedin.com/in/prajwalit/"]
+        }
+      }
+    </script>
+    <script>
+      if (performance.getEntriesByType("navigation")[0]?.type === "reload") {
+        history.scrollRestoration = "manual";
+        history.replaceState(
+          history.state,
+          "",
+          location.pathname + location.search,
+        );
+        addEventListener(
+          "pageshow",
+          () => {
+            scrollTo({ top: 0, left: 0, behavior: "instant" });
+          },
+          { once: true },
+        );
+      }
+    </script>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="images/favicon.svg?v=20261009-1"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Italiana&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/journey.css?v=20261009-14" />
+  </head>
+  <body class="no-webgl">
+    <div id="world" aria-hidden="true"></div>
+    <div class="shade" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <header>
+      <a class="wordmark" href="#home">prajwalit<span> / </span></a>
+      <nav aria-label="Main navigation">
+        <button
+          id="about-button"
+          aria-label="A little about me"
+          aria-haspopup="dialog"
+          aria-controls="about"
+        >
+          A little about me</button
+        ><a href="mailto:contact@prajwalit.com">Say hello</a>
+      </nav>
+    </header>
+    <div id="loading" role="status">
+      <img
+        class="loading-mark"
+        width="64"
+        height="64"
+        src="images/favicon.svg?v=20261009-1"
+        alt=""
+      />
+      <p>On our way</p>
+      <span class="loading-line"></span>
+    </div>
 
-<main>
-<section class="chapter hero" id="home"><div class="hero-content"><div class="eyebrow"><span class="small-line"></span> ENTREPRENEUR · ENGINEERING · PRODUCT · DESIGN</div><h1>Prajwalit.</h1><p>I’m a founder at Unravel, where I build software and help shape what we build next. I like moving between the idea, the product, and the details that make it work. Away from work, I’m usually looking for a trail that leads somewhere high.</p><a class="begin" href="#building">What I’m building <span aria-hidden="true">↓</span></a></div><div class="scene-caption"><span>NO HURRY</span><p>Take the<br>scenic route.</p></div></section>
-<section class="chapter" id="building"><div class="story right"><div class="eyebrow"><span class="small-line" aria-hidden="true"></span> AT UNRAVEL</div><h2>What I’m<br>building.</h2><p>At Unravel, we help clients build AI agents that can use tools and take on real work. We’re also building products of our own.</p><p>As a founder, I move between writing software, shaping product ideas, and figuring out what to build next. I like following an idea beyond the first version, until it becomes part of how someone gets things done.</p><a class="text-link" href="https://unravel.tech" target="_blank" rel="noopener">Visit Unravel</a><a class="begin next-chapter" href="#background">Code. Products. People. <span aria-hidden="true">↓</span></a></div></section>
-<section class="chapter" id="background"><div class="story"><div class="eyebrow"><span class="small-line" aria-hidden="true"></span> A BIT OF BACKGROUND</div><h2>Code. Products.<br>People.</h2><p>I began in software, then found myself leading engineering teams as a Director of Engineering. Over time, the work widened into product and design, and into helping people grow.</p><p>Some of the most meaningful moments came alongside engineers stepping into management: finding their voice, learning to lead, and making the role their own.</p><p>Today, I bring all those threads with me as a founder.</p><a class="begin next-chapter" href="#perspective">Away from the desk <span aria-hidden="true">↓</span></a></div></section>
-<section class="chapter" id="perspective"><div class="story"><h2>Away from<br>the desk.</h2><p>I’ve walked to Everest Base Camp, trekked Kilimanjaro, explored Norway, and travelled all over the Himalayas.</p><p>Trolltunga in Norway is one of the most beautiful places I’ve been. Sitting at the edge, with all that space below, has stayed with me.</p><a class="begin next-chapter" href="#hello">Good to have you here <span aria-hidden="true">↓</span></a></div></section>
-<section class="chapter finale" id="hello"><div class="closing"><div class="eyebrow">STAY A WHILE</div><h2>Good to have<br>you here.</h2><p>If you have an idea you’d like to bring to life, I’d love to hear it. And if you know a trail worth taking, there’s always room for one more.</p><a class="email" href="mailto:contact@prajwalit.com">Say hello</a><button id="back-top" class="begin">Back to the beginning <span aria-hidden="true">↑</span></button></div></section>
-</main>
-<footer class="hud"><div class="location"><span class="location-dot"></span><div><span id="place-name">BY THE LAKE</span><small>SCROLL TO EXPLORE</small></div></div><div class="journey-progress"><span id="chapter-number">01</span><div class="track"><i id="progress"></i></div><span>05</span></div><div class="hud-controls"><button id="play" class="start-journey" aria-label="Start the journey with background music">▷ <span>Start the journey</span></button><button id="sound-toggle" hidden aria-pressed="false" aria-label="Turn background music on">♫ <span>Sound off</span></button></div></footer>
-<dialog id="about"><button class="close" aria-label="Close about">×</button><div class="eyebrow">A LITTLE ABOUT ME</div><h2>Hi, I’m Prajwalit.</h2><p>I’m a founder at Unravel, where I build software, help shape our products, and work with clients building agentic systems. My work moves between code and the question of what we should make next.</p><p>Before Unravel, I led engineering teams and supported engineers stepping into management. That experience shaped what I value in good work: thoughtful teams, clear decisions, and room to grow.</p><p>Outside work, I’m drawn to long trails and open views. I’ve walked to Everest Base Camp, trekked Kilimanjaro, travelled across the Himalayas, and sat at the edge of Trolltunga.</p><div class="about-links"><a class="about-action" href="mailto:contact@prajwalit.com">Email me</a><a class="about-action" href="https://www.linkedin.com/in/prajwalit/" target="_blank" rel="noopener">LinkedIn profile</a></div></dialog>
-<audio id="background-track" hidden src="sounds/silent-trail.m4a?v=20261009-3" preload="auto" loop></audio>
-<script type="module" src="scripts/ambience.js?v=20261009-8"></script>
-<script type="module" src="scripts/journey.js?v=20261009-16"></script>
-</body></html>
+    <main id="main-content" tabindex="-1">
+      <section class="chapter hero" id="home">
+        <div class="hero-content">
+          <div class="eyebrow">
+            <span class="small-line"></span> ENTREPRENEUR · ENGINEERING ·
+            PRODUCT · DESIGN
+          </div>
+          <h1>Prajwalit.</h1>
+          <p>
+            I’m a founder at Unravel, where I build software and help shape what
+            we build next. I like moving between the idea, the product, and the
+            details that make it work. Away from work, I’m usually looking for a
+            trail that leads somewhere high.
+          </p>
+          <a class="begin" href="#building"
+            >What I’m building <span aria-hidden="true">↓</span></a
+          >
+        </div>
+        <div class="scene-caption">
+          <span>NO HURRY</span>
+          <p>Take the<br />scenic route.</p>
+        </div>
+      </section>
+      <section class="chapter" id="building">
+        <div class="story right">
+          <div class="eyebrow">
+            <span class="small-line" aria-hidden="true"></span> AT UNRAVEL
+          </div>
+          <h2>What I’m<br />building.</h2>
+          <p>
+            At Unravel, we help clients build AI agents that can use tools and
+            take on real work. We’re also building products of our own.
+          </p>
+          <p>
+            As a founder, I move between writing software, shaping product
+            ideas, and figuring out what to build next. I like following an idea
+            beyond the first version, until it becomes part of how someone gets
+            things done.
+          </p>
+          <a
+            class="text-link"
+            href="https://unravel.tech"
+            target="_blank"
+            rel="noopener"
+            >Visit Unravel</a
+          ><a class="begin next-chapter" href="#background"
+            >Code. Products. People. <span aria-hidden="true">↓</span></a
+          >
+        </div>
+      </section>
+      <section class="chapter" id="background">
+        <div class="story">
+          <div class="eyebrow">
+            <span class="small-line" aria-hidden="true"></span> A BIT OF
+            BACKGROUND
+          </div>
+          <h2>Code. Products.<br />People.</h2>
+          <p>
+            I began in software, then found myself leading engineering teams as
+            a Director of Engineering. Over time, the work widened into product
+            and design, and into helping people grow.
+          </p>
+          <p>
+            Some of the most meaningful moments came alongside engineers
+            stepping into management: finding their voice, learning to lead, and
+            making the role their own.
+          </p>
+          <p>Today, I bring all those threads with me as a founder.</p>
+          <a class="begin next-chapter" href="#perspective"
+            >Away from the desk <span aria-hidden="true">↓</span></a
+          >
+        </div>
+      </section>
+      <section class="chapter" id="perspective">
+        <div class="story">
+          <h2>Away from<br />the desk.</h2>
+          <p>
+            I’ve walked to Everest Base Camp, trekked Kilimanjaro, explored
+            Norway, and travelled all over the Himalayas.
+          </p>
+          <p>
+            Trolltunga in Norway is one of the most beautiful places I’ve been.
+            Sitting at the edge, with all that space below, has stayed with me.
+          </p>
+          <a class="begin next-chapter" href="#hello"
+            >Good to have you here <span aria-hidden="true">↓</span></a
+          >
+        </div>
+      </section>
+      <section class="chapter finale" id="hello">
+        <div class="closing">
+          <div class="eyebrow">STAY A WHILE</div>
+          <h2>Good to have<br />you here.</h2>
+          <p>
+            If you have an idea you’d like to bring to life, I’d love to hear
+            it. And if you know a trail worth taking, there’s always room for
+            one more.
+          </p>
+          <a class="email" href="mailto:contact@prajwalit.com">Say hello</a
+          ><button id="back-top" class="begin">
+            Back to the beginning <span aria-hidden="true">↑</span>
+          </button>
+        </div>
+      </section>
+    </main>
+    <footer class="hud">
+      <div class="location">
+        <span class="location-dot"></span>
+        <div>
+          <span id="place-name">BY THE LAKE</span
+          ><small>SCROLL TO EXPLORE</small>
+        </div>
+      </div>
+      <div class="journey-progress">
+        <span id="chapter-number">01</span>
+        <div class="track"><i id="progress"></i></div>
+        <span>05</span>
+      </div>
+      <div class="hud-controls">
+        <button
+          id="play"
+          class="start-journey"
+          aria-label="Start the journey with background music"
+        >
+          ▷ <span>Start the journey</span></button
+        ><button
+          id="sound-toggle"
+          hidden
+          aria-pressed="false"
+          aria-label="Turn background music on"
+        >
+          ♫ <span>Sound off</span>
+        </button>
+      </div>
+    </footer>
+    <dialog id="about" aria-labelledby="about-title">
+      <button class="close" aria-label="Close about">×</button>
+      <div class="eyebrow">A LITTLE ABOUT ME</div>
+      <h2 id="about-title">Hi, I’m Prajwalit.</h2>
+      <p>
+        I’m a founder at Unravel, where I build software, help shape our
+        products, and work with clients building agentic systems. My work moves
+        between code and the question of what we should make next.
+      </p>
+      <p>
+        Before Unravel, I led engineering teams and supported engineers stepping
+        into management. That experience shaped what I value in good work:
+        thoughtful teams, clear decisions, and room to grow.
+      </p>
+      <p>
+        Outside work, I’m drawn to long trails and open views. I’ve walked to
+        Everest Base Camp, trekked Kilimanjaro, travelled across the Himalayas,
+        and sat at the edge of Trolltunga.
+      </p>
+      <div class="about-links">
+        <a class="about-action" href="mailto:contact@prajwalit.com">Email me</a
+        ><a
+          class="about-action"
+          href="https://www.linkedin.com/in/prajwalit/"
+          target="_blank"
+          rel="noopener"
+          >LinkedIn profile</a
+        >
+      </div>
+    </dialog>
+    <audio
+      id="background-track"
+      hidden
+      src="sounds/silent-trail.m4a?v=20261009-3"
+      preload="auto"
+      loop
+    ></audio>
+    <script type="module" src="scripts/ambience.js?v=20261009-8"></script>
+    <script type="module" src="scripts/journey.js?v=20261009-19"></script>
+  </body>
+</html>
