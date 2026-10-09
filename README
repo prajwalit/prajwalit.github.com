@@ -48,7 +48,8 @@ Current scope
   heading. Vertical scrolling still moves back down the journey.
 
 Background music
-  Five optional original scores—soft pads, felt piano, two gentle lo-fi beats, and
-  low tide—synthesized locally with the Web Audio API. WAV previews are in sounds/. Sound starts off; the footer
+  Six optional sound styles: the Silent Trail track, soft pads, felt piano, two
+  gentle lo-fi beats, and low tide. The song plays as a level-adjusted AAC track;
+  synthesized styles use the Web Audio API. WAV previews are in sounds/. Sound starts off; the footer
   control fades playback in and out. Hidden tabs pause playback. No third-party
   music files or services are used.

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#ed9579"/><stop offset=".55" stop-color="#a86f79"/><stop offset="1" stop-color="#172d43"/></linearGradient>
+    <linearGradient id="water" x2="0" y2="1"><stop stop-color="#32475a"/><stop offset="1" stop-color="#101d31"/></linearGradient>
+    <clipPath id="frame"><rect x="2" y="2" width="60" height="60" rx="15"/></clipPath>
+  </defs>
+  <g clip-path="url(#frame)">
+    <rect x="2" y="2" width="60" height="60" fill="url(#sky)"/>
+    <circle cx="44" cy="24" r="8" fill="#ffe0ac"/>
+    <path d="M2 42 17 27l8 9 8-11 15 17 7-7 9 8v21H2z" fill="#23354d"/>
+    <path d="M2 44q14-3 30 0t30 0v18H2z" fill="url(#water)"/>
+    <path d="M37 48h16M41 52h11M45 56h6" stroke="#f3bd97" stroke-opacity=".42" stroke-linecap="round"/>
+    <text x="12" y="48" fill="#fff4e7" font-family="Georgia,serif" font-size="30" letter-spacing="-3">P.</text>
+  </g>
+</svg>
