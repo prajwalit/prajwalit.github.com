@@ -982,3 +982,8 @@ dialog p {
     animation: journey-invitation 3.2s ease-in-out .5s 1;
   }
 }
+
+/* The final chapter begins 30vh before the end of the camera route. Native
+   anchor navigation should complete that last stretch and unlock the summit. */
+#hello { scroll-margin-top: -30vh; }
+.no-webgl #hello { scroll-margin-top: 70px; }
