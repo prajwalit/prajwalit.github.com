@@ -989,7 +989,7 @@ dialog p {
 .no-webgl #hello { scroll-margin-top: 70px; }
 
 #wallpaper-open {
-  position: absolute; top: 190px; right: 6%; pointer-events: auto;
+  position: absolute; bottom: 22px; left: 6%; pointer-events: auto;
   display: flex; align-items: center; gap: 10px; padding: 11px 14px;
   border: 1px solid #efbc9577; background: #1b2936b3; font-size: 11px;
 }
@@ -1009,7 +1009,8 @@ dialog p {
 .wallpaper-actions button:disabled { opacity: .6; cursor: wait; }
 #wallpaper-close { top: 16px; right: 16px; }
 @media (max-width: 650px) {
-  #wallpaper-open { top: 180px; padding: 10px; }
+  #wallpaper-open { padding: 10px; }
+  #wallpaper-open span { display: none; }
   #wallpaper-dialog { padding: 22px 18px; }
   #wallpaper-dialog h2 { font-size: 32px; }
   .wallpaper-formats { width: 100%; }
