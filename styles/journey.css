@@ -997,8 +997,11 @@ dialog p {
 #hello { scroll-margin-top: -30vh; }
 .no-webgl #hello { scroll-margin-top: 70px; }
 
+.explore-view-actions {
+  position: absolute; bottom: 22px; left: calc(6% + 53px); transform: translateX(-50%);
+  display: flex; gap: 8px; pointer-events: auto;
+}
 #wallpaper-open {
-  position: absolute; bottom: 22px; left: calc(6% + 53px); transform: translateX(-50%); pointer-events: auto;
   display: flex; align-items: center; gap: 10px; padding: 11px 14px;
   border: 1px solid #efbc9577; background: #1b2936b3; font-size: 11px;
 }
@@ -1026,3 +1029,15 @@ dialog p {
   .wallpaper-formats button { flex: 1; }
 }
 @media print { #wallpaper-dialog, #wallpaper-open { display: none !important; } }
+
+#time-open { display: grid; place-items: center; padding: 10px; border: 1px solid #efbc9577; background: #1b2936b3; }
+#time-panel { position: fixed; inset: auto auto 80px max(16px, 4%); margin: 0; width: min(330px, calc(100vw - 32px)); padding: 22px; box-sizing: border-box; border: 1px solid #efbc9566; background: #1b2936f5; }
+#time-panel::backdrop { background: transparent; backdrop-filter: none; }
+#time-panel h2 { font-size: 28px; margin: 0 20px 12px 0; }
+#time-close { position: absolute; right: 12px; top: 8px; font-size: 24px; }
+#time-status { font-size: 12px; margin: 0 0 8px; color: var(--accent); }
+#time-slider { width: 100%; accent-color: var(--accent); cursor: pointer; }
+.time-labels { display: flex; justify-content: space-between; font-size: 9px; color: var(--muted); margin: 4px 0 18px; }
+#time-pause { border: 1px solid #efbc9577; padding: 9px 12px; font-size: 12px; }
+#time-panel .time-help { font-size: 11px; line-height: 1.5; color: var(--muted); margin: 12px 0 0; }
+@media print { #time-panel, #time-open { display: none !important; } }

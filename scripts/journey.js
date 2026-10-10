@@ -1,3 +1,6 @@
+import { createSkyClock, createTimeControls } from "./time-controls.js?v=1";
+import { skyFragmentShader } from "./sky-shader.js?v=4";
+import { createSunset } from "./sunset.js?v=4";
 import { createWallpaper } from "./wallpaper.js";
 import { addDiscoveries } from "./discoveries.js?v=10";
 import { createExplorer } from "./explore.js?v=5";
@@ -15,6 +18,7 @@ const $ = (s) => document.querySelector(s);
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 let explorer = null;
 let wallpaper = null;
+let timeControls = null;
 let explorationProgress = null;
 let autoplayTarget = null;
 let automatic = false,
@@ -307,7 +311,8 @@ async function start() {
     10,
     160000,
   );
-  scene.add(new THREE.HemisphereLight(0xbacff1, 0x203c49, 1.35));
+  const ambient = new THREE.HemisphereLight(0xbacff1, 0x203c49, 1.35);
+  scene.add(ambient);
   const sunDirection = new THREE.Vector3(0.16, 0.24, -1).normalize();
   const sun = new THREE.DirectionalLight(0xffc397, 3.4);
   sun.position.copy(sunDirection).multiplyScalar(10000);
@@ -331,27 +336,9 @@ async function start() {
     new THREE.ShaderMaterial({
       side: THREE.BackSide,
       depthWrite: false,
-      uniforms: { uTime: clock, sunDirection: { value: sunDirection } },
+      uniforms: { uTime: clock, starRotation: { value: new THREE.Matrix3() }, uDusk: { value: 0 }, uNight: { value: 0 }, uDay: { value: 0 }, moonDirection: { value: new THREE.Vector3() }, sunDirection: { value: sunDirection } },
       vertexShader: `varying vec3 vDirection;void main(){vDirection=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
-      fragmentShader: `
- varying vec3 vDirection;uniform vec3 sunDirection;uniform float uTime;
- float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
- float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1)),f.x),f.y);}
- float fbm(vec2 p){float f=0.,a=.5;for(int i=0;i<5;i++){f+=a*noise(p);p=p*2.02+4.7;a*=.5;}return f;}
- void main(){
-  vec3 d=normalize(vDirection);float h=max(0.,d.y);
-  vec3 col=mix(vec3(.92,.46,.31),vec3(.26,.32,.57),smoothstep(-.02,.65,h));
-  col=mix(vec3(.30,.32,.46),col,smoothstep(-.22,.02,d.y));
-  float facing=max(dot(d,sunDirection),0.);
-  col+=vec3(.80,.33,.09)*pow(facing,20.);
-  float disc=smoothstep(.99968,.99985,facing);col=mix(col,vec3(4.,2.8,1.6),disc);
-  vec2 p=d.xz/max(.12,d.y+.16)*vec2(1.7,6.);
-  float cloud=smoothstep(.47,.74,fbm(p+vec2(uTime*.002,0.)));
-  float band=smoothstep(.025,.10,h)*(1.-smoothstep(.32,.60,h));
-  col=mix(col,vec3(.74,.52,.57),cloud*band*.36);
-  col=mix(vec3(.76,.64,.66),col,smoothstep(-.005,.12,d.y));
-  gl_FragColor=vec4(col,1.);
- }`,
+      fragmentShader: skyFragmentShader,
     }),
   );
   scene.add(sky);
@@ -575,6 +562,9 @@ async function start() {
     )
     .replace("float rf0 = 0.3", "float rf0 = 0.08");
   scene.add(water);
+  const updateSunset = createSunset({sun, ambient, sunDirection, sky, water, fog: scene.fog, reduced: false});
+  const skyClock = createSkyClock(reduced);
+  timeControls = createTimeControls(skyClock);
   const discoveries = addDiscoveries(scene, terrainGeometry, { reduced });
   const summitEye = summit.clone().add(new THREE.Vector3(0, 38, 0));
   const path = new THREE.CatmullRomCurve3(
@@ -627,6 +617,7 @@ async function start() {
       onChange: () => {
         if (!explorer?.active) {
           wallpaper?.close();
+          timeControls?.close();
           explorationProgress = null;
         }
         automatic = false;
@@ -652,6 +643,7 @@ async function start() {
     const dt = Math.min(frameSeconds, 0.05);
     previous = now;
     elapsed += dt;
+    updateSunset(skyClock.tick(Math.min(frameSeconds, 1)));
     clock.value = reduced ? 0 : elapsed;
     const maxScroll = Math.max(
       1,

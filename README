@@ -128,3 +128,22 @@ Wildflowers
   and lake banks, between elevations 25 and 650. Each uses 30–54 flowers with
   varied orientation, height and cluster size. Roots follow actual terrain.
   The original opening patch remains in place, for sixteen locations total.
+
+Day and night cycle
+  A 24-minute cycle begins at the existing sunset, passes through moonlit night
+  with stars and a soft Milky Way band, then sunrise and daylight, before
+  returning to sunset. It pauses while the tab is hidden. Reduced motion keeps
+  the opening sky until a visitor changes it. DAY_CYCLE_DURATION lives in scripts/sunset.js.
+  Celestial detail uses the existing sky shader and water reflection. The one
+  shadowed directional light alternates between sun and moon; no extra lights,
+  textures or rendering passes are added. Ambient light keeps night navigable.
+
+  Stars and the Milky Way rotate together around a tilted celestial axis, once
+  per 24-minute cycle. Atmospheric clouds and the horizon remain independent.
+  The galaxy has variable width, an asymmetric core and fragmented dust lanes.
+
+Time controls in Explore freely
+  The moon icon beside Save a view opens a time slider and pause/resume control.
+  Selecting a time smoothly changes the light and holds it until Resume cycle.
+  Sunset lasts the first four minutes of the 24-minute loop. Camera and music
+  controls remain independent; reduced motion starts the sky clock paused.

@@ -105,7 +105,7 @@
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Italiana&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles/journey.css?v=20261010-5" />
+    <link rel="stylesheet" href="styles/journey.css?v=20261010-6" />
   </head>
   <body class="no-webgl">
     <div id="restart-fade" aria-hidden="true"></div>
@@ -326,12 +326,26 @@
         <button id="explore-up" type="button" aria-label="Rise (hold)">+</button>
         <button id="explore-down" type="button" aria-label="Descend (hold)">−</button>
       </div>
+      <div class="explore-view-actions">
       <button id="wallpaper-open" type="button" aria-label="Create a wallpaper" title="Create a wallpaper">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 6h4l2-3h4l2 3h4a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z"/><circle cx="12" cy="13" r="4"/></svg>
         <span>Save a view</span>
       </button>
+      <button id="time-open" type="button" aria-label="Time of day" title="Time of day" aria-haspopup="dialog">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9A7 7 0 0 1 12 3Z"/><path d="M18 2v4m-2-2h4"/></svg>
+      </button>
+      </div>
       <button id="explore-exit" type="button">Return to summit</button>
     </div>
+    <dialog id="time-panel" aria-labelledby="time-title">
+      <button id="time-close" type="button" aria-label="Close time controls">×</button>
+      <h2 id="time-title">Choose your light.</h2>
+      <p id="time-status">Sunset</p>
+      <input id="time-slider" aria-label="Time of day" type="range" min="0" max="1000" step="1" value="0" />
+      <div class="time-labels" aria-hidden="true"><span>Sunset</span><span>Night</span><span>Sunrise</span><span>Day</span><span>Sunset</span></div>
+      <button id="time-pause" type="button">Pause time</button>
+      <p class="time-help">Move the slider to hold a moment. Resume when you’re ready.</p>
+    </dialog>
     <dialog id="wallpaper-dialog" aria-labelledby="wallpaper-title">
       <button id="wallpaper-close" class="close" type="button" aria-label="Close wallpaper preview">×</button>
       <h2 id="wallpaper-title">Keep this view.</h2>
@@ -390,6 +404,6 @@
       loop
     ></audio>
     <script type="module" src="scripts/ambience.js?v=20261009-8"></script>
-    <script type="module" src="scripts/journey.js?v=20261010-13"></script>
+    <script type="module" src="scripts/journey.js?v=20261010-19"></script>
   </body>
 </html>
