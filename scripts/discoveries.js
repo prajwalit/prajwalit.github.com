@@ -1,4 +1,5 @@
-import { createShootingStarFlight } from "./shooting-star.js?v=2";
+import { createBirdFlight } from "./bird-flight.js?v=1";
+import { createShootingStarFlight } from "./shooting-star.js?v=3";
 import { createAlpineFlowers, createFlowerPatchFactory } from "./natural-landmarks.js?v=3";
 import * as THREE from "../assets/vendor/three.module.js";
 import { sampleGround, habitat } from "./vegetation.js?v=5";
@@ -204,15 +205,7 @@ export function addDiscoveries(
   birds.frustumCulled = false;
   birds.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
   root.add(birds);
-  const transform = new THREE.Object3D();
-  let flightHeight = 750;
-  for (let i = 0; i < 80; i++) {
-    const a = (i / 80) * Math.PI * 2;
-    flightHeight = Math.max(
-      flightHeight,
-      (ground(Math.cos(a) * 900, -2700 + Math.sin(a) * 650)?.height ?? 0) + 220,
-    );
-  }
+  const updateBirds = createBirdFlight(birds, ground, reduced);
 
   // A single tapered streak, no light, bloom, particles or shadow map.
   const streakGeometry = new THREE.BufferGeometry();
@@ -248,33 +241,7 @@ export function addDiscoveries(
   const updateStar = createShootingStarFlight(streak, ground, reduced);
   function update(seconds, camera) {
     const t = reduced ? 0 : seconds;
-    const orbit = t * 0.017;
-    birds.visible = !reduced && t % 100 < 42;
-    if (birds.visible) {
-      const pass = t % 100;
-      birds.material.opacity =
-        THREE.MathUtils.smoothstep(pass, 0, 4) *
-        (1 - THREE.MathUtils.smoothstep(pass, 37, 42));
-      for (let i = 0; i < 7; i++) {
-        const a = orbit - i * 0.018;
-        for (let side = 0; side < 2; side++) {
-          transform.position.set(
-            Math.cos(a) * (900 + (i % 2) * 24),
-            flightHeight + Math.sin(t * 0.4 + i) * 3 + i * 1.6,
-            -2700 + Math.sin(a) * 650,
-          );
-          transform.rotation.set(
-            0,
-            -a + (side ? Math.PI : 0),
-            0.14 + Math.sin(t * 4.4 + i * 0.8) * 0.4,
-          );
-          transform.scale.setScalar(1);
-          transform.updateMatrix();
-          birds.setMatrixAt(i * 2 + side, transform.matrix);
-        }
-      }
-      birds.instanceMatrix.needsUpdate = true;
-    }
+    updateBirds(t, camera);
     updateStar(t, camera);
   }
   update(0);

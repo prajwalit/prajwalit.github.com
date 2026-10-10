@@ -88,9 +88,12 @@ test("rare effects fade and reduced motion freezes the props", () => {
   );
   normal.update(0);
   assert.equal(birds.material.opacity, 0);
-  normal.update(10);
+  normal.update(119, camera);
+  assert.equal(birds.visible, false);
+  normal.update(120, camera);
+  normal.update(123, camera);
   assert.equal(birds.material.opacity, 1);
-  normal.update(60);
+  normal.update(139, camera);
   assert.equal(birds.visible, false);
   const still = addDiscoveries(new THREE.Scene(), terrain, { reduced: true });
   const snapshot = () => {

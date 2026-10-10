@@ -99,12 +99,13 @@ Optional exploration (experiment)
 Landscape discoveries
   A cairn sits on a western ridge. Wildflowers grow on the opening lakeshore
   near x 576 / z 984, about 15 units above the water, close to the early route.
-  Seven distant birds pass over the northern valley; a shooting star appears
+  Seven distant birds cross the visible sky every two minutes; a shooting star appears
   first becomes due at 20 active seconds, then 20 seconds after each launch.
   A varied path is chosen in the current camera view, above the terrain. If
   sky is obscured, launch waits without accumulating a backlog. Once launched,
-  the world-space path stays fixed for its 1.15-second duration. The flock fades in/out
-  during a 42-second passage each 100 seconds. Hidden tabs stop the clock.
+  the world-space path stays fixed for its 1.15-second duration. The flock first becomes due at 120 seconds and crosses for 18 seconds,
+  fading in and out. It waits for clear sky, then keeps its chosen world-space
+  route even if the camera turns. Subsequent launches are 120 seconds apart. Hidden tabs stop the clock.
   Ground discoveries use actual terrain samples and distance culling. These
   details total about 31,300 instanced triangles across the map. Additional
   wildflower patches share two tiny geometry buffers and are culled beyond

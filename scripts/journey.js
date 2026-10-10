@@ -1,5 +1,5 @@
 import { createWallpaper } from "./wallpaper.js";
-import { addDiscoveries } from "./discoveries.js?v=9";
+import { addDiscoveries } from "./discoveries.js?v=10";
 import { createExplorer } from "./explore.js?v=5";
 import { createScreenWakeLock } from "./screen-wake-lock.js";
 import * as THREE from "../assets/vendor/three.module.js";
