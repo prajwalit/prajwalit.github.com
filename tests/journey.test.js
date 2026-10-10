@@ -27,7 +27,7 @@ test("start dispatches sound gesture and manual input pauses the journey", async
 test("summit controls only pause and resume, even after a full revolution", async () => {
   const env = await setup();
   env.run(
-    "journeyStarted=true; summitReady=true; panoramaElapsed=180; updateJourneyControl();",
+    "journeyStarted=true; summitReady=true; panoramaPaused=false; panoramaElapsed=180; updateJourneyControl();",
   );
   assert.match(env.get("#play").innerHTML, /Pause panorama/);
   env.get("#play").onclick();
@@ -35,10 +35,14 @@ test("summit controls only pause and resume, even after a full revolution", asyn
   env.get("#play").onclick();
   assert.match(env.get("#play").innerHTML, /Pause panorama/);
 });
-test("reduced motion begins with the panorama paused", async () => {
-  const env = await setup({ reduced: true });
+for (const reduced of [false, true]) test(`summit waits for explicit panorama start (reduced motion: ${reduced})`, async () => {
+  const env = await setup({ reduced });
   env.run("journeyStarted=true; summitReady=true; updateJourneyControl();");
-  assert.match(env.get("#play").innerHTML, /Resume panorama/);
+  assert.equal(env.run("panoramaPaused"), true);
+  assert.match(env.get("#play").innerHTML, /Start panorama/);
+  env.get("#play").onclick();
+  assert.equal(env.run("panoramaPaused"), false);
+  assert.match(env.get("#play").innerHTML, /Pause panorama/);
 });
 test("horizontal summit input pans and pauses; vertical and pinch gestures remain native", async () => {
   const env = await setup();
@@ -81,6 +85,7 @@ test("replay resets summit orientation and restarts automatic travel", async () 
   for (const field of ["position", "panoramaElapsed", "panTarget", "panOffset"])
     assert.equal(env.run(field), 0);
   assert.equal(env.run("summitReady"), false);
+  assert.equal(env.run("panoramaPaused"), true);
   assert.equal(env.run("automatic"), true);
   assert.equal(env.scrolls.at(-1).top, 0);
   assert.equal(env.scrolls.at(-1).behavior, "instant");

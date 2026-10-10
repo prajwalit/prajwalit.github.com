@@ -48,6 +48,20 @@ export function createTimeControls(clock) {
     toggle.textContent = 'Resume cycle';
   };
   toggle.onclick = () => { clock.toggle(); toggle.textContent = clock.paused ? 'Resume cycle' : 'Pause time'; };
-  panel.addEventListener('close', () => trigger.focus());
+  // Require both ends of the gesture outside, so dragging the slider beyond
+  // the panel does not dismiss it. Backdrop events target the dialog itself.
+  const outside = event => {
+    const bounds = panel.getBoundingClientRect();
+    return event.target === panel && (event.clientX < bounds.left ||
+      event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom);
+  };
+  let pressedOutside = false;
+  panel.addEventListener('pointerdown', event => { pressedOutside = outside(event); });
+  panel.addEventListener('pointercancel', () => { pressedOutside = false; });
+  panel.addEventListener('click', event => {
+    if (pressedOutside && outside(event)) panel.close();
+    pressedOutside = false;
+  });
+  panel.addEventListener('close', () => { pressedOutside = false; trigger.focus(); });
   return { close: () => panel.close() };
 }

@@ -1,4 +1,4 @@
-import { createSkyClock, createTimeControls } from "./time-controls.js?v=2";
+import { createSkyClock, createTimeControls } from "./time-controls.js?v=3";
 import { skyFragmentShader } from "./sky-shader.js?v=4";
 import { createSunset } from "./sunset.js?v=5";
 import { createWallpaper } from "./wallpaper.js";
@@ -24,7 +24,7 @@ let autoplayTarget = null;
 let automatic = false,
   position = 0,
   journeyStarted = Boolean(location.hash && location.hash !== "#home");
-let panoramaPaused = reduced,
+let panoramaPaused = true,
   panoramaElapsed = 0;
 let summitCaptionElapsed = 0;
 let summitReady = false,
@@ -51,6 +51,7 @@ function updateJourneyControl() {
     journeyStarted,
     summitReady,
     panoramaPaused,
+    panoramaElapsed > 0,
     automatic,
     exploring,
   ].join(":");
@@ -61,8 +62,9 @@ function updateJourneyControl() {
   play.classList.toggle("start-journey", !journeyStarted);
   if (summitReady) {
     if (panoramaPaused) {
-      label = "▷ <span>Resume panorama</span>";
-      aria = "Resume the summit panorama";
+      const action = panoramaElapsed > 0 ? "Resume" : "Start";
+      label = `▷ <span>${action} panorama</span>`;
+      aria = `${action} the summit panorama`;
     } else {
       label = "Ⅱ <span>Pause panorama</span>";
       aria = "Pause the summit panorama";
@@ -145,7 +147,7 @@ restartJourney.onclick = async () => {
     panTarget = 0;
     panOffset = 0;
     summitReady = false;
-    panoramaPaused = reduced;
+    panoramaPaused = true;
     journeyStarted = true;
     window.scrollTo({ top: 0, behavior: "instant" });
     // Keep the playing soundtrack and its mute preference untouched.
@@ -685,6 +687,7 @@ async function start() {
     const arrival = THREE.MathUtils.smootherstep(position, 0.84, 0.95);
     camera.position.lerp(summitEye, arrival);
     const atSummit = target > 0.999 && position > 0.99;
+    if (atSummit && !summitReady) panoramaPaused = true;
     summitReady = atSummit;
     if (position < 0.84) {
       summitCaptionElapsed = 0;
