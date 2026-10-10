@@ -1035,9 +1035,22 @@ dialog p {
 #time-panel::backdrop { background: transparent; backdrop-filter: none; }
 #time-panel h2 { font-size: 28px; margin: 0 20px 12px 0; }
 #time-close { position: absolute; right: 12px; top: 8px; font-size: 24px; }
-#time-status { font-size: 12px; margin: 0 0 8px; color: var(--accent); }
-#time-slider { width: 100%; accent-color: var(--accent); cursor: pointer; }
-.time-labels { display: flex; justify-content: space-between; font-size: 9px; color: var(--muted); margin: 4px 0 18px; }
-#time-pause { border: 1px solid #efbc9577; padding: 9px 12px; font-size: 12px; }
+#time-dial { position: relative; width: 220px; height: 220px; margin: 0 auto 14px; touch-action: none; cursor: grab; border-radius: 50%; }
+#time-dial:active { cursor: grabbing; }
+#time-dial:focus-visible { outline: 1px solid var(--accent); outline-offset: 3px; }
+#time-dial svg { width: 100%; height: 100%; display: block; }
+.time-track { fill: none; stroke: #efbc9555; stroke-width: 2; }
+.time-markers { fill: var(--muted); font-size: 10px; text-anchor: middle; }
+#time-handle { fill: var(--accent); stroke: #1b2936; stroke-width: 3; }
+#time-status { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; font-size: 16px; color: var(--accent); }
+#time-pause { display: grid; place-items: center; }
+.time-play-icon, .is-paused .time-pause-icon { display: none; }
+.is-paused .time-play-icon { display: block; }
 #time-panel .time-help { font-size: 11px; line-height: 1.5; color: var(--muted); margin: 12px 0 0; }
 @media print { #time-panel, #time-open { display: none !important; } }
+
+.time-speeds { display: flex; gap: 6px; margin-bottom: 12px; }
+.time-speeds button { flex: 1; min-height: 44px; border: 1px solid #efbc9544; font-size: 12px; }
+.time-speeds button[aria-pressed="true"] { color: var(--accent); background: #efbc951a; border-color: var(--accent); }
+
+#time-panel { max-height: calc(100dvh - 100px); overflow-y: auto; }

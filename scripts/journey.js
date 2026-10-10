@@ -1,4 +1,4 @@
-import { createSkyClock, createTimeControls } from "./time-controls.js?v=3";
+import { createSkyClock, createTimeControls } from "./time-controls.js?v=6";
 import { skyFragmentShader } from "./sky-shader.js?v=4";
 import { createSunset } from "./sunset.js?v=5";
 import { createWallpaper } from "./wallpaper.js";
@@ -646,6 +646,7 @@ async function start() {
     previous = now;
     elapsed += dt;
     updateSunset(skyClock.tick(Math.min(frameSeconds, 1)));
+    timeControls.update();
     clock.value = reduced ? 0 : elapsed;
     const maxScroll = Math.max(
       1,

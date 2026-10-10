@@ -105,7 +105,7 @@
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Italiana&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles/journey.css?v=20261010-6" />
+    <link rel="stylesheet" href="styles/journey.css?v=20261011-2" />
   </head>
   <body class="no-webgl">
     <div id="restart-fade" aria-hidden="true"></div>
@@ -340,11 +340,24 @@
     <dialog id="time-panel" aria-labelledby="time-title">
       <button id="time-close" type="button" aria-label="Close time controls">×</button>
       <h2 id="time-title">Choose your light.</h2>
-      <p id="time-status">Sunset</p>
-      <input id="time-slider" aria-label="Time of day" type="range" min="0" max="1000" step="1" value="0" />
-      <div class="time-labels" aria-hidden="true"><span>Sunset</span><span>Night</span><span>Sunrise</span><span>Day</span><span>Sunset</span></div>
-      <button id="time-pause" type="button">Pause time</button>
-      <p class="time-help">Move the slider to hold a moment. Resume when you’re ready.</p>
+      <div id="time-dial" role="slider" tabindex="0" aria-label="Time of day" aria-valuemin="0" aria-valuemax="1000" aria-valuenow="0" aria-valuetext="Sunset" aria-describedby="time-help">
+        <svg viewBox="0 0 220 220" aria-hidden="true">
+          <circle class="time-track" cx="110" cy="110" r="74" />
+          <g class="time-markers"><text x="110" y="18">Sunset</text><text x="200" y="114">Night</text><text x="110" y="210">Sunrise</text><text x="20" y="114">Day</text></g>
+          <circle id="time-handle" cx="110" cy="36" r="7" />
+        </svg>
+        <span id="time-status">Sunset</span>
+      </div>
+      <div class="time-speeds" role="group" aria-label="Time speed">
+        <button id="time-pause" type="button" aria-label="Pause time" title="Pause time">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path class="time-pause-icon" d="M8 5v14M16 5v14"/><path class="time-play-icon" d="m8 4 12 8-12 8Z"/></svg>
+        </button>
+        <button type="button" data-time-speed="1" aria-label="Normal time speed" aria-pressed="true">1×</button>
+        <button type="button" data-time-speed="2" aria-label="2 times time speed" aria-pressed="false">2×</button>
+        <button type="button" data-time-speed="4" aria-label="4 times time speed" aria-pressed="false">4×</button>
+        <button type="button" data-time-speed="8" aria-label="8 times time speed" aria-pressed="false">8×</button>
+      </div>
+      <p id="time-help" class="time-help">Drag around the dial to hold a moment. Press play to let time flow.</p>
     </dialog>
     <dialog id="wallpaper-dialog" aria-labelledby="wallpaper-title">
       <button id="wallpaper-close" class="close" type="button" aria-label="Close wallpaper preview">×</button>
@@ -404,6 +417,6 @@
       loop
     ></audio>
     <script type="module" src="scripts/ambience.js?v=20261009-8"></script>
-    <script type="module" src="scripts/journey.js?v=20261010-22"></script>
+    <script type="module" src="scripts/journey.js?v=20261011-3"></script>
   </body>
 </html>
