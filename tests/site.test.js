@@ -59,7 +59,7 @@ test('the initial HTML contains every chapter and defaults to readable fallback'
 });
 function navigation(type) {
   const scripts = [...html.matchAll(/<script([^>]*)>(.*?)<\/script>/gs)];
-  const script = scripts.find(match => !attributes(match[1]).type && !attributes(match[1]).src)[2];
+  const script = scripts.find(match => !attributes(match[1]).type && !attributes(match[1]).src && match[2].includes("history.scrollRestoration"))[2];
   const listeners = new Map(), calls = [];
   const history = { state: null, scrollRestoration: 'auto', replaceState: (...args) => calls.push(['replace', ...args]) };
   vm.runInNewContext(script, {
