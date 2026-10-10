@@ -1,4 +1,5 @@
-import { createExplorer } from "./explore.js?v=2";
+import { createWallpaper } from "./wallpaper.js";
+import { createExplorer } from "./explore.js?v=3";
 import { createScreenWakeLock } from "./screen-wake-lock.js";
 import * as THREE from "../assets/vendor/three.module.js";
 import {
@@ -12,6 +13,7 @@ import { addVegetation, habitat, sampleGround } from "./vegetation.js?v=4";
 const $ = (s) => document.querySelector(s);
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 let explorer = null;
+let wallpaper = null;
 let autoplayTarget = null;
 let automatic = false,
   position = 0,
@@ -612,6 +614,7 @@ async function start() {
     {
       reduced,
       onChange: () => {
+        if (!explorer?.active) wallpaper?.close();
         automatic = false;
         autoplayTarget = null;
         panoramaPaused = true;
@@ -619,6 +622,12 @@ async function start() {
       },
     },
   );
+  wallpaper = createWallpaper({
+    renderer,
+    scene,
+    camera,
+    available: () => explorer.canCapture,
+  });
   function render(now) {
     requestAnimationFrame(render);
     if (document.hidden) {

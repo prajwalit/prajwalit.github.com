@@ -987,3 +987,32 @@ dialog p {
    anchor navigation should complete that last stretch and unlock the summit. */
 #hello { scroll-margin-top: -30vh; }
 .no-webgl #hello { scroll-margin-top: 70px; }
+
+#wallpaper-open {
+  position: absolute; top: 190px; right: 6%; pointer-events: auto;
+  display: flex; align-items: center; gap: 10px; padding: 11px 14px;
+  border: 1px solid #efbc9577; background: #1b2936b3; font-size: 11px;
+}
+#wallpaper-dialog { width: min(780px, calc(100% - 32px)); max-width: 780px; max-height: 92vh; max-height: 92dvh; overflow: auto; padding: 28px; }
+#wallpaper-dialog h2 { font-size: 38px; margin: 0 34px 8px 0; }
+#wallpaper-dialog .wallpaper-help { font-size: 12px; line-height: 1.5; margin: 0 0 18px; color: var(--muted); }
+.wallpaper-options { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; font-size: 11px; }
+.wallpaper-formats { display: flex; gap: 6px; margin-right: auto; }
+.wallpaper-options button, .wallpaper-options select, .wallpaper-actions button, .wallpaper-actions a { border: 1px solid #efbc9566; padding: 9px 12px; background: #182634; color: var(--ivory); font: inherit; border-radius: 3px; }
+.wallpaper-formats button[aria-pressed="true"] { background: #efbc9533; border-color: var(--accent); }
+.wallpaper-stage { display: flex; justify-content: center; align-items: center; background: #15212c; border: 1px solid #ffffff15; min-height: 120px; }
+#wallpaper-preview { display: block; max-width: 100%; max-height: 43vh; max-height: 43dvh; width: auto; height: auto; touch-action: none; cursor: grab; }
+#wallpaper-preview:active { cursor: grabbing; }
+#wallpaper-status { font-size: 11px; line-height: 1.5; min-height: 17px; margin: 13px 0; }
+.wallpaper-actions { display: flex; gap: 10px; flex-wrap: wrap; font-size: 12px; }
+.wallpaper-actions [hidden] { display: none; }
+.wallpaper-actions button:disabled { opacity: .6; cursor: wait; }
+#wallpaper-close { top: 16px; right: 16px; }
+@media (max-width: 650px) {
+  #wallpaper-open { top: 180px; padding: 10px; }
+  #wallpaper-dialog { padding: 22px 18px; }
+  #wallpaper-dialog h2 { font-size: 32px; }
+  .wallpaper-formats { width: 100%; }
+  .wallpaper-formats button { flex: 1; }
+}
+@media print { #wallpaper-dialog, #wallpaper-open { display: none !important; } }

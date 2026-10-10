@@ -265,6 +265,7 @@ export function createExplorer(camera, ground, { reduced, onChange }) {
     get active() {
       return mode !== "off";
     },
+    get canCapture() { return mode === "free"; },
     enter,
     leave,
     update(seconds) {

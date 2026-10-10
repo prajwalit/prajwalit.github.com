@@ -98,7 +98,7 @@
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Italiana&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles/journey.css?v=20261009-28" />
+    <link rel="stylesheet" href="styles/journey.css?v=20261010-1" />
   </head>
   <body class="no-webgl">
     <div id="restart-fade" aria-hidden="true"></div>
@@ -317,8 +317,32 @@
         <button id="explore-up" type="button" aria-label="Rise (hold)">+</button>
         <button id="explore-down" type="button" aria-label="Descend (hold)">−</button>
       </div>
+      <button id="wallpaper-open" type="button" aria-label="Create a wallpaper" title="Create a wallpaper">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 6h4l2-3h4l2 3h4a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z"/><circle cx="12" cy="13" r="4"/></svg>
+        <span>Save a view</span>
+      </button>
       <button id="explore-exit" type="button">Return to summit</button>
     </div>
+    <dialog id="wallpaper-dialog" aria-labelledby="wallpaper-title">
+      <button id="wallpaper-close" class="close" type="button" aria-label="Close wallpaper preview">×</button>
+      <h2 id="wallpaper-title">Keep this view.</h2>
+      <p class="wallpaper-help">Choose a format. Drag the preview to frame your view, or use the arrow keys.</p>
+      <div class="wallpaper-options">
+        <div class="wallpaper-formats" role="group" aria-label="Wallpaper format">
+          <button type="button" data-wallpaper-format="phone" aria-pressed="false">Phone · Portrait</button>
+          <button type="button" data-wallpaper-format="desktop" aria-pressed="true">Desktop · Landscape</button>
+        </div>
+        <label for="wallpaper-resolution">Resolution</label>
+        <select id="wallpaper-resolution"><option value="1920">Standard</option><option value="3840">High · up to 4K</option></select>
+      </div>
+      <div class="wallpaper-stage"><canvas id="wallpaper-preview" tabindex="0" role="img" aria-label="Wallpaper framing preview. Drag or use arrow keys to look around."></canvas></div>
+      <p id="wallpaper-status" role="status" aria-live="polite"></p>
+      <div class="wallpaper-actions">
+        <button id="wallpaper-create" type="button">Create wallpaper</button>
+        <a id="wallpaper-download" hidden download>Download wallpaper</a>
+        <button id="wallpaper-share" type="button" hidden>Share / Save image</button>
+      </div>
+    </dialog>
     <dialog id="about" aria-labelledby="about-title">
       <button class="close" aria-label="Close about">×</button>
       <div class="eyebrow">A LITTLE ABOUT ME</div>
@@ -357,6 +381,6 @@
       loop
     ></audio>
     <script type="module" src="scripts/ambience.js?v=20261009-8"></script>
-    <script type="module" src="scripts/journey.js?v=20261009-38"></script>
+    <script type="module" src="scripts/journey.js?v=20261010-1"></script>
   </body>
 </html>
