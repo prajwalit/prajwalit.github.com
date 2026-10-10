@@ -1,4 +1,4 @@
-import { createSkyClock, createTimeControls } from "./time-controls.js?v=6";
+import { createSkyClock, createTimeControls } from "./time-controls.js?v=8";
 import { skyFragmentShader } from "./sky-shader.js?v=4";
 import { createSunset } from "./sunset.js?v=5";
 import { createWallpaper } from "./wallpaper.js";

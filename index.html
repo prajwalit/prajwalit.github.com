@@ -105,7 +105,7 @@
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Italiana&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles/journey.css?v=20261011-2" />
+    <link rel="stylesheet" href="styles/journey.css?v=20261011-4" />
   </head>
   <body class="no-webgl">
     <div id="restart-fade" aria-hidden="true"></div>
@@ -352,10 +352,11 @@
         <button id="time-pause" type="button" aria-label="Pause time" title="Pause time">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path class="time-pause-icon" d="M8 5v14M16 5v14"/><path class="time-play-icon" d="m8 4 12 8-12 8Z"/></svg>
         </button>
-        <button type="button" data-time-speed="1" aria-label="Normal time speed" aria-pressed="true">1×</button>
-        <button type="button" data-time-speed="2" aria-label="2 times time speed" aria-pressed="false">2×</button>
-        <button type="button" data-time-speed="4" aria-label="4 times time speed" aria-pressed="false">4×</button>
-        <button type="button" data-time-speed="8" aria-label="8 times time speed" aria-pressed="false">8×</button>
+        <div class="time-speed-stepper">
+          <button id="time-slower" type="button" aria-label="Slower time" title="Slower time" disabled>−</button>
+          <output id="time-speed" aria-live="polite" aria-label="Time speed">1×</output>
+          <button id="time-faster" type="button" aria-label="Faster time" title="Faster time">+</button>
+        </div>
       </div>
       <p id="time-help" class="time-help">Drag around the dial to hold a moment. Press play to let time flow.</p>
     </dialog>
@@ -417,6 +418,6 @@
       loop
     ></audio>
     <script type="module" src="scripts/ambience.js?v=20261009-8"></script>
-    <script type="module" src="scripts/journey.js?v=20261011-3"></script>
+    <script type="module" src="scripts/journey.js?v=20261011-5"></script>
   </body>
 </html>

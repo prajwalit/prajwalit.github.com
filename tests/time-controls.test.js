@@ -31,7 +31,7 @@ test('reduced-motion clock starts still but permits manual time selection', () =
 
 test('time speeds change rate without jumping or overriding pause', () => {
   const clock = createSkyClock();
-  for (const speed of [1, 2, 4, 8, 1]) {
+  for (const speed of [1, 2, 4, 8, 16, 1]) {
     const before = clock.time;
     clock.setSpeed(speed);
     assert.equal(clock.time, before);

@@ -1049,8 +1049,11 @@ dialog p {
 #time-panel .time-help { font-size: 11px; line-height: 1.5; color: var(--muted); margin: 12px 0 0; }
 @media print { #time-panel, #time-open { display: none !important; } }
 
-.time-speeds { display: flex; gap: 6px; margin-bottom: 12px; }
-.time-speeds button { flex: 1; min-height: 44px; border: 1px solid #efbc9544; font-size: 12px; }
-.time-speeds button[aria-pressed="true"] { color: var(--accent); background: #efbc951a; border-color: var(--accent); }
+.time-speeds { display: flex; justify-content: center; gap: 12px; margin-bottom: 12px; }
+.time-speeds button { width: 44px; min-height: 44px; border: 1px solid #efbc9544; font-size: 20px; }
+.time-speed-stepper { display: flex; align-items: center; border: 1px solid #efbc9544; }
+.time-speed-stepper button { border: 0; }
+.time-speed-stepper button:disabled { opacity: .3; cursor: default; }
+#time-speed { min-width: 48px; text-align: center; font-size: 14px; color: var(--accent); font-variant-numeric: tabular-nums; }
 
 #time-panel { max-height: calc(100dvh - 100px); overflow-y: auto; }

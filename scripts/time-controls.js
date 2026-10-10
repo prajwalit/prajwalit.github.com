@@ -24,7 +24,7 @@ export function createSkyClock(paused = false) {
     get time() { return time; },
     get paused() { return paused; },
     get speed() { return speed; },
-    setSpeed(value) { if ([1, 2, 4, 8].includes(value)) speed = value; },
+    setSpeed(value) { if ([1, 2, 4, 8, 16].includes(value)) speed = value; },
     toggle() { paused = !paused; },
     select(fraction) {
       const desired = Math.max(0, Math.min(1, fraction)) * DAY_CYCLE_DURATION;
@@ -53,12 +53,17 @@ export function createTimeControls(clock) {
   let selected = 0, pointer = null;
   const toggle = document.querySelector('#time-pause');
   const status = document.querySelector('#time-status');
-  const speeds = panel.querySelectorAll('[data-time-speed]');
-  const syncSpeed = () => speeds.forEach(button =>
-    button.setAttribute('aria-pressed', String(Number(button.dataset.timeSpeed) === clock.speed)));
-  speeds.forEach(button => {
-    button.onclick = () => { clock.setSpeed(Number(button.dataset.timeSpeed)); syncSpeed(); };
-  });
+  const slower = document.querySelector('#time-slower');
+  const faster = document.querySelector('#time-faster');
+  const speedValue = document.querySelector('#time-speed');
+  function syncSpeed() {
+    const text = `${clock.speed}×`;
+    if (speedValue.textContent !== text) speedValue.textContent = text;
+    slower.disabled = clock.speed === 1;
+    faster.disabled = clock.speed === 16;
+  }
+  slower.onclick = () => { clock.setSpeed(clock.speed / 2); syncSpeed(); };
+  faster.onclick = () => { clock.setSpeed(clock.speed * 2); syncSpeed(); };
   const label = fraction => fraction < .17 ? 'Sunset' : fraction < .49 ? 'Night' : fraction < .62 ? 'Sunrise' : fraction < .89 ? 'Daylight' : 'Golden hour';
   function syncToggle() {
     const name = clock.paused ? 'Resume cycle' : 'Pause time';
