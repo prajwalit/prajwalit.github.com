@@ -989,7 +989,7 @@ dialog p {
 .no-webgl #hello { scroll-margin-top: 70px; }
 
 #wallpaper-open {
-  position: absolute; bottom: 22px; left: 6%; pointer-events: auto;
+  position: absolute; bottom: 22px; left: calc(6% + 53px); transform: translateX(-50%); pointer-events: auto;
   display: flex; align-items: center; gap: 10px; padding: 11px 14px;
   border: 1px solid #efbc9577; background: #1b2936b3; font-size: 11px;
 }
