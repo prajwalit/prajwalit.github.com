@@ -1,6 +1,6 @@
 import { createWallpaper } from "./wallpaper.js";
-import { addDiscoveries } from "./discoveries.js";
-import { createExplorer } from "./explore.js?v=4";
+import { addDiscoveries } from "./discoveries.js?v=9";
+import { createExplorer } from "./explore.js?v=5";
 import { createScreenWakeLock } from "./screen-wake-lock.js";
 import * as THREE from "../assets/vendor/three.module.js";
 import {
@@ -726,7 +726,7 @@ async function start() {
     explorer.update(dt);
     updateJourneyControl();
     sky.position.copy(camera.position);
-    discoveries.update(elapsed);
+    discoveries.update(elapsed, camera);
     water.material.uniforms.time.value = reduced ? 0 : elapsed * 0.2;
     panels.forEach((panel, i) => {
       const [a, b, c, d] = ranges[i];

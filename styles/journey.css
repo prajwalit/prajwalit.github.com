@@ -785,8 +785,9 @@ dialog p {
   background: #1b2936b3;
   font-size: 12px;
 }
-#explore-toggle span {
+#explore-toggle svg {
   margin-left: 14px;
+  vertical-align: middle;
 }
 #explore-toggle[hidden],
 #explore-ui[hidden],

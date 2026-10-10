@@ -2,7 +2,6 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import * as THREE from "../assets/vendor/three.module.js";
 import { addDiscoveries, findDiscoverySite } from "../scripts/discoveries.js";
-import { sampleGround } from "../scripts/vegetation.js";
 
 function landscape() {
   const geometry = new THREE.PlaneGeometry(17500, 20000, 200, 200);
@@ -40,10 +39,20 @@ test("discovery placement rejects water, cliffs, missing ground and sharp ledges
 test("discoveries stay distributed and within a small geometry and draw-call budget", () => {
   const terrain = landscape();
   const scene = new THREE.Scene();
-  const { sites, root, update } = addDiscoveries(scene, terrain);
-  assert.ok(sites.cairn && sites.boat && sites.reindeer);
-  assert.ok(sites.cairn.distanceTo(sites.reindeer) > 2000);
-  assert.ok(sites.boat.distanceTo(sites.cairn) > 2000);
+  const { sites, root, flowerPatches } = addDiscoveries(scene, terrain);
+  assert.ok(sites.cairn && sites.flowers);
+  assert.deepEqual(Object.keys(sites).sort(), ["cairn", "flowers"]);
+  assert.ok(sites.cairn.distanceTo(sites.flowers) > 2000);
+  assert.ok(sites.flowers.y >= 10 && sites.flowers.y <= 60);
+  assert.ok(Math.abs(sites.flowers.z - 1100) <= 500);
+  assert.equal(flowerPatches.length, 15);
+  flowerPatches.forEach((p, i) => {
+    assert.ok(p.y >= 25 && p.y <= 650);
+    for (const other of flowerPatches.slice(i + 1)) assert.ok(p.distanceTo(other) > 600);
+  });
+  const buffers = new Set();
+  root.traverse(o => { if (o.isInstancedMesh && o.name.startsWith("Meadow")) buffers.add(o.geometry); });
+  assert.equal(buffers.size, 2, "all added patches share two geometry buffers");
   let triangles = 0,
     draws = 0;
   root.traverse((o) => {
@@ -55,40 +64,24 @@ test("discoveries stay distributed and within a small geometry and draw-call bud
     assert.equal(o.castShadow, false);
     assert.equal(o.isLight, undefined);
   });
-  assert.ok(triangles < 2500, `${triangles} triangles`);
-  assert.ok(draws <= 6, `${draws} draw calls before reflection`);
-  const boat = root.getObjectByName("A small sailboat on the lake").levels[0]
-    .object;
-  for (let t = 0; t < 1100; t += 11) {
-    update(t);
-    for (const [dx, dz] of [
-      [0, 0],
-      [12, 0],
-      [-12, 0],
-      [0, 12],
-      [0, -12],
-    ]) {
-      assert.ok(
-        sampleGround(
-          terrain,
-          sites.boat.x + boat.position.x + dx,
-          sites.boat.z + boat.position.z + dz,
-        ).height < -8,
-      );
-    }
-  }
+  assert.ok(triangles < 42000, `${triangles} triangles`);
+  assert.ok(draws <= 35, `${draws} draw calls before reflection`);
 });
 
 test("rare effects fade and reduced motion freezes the props", () => {
   const terrain = landscape();
   const normal = addDiscoveries(new THREE.Scene(), terrain);
   const streak = normal.root.getObjectByName("An occasional shooting star");
-  normal.update(30);
+  normal.update(19.99);
   assert.equal(streak.visible, false);
-  normal.update(71.5);
+  const camera = new THREE.PerspectiveCamera(54, 1.5, 10, 160000);
+  camera.position.set(0, 2500, 0);
+  camera.lookAt(0, 10000, -18000);
+  normal.update(20, camera);
+  normal.update(20.5, camera);
   assert.equal(streak.visible, true);
   assert.ok(streak.material.opacity > 0);
-  normal.update(73);
+  normal.update(21.2);
   assert.equal(streak.visible, false);
   const birds = normal.root.getObjectByName(
     "A passing flock above the northern valley",

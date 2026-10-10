@@ -97,17 +97,33 @@ Optional exploration (experiment)
   with clearance sampled from the same visible mesh throughout the larger area.
 
 Landscape discoveries
-  A cairn sits on a western ridge, a small sailboat drifts on the opening lake,
-  and a reindeer stands in an eastern meadow. Seven distant birds pass above
-  the northern valley; a brief shooting star appears high in the sky after
-  about 71 active seconds, then every 113 seconds. The flock fades in/out
+  A cairn sits on a western ridge. Wildflowers grow on the opening lakeshore
+  near x 576 / z 984, about 15 units above the water, close to the early route.
+  Seven distant birds pass over the northern valley; a shooting star appears
+  first becomes due at 20 active seconds, then 20 seconds after each launch.
+  A varied path is chosen in the current camera view, above the terrain. If
+  sky is obscured, launch waits without accumulating a backlog. Once launched,
+  the world-space path stays fixed for its 1.15-second duration. The flock fades in/out
   during a 42-second passage each 100 seconds. Hidden tabs stop the clock.
-  Props sample the rendered terrain; the boat's entire drift area is checked
-  for deep water. Ground discoveries use distance culling. All assets total
-  1,901 triangles and at most six draw calls per pass, with no extra textures,
-  lights, shadow casters, bloom or particle system. Reflection can draw them
-  a second time. Reduced motion freezes props and hides birds/shooting stars.
+  Ground discoveries use actual terrain samples and distance culling. These
+  details total about 31,300 instanced triangles across the map. Additional
+  wildflower patches share two tiny geometry buffers and are culled beyond
+  280 units; their centres are more than 600 units apart, so at most one added
+  patch renders at a time (two draw calls);
+  reflections may draw them again. No added lights or shadow casters.
+  Reduced motion hides birds and shooting stars.
 
   The compass beside the location label opens free exploration from any point,
   including the beginning. Return to journey restores the point of departure;
   summit entry still returns to the summit. Sound follows the saved preference.
+
+Wildflowers
+  Small cream and dusty pink cups, basal leaves and varied stem heights are
+  planted against the actual terrain. The static patch is culled beyond 400
+  units and adds no image download. The tree, sailboat and reindeer trials have
+  been removed.
+
+  Fifteen additional wildflower patches grow on meadow-compatible lower slopes
+  and lake banks, between elevations 25 and 650. Each uses 30–54 flowers with
+  varied orientation, height and cluster size. Roots follow actual terrain.
+  The original opening patch remains in place, for sixteen locations total.
