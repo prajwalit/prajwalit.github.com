@@ -1,4 +1,4 @@
-import { DAY_CYCLE_DURATION } from "./sunset.js?v=4";
+import { DAY_CYCLE_DURATION } from "./sunset.js?v=5";
 export function createSkyClock(paused = false) {
   let time = 0, target = null;
   return {

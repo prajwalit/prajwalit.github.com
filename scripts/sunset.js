@@ -1,14 +1,25 @@
 import * as THREE from "../assets/vendor/three.module.js";
 
-export const DAY_CYCLE_DURATION = 1440;
+export const DAY_CYCLE_DURATION = 2880;
 const keys = [[0,Math.acos(0.24)], [60,1.85], [120,Math.PI],
   [180,4.4], [210,Math.PI*1.5], [270,Math.PI*2], [360,Math.PI*2+Math.acos(0.24)]];
+// Shared, positive tangents carry motion through phase boundaries, including
+// the loop seam. Harmonic means keep the orbit monotonic without overshoot.
+const speeds = keys.slice(1).map(([t, angle], i) =>
+  (angle - keys[i][1]) / (t - keys[i][0]));
+const tangents = keys.map((_, i) => {
+  const before = speeds[(i + speeds.length - 1) % speeds.length];
+  const after = speeds[i % speeds.length];
+  return 2 * before * after / (before + after);
+});
 export function dayCycleState(seconds) {
   const t = ((seconds % DAY_CYCLE_DURATION) + DAY_CYCLE_DURATION) % DAY_CYCLE_DURATION / DAY_CYCLE_DURATION * 360;
   let i = 1;
   while(t > keys[i][0]) i++;
   const [a, start] = keys[i-1], [b, end] = keys[i];
-  const angle = THREE.MathUtils.lerp(start,end,THREE.MathUtils.smootherstep(t,a,b));
+  const u = (t - a) / (b - a), u2 = u * u, u3 = u2 * u;
+  const angle = (2*u3 - 3*u2 + 1)*start + (u3 - 2*u2 + u)*(b-a)*tangents[i-1]
+    + (-2*u3 + 3*u2)*end + (u3 - u2)*(b-a)*tangents[i];
   const elevation = Math.cos(angle);
   return { angle, elevation,
     night: 1-THREE.MathUtils.smoothstep(elevation,-0.2,0.02),
