@@ -288,13 +288,21 @@ p {
   margin-top: 7px;
   color: var(--muted);
 }
-.location-dot {
-  width: 6px;
-  height: 6px;
-  border: 1px solid var(--accent);
+#explore-compass {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  color: var(--accent);
+  border: 1px solid transparent;
   border-radius: 50%;
-  box-shadow: 0 0 0 5px #efbc9510;
+  background: #efbc9510;
+  pointer-events: auto;
 }
+#explore-compass:hover { background: #efbc9528; border-color: #efbc9566; }
+#explore-compass:disabled { cursor: default; opacity: .5; }
+.no-webgl #explore-compass { display: none; }
 .journey-progress {
   position: absolute;
   left: 50%;

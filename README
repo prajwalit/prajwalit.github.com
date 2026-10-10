@@ -85,13 +85,29 @@ Optional exploration (experiment)
   At the summit, Explore freely opens a bounded free-flight camera. Drag to look;
   WASD/arrows move relative to the view, E/Q rise/descend. The on-screen joystick
   and +/- controls work with pointer/touch input. Escape or Return to summit
-  restores the guided summit pose in 1.8 seconds (instant with reduced motion).
+  restores the guided departure pose in 1.8 seconds (instant with reduced motion).
   Terrain clearance samples rendered triangles; altitude and horizontal bounds
   keep the camera above the lake and inside the scenery. Inputs clear on blur,
   hidden tabs, pointer cancellation, and dialogs. The guided journey stays at
-  the summit while exploring; returning leaves the automatic panorama paused.
+  the departure point while exploring; returning leaves automatic motion paused.
   No wake lock is held in free exploration. Music preference is preserved.
 
   Exploration bounds: x ±7,800; z -13,500 to +4,200; altitude cap 3,300.
   The extended terrain grid preserves the original spacing and vertex alignment,
   with clearance sampled from the same visible mesh throughout the larger area.
+
+Landscape discoveries
+  A cairn sits on a western ridge, a small sailboat drifts on the opening lake,
+  and a reindeer stands in an eastern meadow. Seven distant birds pass above
+  the northern valley; a brief shooting star appears high in the sky after
+  about 71 active seconds, then every 113 seconds. The flock fades in/out
+  during a 42-second passage each 100 seconds. Hidden tabs stop the clock.
+  Props sample the rendered terrain; the boat's entire drift area is checked
+  for deep water. Ground discoveries use distance culling. All assets total
+  1,901 triangles and at most six draw calls per pass, with no extra textures,
+  lights, shadow casters, bloom or particle system. Reflection can draw them
+  a second time. Reduced motion freezes props and hides birds/shooting stars.
+
+  The compass beside the location label opens free exploration from any point,
+  including the beginning. Return to journey restores the point of departure;
+  summit entry still returns to the summit. Sound follows the saved preference.

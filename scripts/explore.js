@@ -77,6 +77,8 @@ export function createExplorer(camera, ground, { reduced, onChange }) {
   const orientation = new THREE.Quaternion();
   const returnEye = new THREE.Vector3(),
     returnRotation = new THREE.Quaternion();
+  let returnLabel = "summit",
+    returnTrigger = null;
   let mode = "off",
     yaw = 0,
     pitch = 0,
@@ -103,7 +105,9 @@ export function createExplorer(camera, ground, { reduced, onChange }) {
     document.body.classList.remove("exploring");
     clearInput();
     onChange(false);
-    document.querySelector("#explore-toggle").focus({ preventScroll: true });
+    (returnTrigger ?? document.querySelector("#explore-toggle")).focus({
+      preventScroll: true,
+    });
   }
   function leave(immediate = false) {
     if (mode === "off") return;
@@ -116,12 +120,14 @@ export function createExplorer(camera, ground, { reduced, onChange }) {
     returnRotation.copy(orientation);
     returnTime = 0;
     mode = "return";
-    exit.textContent = "Returning to summit…";
+    exit.textContent = `Returning to ${returnLabel}…`;
     exit.disabled = true;
   }
   exit.onclick = () => leave();
-  function enter() {
+  function enter(options = {}) {
     if (mode !== "off") return;
+    returnLabel = options.returnLabel ?? "summit";
+    returnTrigger = options.trigger ?? null;
     eye.copy(camera.position);
     rotation.setFromQuaternion(camera.quaternion, "YXZ");
     yaw = targetYaw = rotation.y;
@@ -131,7 +137,7 @@ export function createExplorer(camera, ground, { reduced, onChange }) {
     mode = "free";
     ui.hidden = false;
     exit.disabled = false;
-    exit.textContent = "Return to summit";
+    exit.textContent = `Return to ${returnLabel}`;
     document.body.classList.add("exploring");
     onChange(true);
     surface.focus({ preventScroll: true });
@@ -265,7 +271,9 @@ export function createExplorer(camera, ground, { reduced, onChange }) {
     get active() {
       return mode !== "off";
     },
-    get canCapture() { return mode === "free"; },
+    get canCapture() {
+      return mode === "free";
+    },
     enter,
     leave,
     update(seconds) {

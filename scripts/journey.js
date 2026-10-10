@@ -1,5 +1,6 @@
 import { createWallpaper } from "./wallpaper.js";
-import { createExplorer } from "./explore.js?v=3";
+import { addDiscoveries } from "./discoveries.js";
+import { createExplorer } from "./explore.js?v=4";
 import { createScreenWakeLock } from "./screen-wake-lock.js";
 import * as THREE from "../assets/vendor/three.module.js";
 import {
@@ -14,6 +15,7 @@ const $ = (s) => document.querySelector(s);
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 let explorer = null;
 let wallpaper = null;
+let explorationProgress = null;
 let autoplayTarget = null;
 let automatic = false,
   position = 0,
@@ -39,6 +41,7 @@ function updateJourneyControl() {
   const exploring = Boolean(explorer?.active);
   $("#explore-toggle").hidden = !summitReady || exploring;
   play.hidden = exploring;
+  $("#explore-compass").disabled = !explorer;
   let label, aria;
   const nextState = [
     journeyStarted,
@@ -96,14 +99,21 @@ play.onclick = () => {
   }
   updateJourneyControl();
 };
-$("#explore-toggle").onclick = () => {
-  if (!summitReady || !explorer) return;
+function startExploring(trigger) {
+  if (!explorer || explorer.active) return;
+  explorationProgress = summitReady ? 1 : position;
   journeyStarted = true;
-  // Exploration may be the first click after a manually scrolled journey.
-  // Retry blocked audio inside that gesture; the audio controller honors mute.
   document.dispatchEvent(new Event("journey:start"));
-  explorer.enter();
+  explorer.enter({
+    trigger,
+    returnLabel: summitReady ? "summit" : "journey",
+  });
+}
+$("#explore-toggle").onclick = () => {
+  if (summitReady) startExploring($("#explore-toggle"));
 };
+$("#explore-compass").onclick = () => startExploring($("#explore-compass"));
+
 let restarting = false;
 restartJourney.onclick = async () => {
   if (restarting) return;
@@ -162,7 +172,7 @@ function noteJourneyInput(event) {
   // Activating a footer control is not a request to take over page scrolling.
   // Let each control handle its own action (including the pause button).
   const control = event.target?.closest?.(
-    "#sound-toggle, #play, #restart-journey, #explore-toggle",
+    "#sound-toggle, #play, #restart-journey, #explore-toggle, #explore-compass",
   );
   if (control && ["pointerdown", "touchstart", "keydown"].includes(event.type))
     return;
@@ -565,6 +575,7 @@ async function start() {
     )
     .replace("float rf0 = 0.3", "float rf0 = 0.08");
   scene.add(water);
+  const discoveries = addDiscoveries(scene, terrainGeometry, { reduced });
   const summitEye = summit.clone().add(new THREE.Vector3(0, 38, 0));
   const path = new THREE.CatmullRomCurve3(
     [
@@ -614,7 +625,10 @@ async function start() {
     {
       reduced,
       onChange: () => {
-        if (!explorer?.active) wallpaper?.close();
+        if (!explorer?.active) {
+          wallpaper?.close();
+          explorationProgress = null;
+        }
         automatic = false;
         autoplayTarget = null;
         panoramaPaused = true;
@@ -643,10 +657,10 @@ async function start() {
       1,
       document.documentElement.scrollHeight - innerHeight,
     );
-    if (explorer.active && scrollY !== maxScroll)
-      window.scrollTo({ top: maxScroll, behavior: "instant" });
+    if (explorer.active && Math.abs(scrollY - explorationProgress * maxScroll) > 1)
+      window.scrollTo({ top: explorationProgress * maxScroll, behavior: "instant" });
     let target = explorer.active
-      ? 1
+      ? explorationProgress
       : THREE.MathUtils.clamp(scrollY / maxScroll, 0, 1);
     if (automatic && !document.querySelector("dialog[open]")) {
       // Keep the camera clock in floating-point route space. DOM scroll positions
@@ -712,6 +726,7 @@ async function start() {
     explorer.update(dt);
     updateJourneyControl();
     sky.position.copy(camera.position);
+    discoveries.update(elapsed);
     water.material.uniforms.time.value = reduced ? 0 : elapsed * 0.2;
     panels.forEach((panel, i) => {
       const [a, b, c, d] = ranges[i];

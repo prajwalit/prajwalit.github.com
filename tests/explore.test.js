@@ -185,13 +185,39 @@ test("reduced motion exits immediately and hidden tabs clear held input", (t) =>
 });
 
 test("expanded perimeter still enforces mountain clearance beyond the former bounds", () => {
-  const ground = (x, z) => x > 5900 && z < -9500 ? 2200 : -20;
+  const ground = (x, z) => (x > 5900 && z < -9500 ? 2200 : -20);
   const p = new THREE.Vector3(6000, 80, -10000);
   const v = new THREE.Vector3();
-  for (let frame=0; frame<120; frame++) {
-    moveExplorer(p, v, { forward:1, right:0, up:-1 }, 0, 0, 1/60, ground);
+  for (let frame = 0; frame < 120; frame++) {
+    moveExplorer(p, v, { forward: 1, right: 0, up: -1 }, 0, 0, 1 / 60, ground);
     assert.ok(p.y >= explorerFloor(p.x, p.z, ground));
   }
   assert.ok(p.x > 5200 && p.z < -9000);
   assert.ok(p.y >= 2230);
+});
+
+test("early exploration returns to the supplied journey pose and compass focus", (t) => {
+  const { control, camera, get, events, emit } = setup(t);
+  const entry = new THREE.Vector3(40, 130, 2000);
+  camera.position.copy(entry);
+  const trigger = get("#explore-compass");
+  control.enter({ returnLabel: "journey", trigger });
+  assert.equal(get("#explore-exit").textContent, "Return to journey");
+  emit(events, "keydown", { code: "KeyW" });
+  for (let i = 0; i < 60; i++) {
+    camera.position.copy(entry);
+    camera.quaternion.identity();
+    control.update(1 / 60);
+  }
+  assert.ok(camera.position.distanceTo(entry) > 100);
+  control.leave();
+  assert.equal(get("#explore-exit").textContent, "Returning to journey…");
+  for (let i = 0; i < 120; i++) {
+    camera.position.copy(entry);
+    camera.quaternion.identity();
+    control.update(1 / 60);
+  }
+  assert.equal(control.active, false);
+  assert.ok(camera.position.distanceTo(entry) < 1e-6);
+  assert.equal(trigger.focused, true);
 });
