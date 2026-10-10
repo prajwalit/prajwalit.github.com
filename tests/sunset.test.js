@@ -73,3 +73,14 @@ test("orbital motion stays positive and continuous throughout the cycle", () => 
     assert.ok(Math.abs(before-after) < 1e-6);
   }
 });
+
+test("water sunlight follows daylight while preserving sunset warmth", () => {
+  const {state, update} = fixture();
+  const glint = state.water.material.uniforms.sunColor.value;
+  update(0);
+  assert.ok(glint.equals(new THREE.Color(0xffd0a0)));
+  update(DAY_CYCLE_DURATION * .75);
+  assert.ok(glint.equals(new THREE.Color(0xfff1d7)));
+  update(DAY_CYCLE_DURATION);
+  assert.ok(glint.equals(new THREE.Color(0xffd0a0)));
+});

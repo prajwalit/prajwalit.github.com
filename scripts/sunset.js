@@ -35,7 +35,7 @@ export function createSunset({sun,ambient,sunDirection,sky,water,fog,reduced}) {
   const groundDay=color(0x203c49), groundNight=color(0x182739);
   const fogWarm=color(0xc49aa2), fogDay=color(0x9cbac9), fogNight=color(0x303e5e);
   const waterDay=color(0x165a62), waterNight=color(0x101e36);
-  const glintDay=color(0xffd0a0), glintNight=color(0x657ea8);
+  const glintWarm=color(0xffd0a0), glintDay=color(0xfff1d7), glintNight=color(0x657ea8);
   const moonDirection=sky.material.uniforms.moonDirection.value;
   // Water keeps the supplied vector by reference; give its active light a
   // separate vector so moon reflections cannot overwrite the solar orbit.
@@ -62,7 +62,7 @@ export function createSunset({sun,ambient,sunDirection,sky,water,fog,reduced}) {
     u.starRotation.value.setFromMatrix4(rotationMatrix);
     u.uDusk.value=dusk;u.uNight.value=night;u.uDay.value=day;
     water.material.uniforms.sunDirection.value.copy(moonlit?moonDirection:sunDirection);
-    water.material.uniforms.sunColor.value.copy(glintDay).lerp(glintNight,night)
+    water.material.uniforms.sunColor.value.copy(glintWarm).lerp(glintDay,day).lerp(glintNight,night)
       .multiplyScalar(moonlit?0.45*night:THREE.MathUtils.smoothstep(state.elevation,0,0.15));
     water.material.uniforms.waterColor.value.copy(waterDay).lerp(waterNight,night);
   };

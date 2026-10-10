@@ -1,4 +1,4 @@
-import { DAY_CYCLE_DURATION, dayCycleState } from "./sunset.js?v=5";
+import { DAY_CYCLE_DURATION, dayCycleState } from "./sunset.js?v=6";
 // Put sunset at the top, midnight right, sunrise bottom, and noon left.
 // Using the solar angle keeps all four markers aligned with the actual sky.
 const turn = Math.PI * 2;
