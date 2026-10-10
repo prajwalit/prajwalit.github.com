@@ -135,6 +135,36 @@ function grassGeometry() {
   return geometry;
 }
 
+function scrubGeometry() {
+  const positions = [];
+  // Open sprays of small leaves, rather than a solid flattened sphere.
+  for (let stem = 0; stem < 9; stem++) {
+    const angle = stem * 2.39996;
+    const radius = 0.15 + (stem % 4) * 0.13;
+    const x = Math.cos(angle) * radius;
+    const z = Math.sin(angle) * radius;
+    const height = 0.45 + ((stem * 7) % 11) * 0.055;
+    const dx = Math.cos(angle) * 0.3;
+    const dz = Math.sin(angle) * 0.3;
+    positions.push(x - 0.025, -0.15, z, x + 0.025, -0.15, z, x + dx, height, z + dz);
+    for (let leaf = 0; leaf < 3; leaf++) {
+      const t = 0.35 + leaf * 0.23;
+      const cx = x + dx * t, cy = height * t, cz = z + dz * t;
+      const a = angle + leaf * 2.1;
+      const width = 0.12 + (stem % 3) * 0.025;
+      const ux = Math.cos(a) * width, uz = Math.sin(a) * width;
+      positions.push(
+        cx, cy - 0.12, cz, cx + ux, cy + 0.035, cz + uz, cx + dx * 0.2, cy + 0.21, cz + dz * 0.2,
+        cx, cy - 0.12, cz, cx + dx * 0.2, cy + 0.21, cz + dz * 0.2, cx - ux, cy + 0.035, cz - uz,
+      );
+    }
+  }
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  geometry.computeVertexNormals();
+  return geometry;
+}
+
 export function addVegetation(scene, terrainGeometry, noise, random) {
   const trees = [],
     grass = [],
@@ -267,23 +297,23 @@ export function addVegetation(scene, terrainGeometry, noise, random) {
   trunks.receiveShadow = true;
   // Terrain shadows shade the forest. Avoid thousands of tiny shadow casters.
   scene.add(...crowns, trunks);
-  const shrubGeometry = new THREE.IcosahedronGeometry(1, 1);
+  const shrubGeometry = scrubGeometry();
   const bushes = new THREE.InstancedMesh(
     shrubGeometry,
-    new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1 }),
+    new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1, side: THREE.DoubleSide }),
     shrubs.length,
   );
   shrubs.forEach((shrub, i) => {
-    transform.position.set(shrub.x, shrub.y + 0.8, shrub.z);
+    transform.position.set(shrub.x, shrub.y, shrub.z);
     transform.rotation.set(0.1, shrub.seed * 6, 0);
     transform.scale.set(
-      2 + shrub.seed * 3,
-      0.8 + shrub.seed * 1.2,
       1.8 + shrub.seed * 2,
+      0.7 + ((shrub.seed * 13) % 1) * 1.3,
+      1.5 + ((shrub.seed * 7) % 1) * 2,
     );
     transform.updateMatrix();
     bushes.setMatrixAt(i, transform.matrix);
-    color.setHSL(0.15 + shrub.seed * 0.1, 0.22, 0.15 + shrub.seed * 0.09);
+    color.setHSL(0.15 + shrub.seed * 0.06, 0.18, 0.19 + shrub.seed * 0.08);
     bushes.setColorAt(i, color);
   });
   bushes.receiveShadow = true;

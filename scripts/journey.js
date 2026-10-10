@@ -8,7 +8,7 @@ import {
 } from "./camera-progress.js?v=2";
 import { Water } from "../assets/vendor/Water.js";
 import { advancePanorama, panoramaAngle } from "./panorama.js";
-import { addVegetation, habitat, sampleGround } from "./vegetation.js?v=4";
+import { addVegetation, habitat, sampleGround } from "./vegetation.js?v=5";
 
 const $ = (s) => document.querySelector(s);
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
