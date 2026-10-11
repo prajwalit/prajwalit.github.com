@@ -1,5 +1,5 @@
 import * as THREE from "../assets/vendor/three.module.js";
-import { visibleSkyPoint } from "./visible-sky.js?v=1";
+import { visibleSkyPoint } from "./visible-sky.js?v=2";
 
 export function createBirdFlight(birds, ground, reduced = false) {
   const duration = 18;

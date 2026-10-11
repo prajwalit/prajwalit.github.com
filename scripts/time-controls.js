@@ -1,4 +1,5 @@
 import { DAY_CYCLE_DURATION, dayCycleState } from "./sunset.js?v=6";
+import { closeOnOutsidePress, onPointerRelease } from "./pointer.js?v=1";
 // Put sunset at the top, midnight right, sunrise bottom, and noon left.
 // Using the solar angle keeps all four markers aligned with the actual sky.
 const turn = Math.PI * 2;
@@ -101,10 +102,7 @@ export function createTimeControls(clock) {
     dial.focus(); dial.setPointerCapture(pointer); fromPointer(event);
   });
   dial.addEventListener('pointermove', event => { if (pointer === event.pointerId) fromPointer(event); });
-  const release = event => { if (pointer === event.pointerId) pointer = null; };
-  dial.addEventListener('pointerup', release);
-  dial.addEventListener('pointercancel', release);
-  dial.addEventListener('lostpointercapture', release);
+  onPointerRelease(dial, event => { if (pointer === event.pointerId) pointer = null; });
   dial.addEventListener('keydown', event => {
     const steps = {ArrowRight:.005, ArrowUp:.005, ArrowLeft:-.005, ArrowDown:-.005, PageUp:.05, PageDown:-.05};
     if (event.key in steps) { event.preventDefault(); select(selected + steps[event.key]); }
@@ -115,21 +113,8 @@ export function createTimeControls(clock) {
   trigger.onclick = () => { sync(); panel.showModal(); };
   document.querySelector('#time-close').onclick = () => panel.close();
   toggle.onclick = () => { clock.toggle(); syncToggle(); };
-  // Require both ends of the gesture outside, so dragging the slider beyond
-  // the panel does not dismiss it. Backdrop events target the dialog itself.
-  const outside = event => {
-    const bounds = panel.getBoundingClientRect();
-    return event.target === panel && (event.clientX < bounds.left ||
-      event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom);
-  };
-  let pressedOutside = false;
-  panel.addEventListener('pointerdown', event => { pressedOutside = outside(event); });
-  panel.addEventListener('pointercancel', () => { pressedOutside = false; });
-  panel.addEventListener('click', event => {
-    if (pressedOutside && outside(event)) panel.close();
-    pressedOutside = false;
-  });
-  panel.addEventListener('close', () => { pressedOutside = false; trigger.focus(); });
+  closeOnOutsidePress(panel);
+  panel.addEventListener('close', () => trigger.focus());
   return { close: () => panel.close(), update: () => {
     if (panel.open && !clock.paused && pointer === null) sync();
   } };

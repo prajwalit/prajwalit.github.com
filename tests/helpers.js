@@ -1,4 +1,5 @@
 import { createScreenWakeLock } from "../scripts/screen-wake-lock.js";
+import { closeOnOutsidePress } from "../scripts/pointer.js";
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
 
@@ -29,6 +30,9 @@ export class Element extends EventTarget {
   }
   removeAttribute(key) {
     this.attributes.delete(key);
+  }
+  getBoundingClientRect() {
+    return { left: 0, top: 0, right: 0, bottom: 0, width: 0, height: 0 };
   }
 }
 
@@ -99,6 +103,7 @@ export function environment({
     document,
     navigator: {},
     createScreenWakeLock,
+    closeOnOutsidePress,
     Event,
     location: { hash: "" },
     localStorage: {

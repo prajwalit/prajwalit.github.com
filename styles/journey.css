@@ -141,7 +141,6 @@ main {
   top: 50%;
 }
 .closing {
-  left: 8%;
   width: 550px;
 }
 .eyebrow {
@@ -421,8 +420,6 @@ dialog p {
 .no-webgl .story,
 .no-webgl .closing {
   position: static;
-  visibility: visible;
-  opacity: 1;
   max-width: 600px;
 }
 .no-webgl .scene-caption {
@@ -502,6 +499,15 @@ dialog p {
   dialog {
     padding: 40px 28px;
   }
+  .about-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+  .about-portrait {
+    width: 72px;
+    height: 72px;
+  }
   .closing h2 {
     font-size: 56px;
   }
@@ -567,6 +573,25 @@ dialog p {
   }
 }
 
+/* A portrait introduces the dialog. The image is lazy, so a visitor who never
+   opens the dialog never downloads it. */
+.about-head {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  margin-bottom: 22px;
+}
+.about-portrait {
+  flex: none;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #ffffff30;
+}
+.about-head h2 {
+  margin: 8px 0 0;
+}
 .about-links {
   display: flex;
   flex-wrap: wrap;
@@ -631,6 +656,8 @@ dialog p {
 .no-webgl #about-button {
   display: none;
 }
+/* Must out-rank the inline opacity, visibility and transform the render loop
+   writes, in case the landscape fails after the first frame. */
 .no-webgl .hero-content,
 .no-webgl .story,
 .no-webgl .closing {
@@ -944,11 +971,6 @@ dialog p {
   letter-spacing: 2px;
   color: var(--muted);
 }
-@media (max-width: 650px) {
-  .explore-hint .explore-desktop { display: none; }
-  .explore-hint .explore-touch { display: block; }
-}
-
 .explore-keys { display: none; }
 @media (hover: hover) and (pointer: fine) {
   .explore-keys {
@@ -1031,7 +1053,7 @@ dialog p {
 @media print { #wallpaper-dialog, #wallpaper-open { display: none !important; } }
 
 #time-open { display: grid; place-items: center; padding: 10px; border: 1px solid #efbc9577; background: #1b2936b3; }
-#time-panel { position: fixed; inset: auto auto 80px max(16px, 4%); margin: 0; width: min(330px, calc(100vw - 32px)); padding: 22px; box-sizing: border-box; border: 1px solid #efbc9566; background: #1b2936f5; }
+#time-panel { position: fixed; inset: auto auto 80px max(16px, 4%); margin: 0; width: min(330px, calc(100vw - 32px)); max-height: calc(100dvh - 100px); overflow-y: auto; padding: 22px; box-sizing: border-box; border: 1px solid #efbc9566; background: #1b2936f5; }
 #time-panel::backdrop { background: transparent; backdrop-filter: none; }
 #time-panel h2 { font-size: 28px; margin: 0 20px 12px 0; }
 #time-close { position: absolute; right: 12px; top: 8px; font-size: 24px; }
@@ -1055,5 +1077,3 @@ dialog p {
 .time-speed-stepper button { border: 0; }
 .time-speed-stepper button:disabled { opacity: .3; cursor: default; }
 #time-speed { min-width: 48px; text-align: center; font-size: 14px; color: var(--accent); font-variant-numeric: tabular-nums; }
-
-#time-panel { max-height: calc(100dvh - 100px); overflow-y: auto; }

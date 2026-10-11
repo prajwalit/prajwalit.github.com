@@ -11,7 +11,8 @@ The terrain is intentionally sculptural, with coral sunset light, cool mountain
 silhouettes, reflective water, and a continuous camera route toward a summit.
 The camera climbs to the central summit, then turns continuously at one revolution
 every 90 seconds. The panorama can be paused and resumed.
-No photographs, satellite imagery, or Trolltunga reconstruction are displayed.
+No photographs, satellite imagery, or Trolltunga reconstruction appear in the
+landscape; the only photograph on the site is the portrait in the about dialog.
 
 Implementation
   scripts/journey.js — deterministic procedural terrain, sky shader,
@@ -20,7 +21,10 @@ Implementation
   scripts/vegetation.js — instanced conifers and grass, with slope/height limits
     and roots sampled from the rendered terrain triangles. Meadow color fades
     into exposed rock higher up; trees become smaller and sparser at the treeline.
-  assets/trolltunga-prajwalit.jpg — retained original photo; not loaded by the site.
+  scripts/pointer.js — the shared release-gesture and dismiss-on-outside-press
+    helpers used by the overlays and every dialog.
+  scripts/seeded-random.js — the one deterministic hash behind procedural
+    placement, so a seed gives the same detail in every module.
   assets/water-normal.jpg — water normal map from the Three.js examples.
   assets/vendor — locally vendored Three.js 0.170.0 and Water; MIT license.
     Water includes a local extension for multisampled, mipmapped reflections
@@ -31,7 +35,9 @@ Implementation
 
 Accessibility and fallbacks
   Reduced-motion preferences disable ambient animation and camera smoothing.
-  Inactive panels are inert and hidden. Dialogs use native modal focus handling.
+  Inactive panels are inert and hidden. Dialogs use native modal focus handling
+  and share one dismissal gesture: a press that both starts and ends outside the
+  panel. Dragging a dial, preview or control past the edge never closes it.
   Manual scrolling, touch, or key input stops automatic playback.
   If WebGL cannot initialize, the text becomes a normal readable page.
 
@@ -56,8 +62,10 @@ Maintenance and SEO
   A canonical URL, description, Open Graph/Twitter metadata, and ProfilePage
   structured data identify the public site at https://prajwalit.com/.
   images/social-preview.jpg supplies the landscape preview for shared links.
+  images/profile-pic.png introduces the about dialog; it is lazy, so visitors
+  who never open the dialog never download it. The legacy social icons and the
+  retained Trolltunga photo have been removed; both remain in git history.
   robots.txt advertises sitemap.xml; update both if the production domain changes.
-  Existing personal photos and legacy icons are retained but not requested by the page.
   Keep the local Three.js license and Water customizations when updating the vendor.
 
 Validation

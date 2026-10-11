@@ -13,7 +13,7 @@ Read the section relevant to your change before touching code, and update it aft
 ```
 index.html          all content + metadata, server-rendered; GA4; reload-scroll shim
 styles/journey.css  dark-only; :root tokens --ivory/--muted/--accent
-scripts/journey.js  the only place Three.js scene setup lives (798 lines)
+scripts/journey.js  the only place Three.js scene setup lives (~790 lines)
 scripts/*.js        mostly pure modules, unit-tested in plain node
 assets/vendor/      Three.js 0.170.0 + Water, locally vendored and patched
 tests/*.test.js     77 tests, node --test, ~144 lines of hand-rolled DOM mocks
@@ -32,6 +32,12 @@ renderer, light, or render target.
 `createShootingStarFlight`, `createScreenWakeLock`, `addDiscoveries`, `addVegetation`.
 They receive the objects they mutate and return closures — no imports of `journey.js`,
 so the dependency graph stays a tree and the modules stay testable.
+
+**Two shared helpers**, both tiny on purpose: `seeded-random.js` holds the one
+deterministic hash behind every procedural placement (change it and the
+landscape changes), and `pointer.js` holds `onPointerRelease` — a gesture ends on
+release, cancellation *and* lost capture — plus `closeOnOutsidePress`, the single
+dismissal gesture every dialog uses.
 
 **Pure geometry/math lives apart from DOM:** `camera-progress.js`, `panorama.js`,
 `sunset.js` (`dayCycleState`), `time-controls.js` (`cycleToDial`/`dialToCycle`),
@@ -87,15 +93,18 @@ python3 -m http.server 8081 --bind 127.0.0.1
   (`./sunset.js?v=6`). All importers of a module must agree — mismatched versions fetch
   and instantiate the module twice. `grep -ho 'from "\./[a-z-]*\.js[^"]*"' scripts/*.js |
   sort -u` should show one version per module. Entry points in `index.html` use a dated
-  form (`journey.js?v=20261011-12`, `journey.css?v=20261011-4`) — bump the date and reset
-  the counter, or increment the counter within a day. Assets (`favicon.svg?v=`,
+  form (`journey.js?v=YYYYMMDD-n`) — bump the date and reset the counter, or
+  increment the counter within a day. Assets (`favicon.svg?v=`,
   `silent-trail.m4a?v=`) follow the same dated scheme.
 - **Update the `README`** in its existing prose voice whenever behavior, constants,
   bounds, timings, or counts change. It is maintained as the spec, not a stale readme.
 - **Ship tests with new behavior.** Prefer extracting the logic as a pure function and
   testing it directly; for DOM-coupled code use `environment()` from `tests/helpers.js`,
   which strips imports and runs the real source in a `vm` context against mocked
-  globals. `env.run("…")` pokes module-scope state directly.
+  globals. `env.run("…")` pokes module-scope state directly. Because `load()`
+  strips imports, anything a module calls at import time must also be injected
+  into the vm context in `environment()` — that is why `createScreenWakeLock` and
+  `closeOnOutsidePress` appear there.
 - **Commits:** sentence-case imperative, no prefix or scope — "Fix mobile galaxy shader
   math and coordinate precision", "Soften cloud overlap while preserving sunset glow".
   Commit when the change is done and tested; **push only when asked** — master is live.
@@ -115,8 +124,8 @@ python3 -m http.server 8081 --bind 127.0.0.1
   render targets, no new image downloads. Prefer instancing, merged buffers, and `LOD`
   with a distance cull — the existing patterns in `vegetation.js` and `discoveries.js`.
 - **No photographs or real-place reconstruction in the scene.** The landscape is
-  explicitly imagined and makes no geographic claim.
-  `assets/trolltunga-prajwalit.jpg` is retained but deliberately never loaded.
+  explicitly imagined and makes no geographic claim. The portrait in the about
+  dialog is the only photograph on the site, and it loads lazily.
 - **Accessibility is part of the feature:** every control gets an accurate
   `aria-label`, dialogs use native modal focus handling and restore focus on close,
   inactive panels are `inert`, the dial is a real `role="slider"` with keyboard steps.

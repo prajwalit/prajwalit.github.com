@@ -1,4 +1,5 @@
-import { visibleSkyPoint } from "./visible-sky.js?v=1";
+import { visibleSkyPoint } from "./visible-sky.js?v=2";
+import { seededRandom as random } from "./seeded-random.js?v=1";
 import * as THREE from "../assets/vendor/three.module.js";
 
 // Only choose a new trajectory when due. Once launched, its world-space path
@@ -7,10 +8,6 @@ export function createShootingStarFlight(streak, ground, reduced = false) {
   const duration = 1.15;
   let nextDue = 20, retryAt = 0, started = -Infinity, lastTime = 0, pass = 0;
   const origin = new THREE.Vector3(), travel = new THREE.Vector3();
-  const random = n => {
-    const v = Math.sin(n * 127.1 + 19.7) * 43758.5453;
-    return v - Math.floor(v);
-  };
   return (seconds, camera) => {
     if (seconds < lastTime) {
       nextDue = 20; retryAt = 0; started = -Infinity; pass = 0;

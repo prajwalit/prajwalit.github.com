@@ -1,10 +1,11 @@
-import { createSkyClock, createTimeControls } from "./time-controls.js?v=9";
+import { createSkyClock, createTimeControls } from "./time-controls.js?v=10";
 import { skyFragmentShader } from "./sky-shader.js?v=10";
 import { createSunset } from "./sunset.js?v=6";
-import { createWallpaper } from "./wallpaper.js";
-import { addDiscoveries } from "./discoveries.js?v=10";
-import { createExplorer } from "./explore.js?v=5";
+import { createWallpaper } from "./wallpaper.js?v=1";
+import { addDiscoveries } from "./discoveries.js?v=11";
+import { createExplorer } from "./explore.js?v=6";
 import { createScreenWakeLock } from "./screen-wake-lock.js";
+import { closeOnOutsidePress } from "./pointer.js?v=1";
 import * as THREE from "../assets/vendor/three.module.js";
 import {
   cameraProgress,
@@ -33,6 +34,8 @@ let summitReady = false,
 const play = $("#play");
 const soundToggle = $("#sound-toggle");
 const restartJourney = $("#restart-journey");
+const exploreToggle = $("#explore-toggle");
+const exploreCompass = $("#explore-compass");
 const screenWakeLock = createScreenWakeLock(navigator, document);
 let controlState = "";
 function setText(element, text) {
@@ -43,9 +46,9 @@ function updateJourneyControl() {
     automatic && !summitReady && !document.querySelector("dialog[open]"),
   );
   const exploring = Boolean(explorer?.active);
-  $("#explore-toggle").hidden = !summitReady || exploring;
+  exploreToggle.hidden = !summitReady || exploring;
   play.hidden = exploring;
-  $("#explore-compass").disabled = !explorer;
+  exploreCompass.disabled = !explorer;
   let label, aria;
   const nextState = [
     journeyStarted,
@@ -115,10 +118,10 @@ function startExploring(trigger) {
     returnLabel: summitReady ? "summit" : "journey",
   });
 }
-$("#explore-toggle").onclick = () => {
-  if (summitReady) startExploring($("#explore-toggle"));
+exploreToggle.onclick = () => {
+  if (summitReady) startExploring(exploreToggle);
 };
-$("#explore-compass").onclick = () => startExploring($("#explore-compass"));
+exploreCompass.onclick = () => startExploring(exploreCompass);
 
 let restarting = false;
 restartJourney.onclick = async () => {
@@ -240,25 +243,13 @@ $("#back-top").onclick = () => {
   stopPlayback();
   window.scrollTo({ top: 0, behavior: reduced ? "instant" : "smooth" });
 };
-for (const [trigger, modal] of [["#about-button", "#about"]]) {
-  $(trigger).onclick = () => {
-    stopPlayback();
-    $(modal).showModal();
-  };
-  $(modal).querySelector(".close").onclick = () => $(modal).close();
-  $(modal).onclick = (e) => {
-    if (e.target === $(modal)) {
-      const r = e.target.getBoundingClientRect();
-      if (
-        e.clientX < r.left ||
-        e.clientX > r.right ||
-        e.clientY < r.top ||
-        e.clientY > r.bottom
-      )
-        e.target.close();
-    }
-  };
-}
+const about = $("#about");
+$("#about-button").onclick = () => {
+  stopPlayback();
+  about.showModal();
+};
+about.querySelector(".close").onclick = () => about.close();
+closeOnOutsidePress(about);
 
 // An imagined landscape: deliberately sculpted, with no geographic claim.
 function hash(x, z) {
@@ -646,6 +637,7 @@ async function start() {
     const dt = Math.min(frameSeconds, 0.05);
     previous = now;
     elapsed += dt;
+    const modalOpen = Boolean(document.querySelector("dialog[open]"));
     updateSunset(skyClock.tick(Math.min(frameSeconds, 1)));
     timeControls.update();
     // Cloud drift follows real time even when rendering falls below 20 fps.
@@ -659,7 +651,7 @@ async function start() {
     let target = explorer.active
       ? explorationProgress
       : THREE.MathUtils.clamp(scrollY / maxScroll, 0, 1);
-    if (automatic && !document.querySelector("dialog[open]")) {
+    if (automatic && !modalOpen) {
       // Keep the camera clock in floating-point route space. DOM scroll positions
       // can round to pixels, so they must not feed back into automatic motion.
       autoplayTarget = Math.min(
@@ -704,12 +696,11 @@ async function start() {
     panoramaElapsed = advancePanorama(
       panoramaElapsed,
       dt,
-      atSummit && !panoramaPaused && !document.querySelector("dialog[open]"),
+      atSummit && !panoramaPaused && !modalOpen,
     );
     // Constant angular speed keeps each revolution seamless at the wrap.
     const turn = panoramaAngle(panoramaElapsed, panOffset);
-    if (atSummit && !document.querySelector("dialog[open]"))
-      summitCaptionElapsed += dt;
+    if (atSummit && !modalOpen) summitCaptionElapsed += dt;
     const lift = THREE.MathUtils.smoothstep(position, 0.42, 0.83);
     approachGaze.set(
       camera.position.x * 0.2,

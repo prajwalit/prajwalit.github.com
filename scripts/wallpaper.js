@@ -1,4 +1,5 @@
 import * as THREE from "../assets/vendor/three.module.js";
+import { closeOnOutsidePress, onPointerRelease } from "./pointer.js?v=1";
 
 export function wallpaperSize(format, requestedEdge, deviceLimit = 4096) {
   const edge = Math.max(16, Math.floor(Math.min(requestedEdge, deviceLimit)));
@@ -128,6 +129,7 @@ export function createWallpaper({ renderer, scene, camera, available }) {
     choose(innerHeight > innerWidth ? "phone" : "desktop");
   };
   close.onclick = () => dialog.close();
+  closeOnOutsidePress(dialog);
   dialog.addEventListener("close", () => {
     discard();
     drag = null;
@@ -158,10 +160,9 @@ export function createWallpaper({ renderer, scene, camera, available }) {
     showDimensions();
     schedulePreview();
   });
-  for (const type of ["pointerup", "pointercancel", "lostpointercapture"])
-    preview.addEventListener(type, (event) => {
-      if (drag?.id === event.pointerId) drag = null;
-    });
+  onPointerRelease(preview, (event) => {
+    if (drag?.id === event.pointerId) drag = null;
+  });
   preview.addEventListener("keydown", (event) => {
     if (
       busy ||

@@ -105,7 +105,7 @@
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Italiana&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles/journey.css?v=20261011-4" />
+    <link rel="stylesheet" href="styles/journey.css?v=20261011-5" />
   </head>
   <body class="no-webgl">
     <div id="restart-fade" aria-hidden="true"></div>
@@ -382,8 +382,21 @@
     </dialog>
     <dialog id="about" aria-labelledby="about-title">
       <button class="close" aria-label="Close about">×</button>
-      <div class="eyebrow">A LITTLE ABOUT ME</div>
-      <h2 id="about-title">Hi, I’m Prajwalit.</h2>
+      <div class="about-head">
+        <img
+          class="about-portrait"
+          src="images/profile-pic.png?v=20261011-1"
+          width="92"
+          height="92"
+          loading="lazy"
+          decoding="async"
+          alt="Prajwalit"
+        />
+        <div>
+          <div class="eyebrow">A LITTLE ABOUT ME</div>
+          <h2 id="about-title">Hi, I’m Prajwalit.</h2>
+        </div>
+      </div>
       <p>
         I’m a founder at Unravel, where I build software, help shape our
         products, and work with clients building agentic systems. My work moves
@@ -418,6 +431,6 @@
       loop
     ></audio>
     <script type="module" src="scripts/ambience.js?v=20261009-8"></script>
-    <script type="module" src="scripts/journey.js?v=20261011-12"></script>
+    <script type="module" src="scripts/journey.js?v=20261011-13"></script>
   </body>
 </html>

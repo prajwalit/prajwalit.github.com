@@ -1,4 +1,5 @@
 import * as THREE from "../assets/vendor/three.module.js";
+import { onPointerRelease } from "./pointer.js?v=1";
 
 const SPEED = 240;
 const LIMITS = {
@@ -163,10 +164,9 @@ export function createExplorer(camera, ground, { reduced, onChange }) {
     drag.x = event.clientX;
     drag.y = event.clientY;
   });
-  for (const type of ["pointerup", "pointercancel", "lostpointercapture"])
-    surface.addEventListener(type, (event) => {
-      if (drag?.id === event.pointerId) drag = null;
-    });
+  onPointerRelease(surface, (event) => {
+    if (drag?.id === event.pointerId) drag = null;
+  });
   surface.addEventListener(
     "wheel",
     (event) => {
@@ -196,14 +196,13 @@ export function createExplorer(camera, ground, { reduced, onChange }) {
   stick.addEventListener("pointermove", (event) => {
     if (joystick === event.pointerId) steer(event);
   });
-  for (const type of ["pointerup", "pointercancel", "lostpointercapture"])
-    stick.addEventListener(type, (event) => {
-      if (joystick === event.pointerId) {
-        joystick = null;
-        axisX = axisY = 0;
-        knob.style.transform = "translate(0, 0)";
-      }
-    });
+  onPointerRelease(stick, (event) => {
+    if (joystick === event.pointerId) {
+      joystick = null;
+      axisX = axisY = 0;
+      knob.style.transform = "translate(0, 0)";
+    }
+  });
   for (const [id, direction] of [
     ["#explore-up", 1],
     ["#explore-down", -1],
@@ -214,10 +213,7 @@ export function createExplorer(camera, ground, { reduced, onChange }) {
       button.setPointerCapture(event.pointerId);
       altitude.set(event.pointerId, direction);
     });
-    for (const type of ["pointerup", "pointercancel", "lostpointercapture"])
-      button.addEventListener(type, (event) =>
-        altitude.delete(event.pointerId),
-      );
+    onPointerRelease(button, (event) => altitude.delete(event.pointerId));
     button.addEventListener("keydown", (event) => {
       if (event.code === "Space" || event.code === "Enter") {
         event.preventDefault();

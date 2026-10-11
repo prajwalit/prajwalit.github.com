@@ -1,6 +1,6 @@
-import { createBirdFlight } from "./bird-flight.js?v=1";
-import { createShootingStarFlight } from "./shooting-star.js?v=3";
-import { createAlpineFlowers, createFlowerPatchFactory } from "./natural-landmarks.js?v=3";
+import { createBirdFlight } from "./bird-flight.js?v=2";
+import { createShootingStarFlight } from "./shooting-star.js?v=4";
+import { createAlpineFlowers, createFlowerPatchFactory } from "./natural-landmarks.js?v=4";
 import * as THREE from "../assets/vendor/three.module.js";
 import { sampleGround, habitat } from "./vegetation.js?v=5";
 

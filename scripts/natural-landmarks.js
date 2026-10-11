@@ -1,10 +1,7 @@
 import * as THREE from "../assets/vendor/three.module.js";
+import { seededRandom as random } from "./seeded-random.js?v=1";
 
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
-const random = (n) => {
-  const x = Math.sin(n * 127.1 + 19.7) * 43758.5453;
-  return x - Math.floor(x);
-};
 
 // Build once into a few buffers. No per-leaf objects, textures or animation.
 class Surface {
