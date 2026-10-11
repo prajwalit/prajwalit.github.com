@@ -27,7 +27,10 @@ void main(){
  float disc=smoothstep(.99968,.99985,facing)*smoothstep(-.015,.01,d.y);
  col=mix(col,mix(vec3(4.,2.8,1.6),vec3(2.8,.65,.25),uDusk),disc);
  vec2 p=d.xz/max(.12,d.y+.16)*vec2(1.7,6.);
- float cloud=smoothstep(.47,.74,fbm(p+vec2(uTime*.002,0.)));
+ // Gentle but visible daytime drift; dissolve clouds as night arrives.
+ // Applying the fade here also clears their mask over stars and the Milky Way.
+ float cloud=smoothstep(.47,.74,fbm(p+vec2(uTime*.055,uTime*.015)))
+   *(1.-smoothstep(0.,.95,uNight));
  float band=smoothstep(.025,.10,h)*(1.-smoothstep(.32,.60,h));
  if(uNight>.001 && d.y>0.){
    vec3 celestial=starRotation*d;

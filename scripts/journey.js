@@ -1,5 +1,5 @@
 import { createSkyClock, createTimeControls } from "./time-controls.js?v=9";
-import { skyFragmentShader } from "./sky-shader.js?v=4";
+import { skyFragmentShader } from "./sky-shader.js?v=7";
 import { createSunset } from "./sunset.js?v=6";
 import { createWallpaper } from "./wallpaper.js";
 import { addDiscoveries } from "./discoveries.js?v=10";
@@ -647,7 +647,8 @@ async function start() {
     elapsed += dt;
     updateSunset(skyClock.tick(Math.min(frameSeconds, 1)));
     timeControls.update();
-    clock.value = reduced ? 0 : elapsed;
+    // Cloud drift follows real time even when rendering falls below 20 fps.
+    if (!reduced) clock.value += Math.min(frameSeconds, 1);
     const maxScroll = Math.max(
       1,
       document.documentElement.scrollHeight - innerHeight,
