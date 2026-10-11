@@ -1,0 +1,132 @@
+# CLAUDE.md
+
+Personal site at **prajwalit.com** — static GitHub Pages, no build step, no runtime
+dependencies. Five chapters of plain HTML with a Three.js procedural mountain-lake
+landscape layered over them, flown through on scroll.
+
+`README` is the living design spec: bounds, timings, instance counts, rationale.
+Read the section relevant to your change before touching code, and update it after
+(see Workflow below).
+
+## Layout
+
+```
+index.html          all content + metadata, server-rendered; GA4; reload-scroll shim
+styles/journey.css  dark-only; :root tokens --ivory/--muted/--accent
+scripts/journey.js  the only place Three.js scene setup lives (798 lines)
+scripts/*.js        mostly pure modules, unit-tested in plain node
+assets/vendor/      Three.js 0.170.0 + Water, locally vendored and patched
+tests/*.test.js     77 tests, node --test, ~144 lines of hand-rolled DOM mocks
+```
+
+## Architecture
+
+**`journey.js` owns the scene and the frame.** It builds terrain, sky, water, camera
+path, then runs one `render(now)` loop that drives everything: camera position and
+gaze, panorama turn, panel opacity/`inert`, captions, progress bar, place name. There
+is no state manager — module-scope `let` plus the loop. Nothing else creates a
+renderer, light, or render target.
+
+**Everything else is a factory returning an update function.** `createSunset`,
+`createSkyClock`, `createExplorer`, `createWallpaper`, `createBirdFlight`,
+`createShootingStarFlight`, `createScreenWakeLock`, `addDiscoveries`, `addVegetation`.
+They receive the objects they mutate and return closures — no imports of `journey.js`,
+so the dependency graph stays a tree and the modules stay testable.
+
+**Pure geometry/math lives apart from DOM:** `camera-progress.js`, `panorama.js`,
+`sunset.js` (`dayCycleState`), `time-controls.js` (`cycleToDial`/`dialToCycle`),
+`vegetation.js` (`habitat`/`sampleGround`), `explore.js` (`explorerFloor`/
+`constrainExplorer`/`moveExplorer`), `wallpaper.js` (`wallpaperSize`/`renderWallpaper`),
+`visible-sky.js`. These are the parts with real test coverage — keep new logic in this
+shape where you can.
+
+### Load-bearing details
+
+- **`body` starts `.no-webgl`.** `journey.js` removes it on success; the `start().catch`
+  handler puts it back and clears `[inert]`. The readable page is the default, not a
+  fallback — never invert this.
+- **Terrain is sampled two ways, deliberately.** `terrainHeight(x,z)` is the analytic
+  field, used only for camera clearance. Everything that must *look* attached to the
+  ground (tree roots, flowers, bird/star sky checks, explorer floor) goes through
+  `sampleGround(terrainGeometry, …)`, which interpolates the actual rendered triangles —
+  including picking the correct half of each quad. Mixing these up makes props float.
+- **Scroll is the single source of truth for route position, but must not feed back.**
+  `autoplayTarget` holds the camera clock in floating-point route space; DOM `scrollY`
+  rounds to pixels, so autoplay writes to scroll and never reads from it.
+- **Reduced motion is threaded through, not bolted on.** `reduced` disables ambient
+  animation and camera smoothing, hides birds and stars, starts both the panorama and
+  the sky clock paused, and makes returns instant. Any new motion needs a `reduced` path.
+- **Hidden tabs stop clocks.** `render` early-returns on `document.hidden`;
+  bird/star schedulers detect time going backwards and reset. Open dialogs also pause
+  the panorama, autoplay, and the wake lock.
+- **One shadowed directional light, reused.** `createSunset` swaps it between sun and
+  moon at near-zero intensity as they cross the horizon. Vegetation and discoveries
+  `receiveShadow` but never cast — thousands of tiny casters is the thing being avoided.
+- **Vendor patches are intentional.** `Water.js` carries local changes (multisampled
+  mipmapped reflections, viewport-aware target sizing capped at 1536px long edge) and
+  `journey.js` string-patches its fragment shader at runtime to fade subpixel ripples by
+  screen-space footprint. `terrainMaterial.onBeforeCompile` similarly injects world-space
+  grain. When editing these, keep `customProgramCacheKey` in step with the shader source.
+- **Mobile GPU precision is a recurring bug class.** The sky vertex shader declares
+  `highp`, and `sky-shader.js` squares signed distances directly because `pow()` with a
+  negative base is undefined. The most recent commit is a fix in exactly this area.
+
+## Workflow
+
+Node 20+. No install step.
+
+```
+npm test                              # 77 tests, must stay green
+npm run check                         # node --check on every script
+git diff --check                      # whitespace
+python3 -m http.server 8081 --bind 127.0.0.1
+```
+
+- **New script in `scripts/`?** Add it to the `check` chain in `package.json`.
+- **Bump `?v=` on every change.** Each module is imported with a version specifier
+  (`./sunset.js?v=6`). All importers of a module must agree — mismatched versions fetch
+  and instantiate the module twice. `grep -ho 'from "\./[a-z-]*\.js[^"]*"' scripts/*.js |
+  sort -u` should show one version per module. Entry points in `index.html` use a dated
+  form (`journey.js?v=20261011-12`, `journey.css?v=20261011-4`) — bump the date and reset
+  the counter, or increment the counter within a day. Assets (`favicon.svg?v=`,
+  `silent-trail.m4a?v=`) follow the same dated scheme.
+- **Update the `README`** in its existing prose voice whenever behavior, constants,
+  bounds, timings, or counts change. It is maintained as the spec, not a stale readme.
+- **Ship tests with new behavior.** Prefer extracting the logic as a pure function and
+  testing it directly; for DOM-coupled code use `environment()` from `tests/helpers.js`,
+  which strips imports and runs the real source in a `vm` context against mocked
+  globals. `env.run("…")` pokes module-scope state directly.
+- **Commits:** sentence-case imperative, no prefix or scope — "Fix mobile galaxy shader
+  math and coordinate precision", "Soften cloud overlap while preserving sunset glow".
+  Commit when the change is done and tested; **push only when asked** — master is live.
+- Code style is Prettier-default-ish (2-space, double quotes, semicolons) but several
+  newer modules are hand-compacted. Match the file you are in rather than reformatting.
+- Comments explain *why* — GPU precision, autoplay policy, pixel-rounding feedback,
+  what a constant protects against. Not what the line does. Follow that.
+
+## Constraints
+
+- **Phone must work properly; desktop should feel premium.** A visual gain that breaks
+  or stutters on a phone isn't acceptable; extra fidelity that only desktop can afford
+  is. Gate cost by device where needed (`devicePixelRatio` is already capped at 1.6,
+  reflection targets at 1536px, wallpaper resolution defaults down on coarse pointers
+  and low `deviceMemory`).
+- **Hold the render budget:** one shadowed light, no post-processing passes, no added
+  render targets, no new image downloads. Prefer instancing, merged buffers, and `LOD`
+  with a distance cull — the existing patterns in `vegetation.js` and `discoveries.js`.
+- **No photographs or real-place reconstruction in the scene.** The landscape is
+  explicitly imagined and makes no geographic claim.
+  `assets/trolltunga-prajwalit.jpg` is retained but deliberately never loaded.
+- **Accessibility is part of the feature:** every control gets an accurate
+  `aria-label`, dialogs use native modal focus handling and restore focus on close,
+  inactive panels are `inert`, the dial is a real `role="slider"` with keyboard steps.
+- **Prose in `index.html` is personal content.** Fix markup freely; don't rewrite the
+  copy, bio, or captions without asking.
+- `node_modules/` is in the repo but holds no packages — don't add dependencies.
+
+## Not covered by tests
+
+GPU rendering, actual browser autoplay policy, CSS layout, real wake-lock dimming,
+search indexing. Verify those by hand: preview the five chapters, sound controls,
+dialogs, summit pan, free exploration, and the time dial — with JavaScript disabled,
+at a narrow viewport, and on a phone for the wake lock.
