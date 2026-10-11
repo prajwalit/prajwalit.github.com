@@ -1,5 +1,5 @@
 import { createSkyClock, createTimeControls } from "./time-controls.js?v=9";
-import { skyFragmentShader } from "./sky-shader.js?v=9";
+import { skyFragmentShader } from "./sky-shader.js?v=10";
 import { createSunset } from "./sunset.js?v=6";
 import { createWallpaper } from "./wallpaper.js";
 import { addDiscoveries } from "./discoveries.js?v=10";
@@ -339,7 +339,8 @@ async function start() {
       side: THREE.BackSide,
       depthWrite: false,
       uniforms: { uTime: clock, starRotation: { value: new THREE.Matrix3() }, uDusk: { value: 0 }, uNight: { value: 0 }, uDay: { value: 0 }, moonDirection: { value: new THREE.Vector3() }, sunDirection: { value: sunDirection } },
-      vertexShader: `varying vec3 vDirection;void main(){vDirection=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+      // Keep interpolated sky directions bounded on mobile GPUs.
+      vertexShader: `varying highp vec3 vDirection;void main(){vDirection=normalize(position);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
       fragmentShader: skyFragmentShader,
     }),
   );

@@ -1,6 +1,6 @@
 // All celestial detail is drawn in the existing sky pass, including reflections.
 export const skyFragmentShader = `
-varying vec3 vDirection;
+varying highp vec3 vDirection;
 uniform vec3 sunDirection,moonDirection;
 uniform mat3 starRotation;
 uniform float uTime,uDusk,uNight,uDay;
@@ -48,7 +48,10 @@ void main(){
    float warp=(noise(gal*.65+17.)-.5)*.045;
    float lat=latitude+warp;
    float width=.085+.055*noise(vec2(longitude*3.2,6.));
-   float envelope=exp(-pow(lat/width,2.));
+   // Signed distances must be squared directly: GLSL pow is undefined
+   // for negative bases, even with an exponent of two (mobile GPU artifacts).
+   float envelopeDistance=lat/width;
+   float envelope=exp(-envelopeDistance*envelopeDistance);
    float core=pow(max(0.,.5+.5*cos(longitude+2.1)),22.);
    float shoulder=lat-.028-.018*noise(vec2(longitude*4.,26.));
    float bulge=exp(-shoulder*shoulder*27.)*core*(.65+.55*noise(gal*1.3+42.));
@@ -64,9 +67,11 @@ void main(){
      +(noise(gal*2.8+23.)-.5)*.035;
    float riftWidth=.012+.024*noise(vec2(longitude*11.,47.));
    float breaks=smoothstep(.28,.68,noise(vec2(longitude*8.,37.)));
-   float rift=exp(-pow((dustLat-riftCentre)/riftWidth,2.))*breaks;
+   float riftDistance=(dustLat-riftCentre)/riftWidth;
+   float rift=exp(-riftDistance*riftDistance)*breaks;
    float branchCentre=riftCentre+.035+.045*noise(vec2(longitude*5.,4.));
-   float branch=exp(-pow((dustLat-branchCentre)/.026,2.))
+   float branchDistance=(dustLat-branchCentre)/.026;
+   float branch=exp(-branchDistance*branchDistance)
      *smoothstep(.42,.72,noise(gal*2.+11.));
    float knots=smoothstep(.38,.76,noise(gal*8.3+9.))*exp(-lat*lat*95.);
    float dust=clamp((rift*.48+branch*.30+knots*.18)*(.55+.55*filaments),0.,.58);
