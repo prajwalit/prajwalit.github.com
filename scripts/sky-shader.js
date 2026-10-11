@@ -22,16 +22,19 @@ void main(){
  vec3 dusk=mix(vec3(.42,.27,.34),vec3(.085,.12,.25),smoothstep(-.02,.65,h));
  vec3 night=mix(vec3(.055,.075,.13),vec3(.009,.018,.048),smoothstep(0.,.65,h));
  vec3 col=mix(warm,daylight,uDay);col=mix(col,dusk,uDusk);col=mix(col,night,uNight);
- float facing=max(dot(d,sunDirection),0.);
- col+=mix(vec3(.80,.33,.09),vec3(.30,.10,.08),uDusk)*pow(facing,20.)*(1.-uNight);
- float disc=smoothstep(.99968,.99985,facing)*smoothstep(-.015,.01,d.y);
- col=mix(col,mix(vec3(4.,2.8,1.6),vec3(2.8,.65,.25),uDusk),disc);
  vec2 p=d.xz/max(.12,d.y+.16)*vec2(1.7,6.);
  // Gentle but visible daytime drift; dissolve clouds as night arrives.
  // Applying the fade here also clears their mask over stars and the Milky Way.
- float cloud=smoothstep(.47,.74,fbm(p+vec2(uTime*.055,uTime*.015)))
+ float cloud=smoothstep(.42,.80,fbm(p+vec2(uTime*.055,uTime*.015)))
    *(1.-smoothstep(0.,.95,uNight));
  float band=smoothstep(.025,.10,h)*(1.-smoothstep(.32,.60,h));
+ // Wispy clouds soften the disc while retaining its warm luminous shape.
+ // Keep the broad halo independent of cloud detail to avoid striped lighting.
+ float sunTransmission=mix(.25,1.,exp(-2.*cloud*band));
+ float facing=max(dot(d,sunDirection),0.);
+ col+=mix(vec3(.80,.33,.09),vec3(.30,.10,.08),uDusk)*pow(facing,20.)*(1.-uNight);
+ float disc=smoothstep(.99968,.99985,facing)*smoothstep(-.015,.01,d.y);
+ col=mix(col,mix(vec3(4.,2.8,1.6),vec3(2.8,.65,.25),uDusk),disc*sunTransmission);
  if(uNight>.001 && d.y>0.){
    vec3 celestial=starRotation*d;
    // A tilted great-circle band with uneven star clouds and dark dust lanes.
