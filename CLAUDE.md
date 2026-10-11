@@ -68,6 +68,10 @@ shape where you can.
 - **One shadowed directional light, reused.** `createSunset` swaps it between sun and
   moon at near-zero intensity as they cross the horizon. Vegetation and discoveries
   `receiveShadow` but never cast — thousands of tiny casters is the thing being avoided.
+- **The day cycle reaches the props through one value.** `createSunset`'s update
+  returns the `dayCycleState` it already computed, and `render` threads `night` into
+  `discoveries.update`, which is how birds know to roost. Read the cycle from that
+  return rather than calling `dayCycleState` again in the frame.
 - **Vendor patches are intentional.** `Water.js` carries local changes (multisampled
   mipmapped reflections, viewport-aware target sizing capped at 1536px long edge) and
   `journey.js` string-patches its fragment shader at runtime to fade subpixel ripples by

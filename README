@@ -44,7 +44,8 @@ Accessibility and fallbacks
 Current scope
   One continuous landscape journey from lake level to a summit panorama.
   The summit is derived from the actual central terrain vertices. The camera
-  uses terrain clearance during ascent and settles above the peak.
+  uses terrain clearance during ascent and settles above the peak, holding a
+  level gaze so the horizon rests on the centre line throughout the turn.
   Reduced-motion mode starts the panorama paused. Scrolling away from the
   summit stops the turn; dialogs and background tabs also pause its clock.
   At the summit, horizontal trackpad scrolling (or Shift + mouse wheel) pans
@@ -113,7 +114,11 @@ Landscape discoveries
   sky is obscured, launch waits without accumulating a backlog. Once launched,
   the world-space path stays fixed for its 1.15-second duration. The flock first becomes due at 120 seconds and crosses for 18 seconds,
   fading in and out. It waits for clear sky, then keeps its chosen world-space
-  route even if the camera turns. Subsequent launches are 120 seconds apart. Hidden tabs stop the clock.
+  route even if the camera turns. Subsequent launches are 120 seconds apart.
+  Birds roost once the sun is a couple of degrees below the horizon. Darkness
+  defers a pass the way an obscured sky does, so a single flock crosses after
+  sunrise rather than a night's worth arriving together; a flock overtaken by
+  nightfall fades out with the light. Hidden tabs stop the clock.
   Ground discoveries use actual terrain samples and distance culling. These
   details total about 31,300 instanced triangles across the map. Additional
   wildflower patches share two tiny geometry buffers and are culled beyond

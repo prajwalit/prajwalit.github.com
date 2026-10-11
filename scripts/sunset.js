@@ -65,5 +65,6 @@ export function createSunset({sun,ambient,sunDirection,sky,water,fog,reduced}) {
     water.material.uniforms.sunColor.value.copy(glintWarm).lerp(glintDay,day).lerp(glintNight,night)
       .multiplyScalar(moonlit?0.45*night:THREE.MathUtils.smoothstep(state.elevation,0,0.15));
     water.material.uniforms.waterColor.value.copy(waterDay).lerp(waterNight,night);
+    return state;
   };
 }

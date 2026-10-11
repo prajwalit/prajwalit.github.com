@@ -43,3 +43,22 @@ test("an active flock keeps its path when the camera moves; reduced motion hides
   const still=setup(undefined,true);still.update(120,still.camera);
   assert.equal(still.birds.visible,false);
 });
+test("birds roost through the night, then one flock crosses once light returns",()=>{
+  const {birds,camera,update}=setup();
+  update(120,camera,1);assert.equal(birds.visible,false);
+  update(600,camera,1);assert.equal(birds.visible,false);
+  update(601,camera,0.3);assert.equal(birds.visible,false);
+  update(602,camera,0);assert.equal(birds.visible,true);
+  update(605,camera,0);assert.equal(birds.material.opacity,1);
+  // A night of missed passes does not stack up behind the sunrise.
+  update(621,camera,0);assert.equal(birds.visible,false);
+  update(721,camera,0);assert.equal(birds.visible,false);
+  update(722,camera,0);assert.equal(birds.visible,true);
+});
+test("a flock overtaken by nightfall fades out with the light",()=>{
+  const {birds,camera,update}=setup();
+  update(120,camera,0);update(123,camera,0);
+  assert.equal(birds.material.opacity,1);
+  update(124,camera,0.5);assert.ok(Math.abs(birds.material.opacity-0.5)<1e-9);
+  update(125,camera,1);assert.equal(birds.material.opacity,0);
+});

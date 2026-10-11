@@ -1,8 +1,8 @@
-import { createSkyClock, createTimeControls } from "./time-controls.js?v=10";
+import { createSkyClock, createTimeControls } from "./time-controls.js?v=11";
 import { skyFragmentShader } from "./sky-shader.js?v=10";
-import { createSunset } from "./sunset.js?v=6";
+import { createSunset } from "./sunset.js?v=7";
 import { createWallpaper } from "./wallpaper.js?v=1";
-import { addDiscoveries } from "./discoveries.js?v=11";
+import { addDiscoveries } from "./discoveries.js?v=12";
 import { createExplorer } from "./explore.js?v=6";
 import { createScreenWakeLock } from "./screen-wake-lock.js";
 import { closeOnOutsidePress } from "./pointer.js?v=1";
@@ -638,7 +638,7 @@ async function start() {
     previous = now;
     elapsed += dt;
     const modalOpen = Boolean(document.querySelector("dialog[open]"));
-    updateSunset(skyClock.tick(Math.min(frameSeconds, 1)));
+    const skyState = updateSunset(skyClock.tick(Math.min(frameSeconds, 1)));
     timeControls.update();
     // Cloud drift follows real time even when rendering falls below 20 fps.
     if (!reduced) clock.value += Math.min(frameSeconds, 1);
@@ -707,15 +707,17 @@ async function start() {
       THREE.MathUtils.lerp(230, summit.y + 120, lift),
       camera.position.z - 2300,
     );
+    // A level gaze. The lake is a flat plane, so its horizon lies exactly on
+    // the horizontal, and holding the view level centres it at every heading.
     panoramaGaze
-      .set(Math.sin(turn) * 3000, -620, -Math.cos(turn) * 3000)
+      .set(Math.sin(turn) * 3000, 0, -Math.cos(turn) * 3000)
       .add(camera.position);
     gaze.copy(approachGaze).lerp(panoramaGaze, arrival);
     camera.lookAt(gaze);
     explorer.update(dt);
     updateJourneyControl();
     sky.position.copy(camera.position);
-    discoveries.update(elapsed, camera);
+    discoveries.update(elapsed, camera, skyState.night);
     water.material.uniforms.time.value = reduced ? 0 : elapsed * 0.2;
     panels.forEach((panel, i) => {
       const [a, b, c, d] = ranges[i];

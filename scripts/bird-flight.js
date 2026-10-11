@@ -3,12 +3,15 @@ import { visibleSkyPoint } from "./visible-sky.js?v=2";
 
 export function createBirdFlight(birds, ground, reduced = false) {
   const duration = 18;
+  // Birds fly while the sun still gives real light, through sunrise and
+  // sunset, and roost once it sits a couple of degrees below the horizon.
+  const roosting = 0.15;
   let nextDue = 120, retryAt = 0, started = -Infinity, lastTime = 0, pass = 0;
   const origin = new THREE.Vector3(), travel = new THREE.Vector3();
   const heading = new THREE.Vector3(), lateral = new THREE.Vector3();
   const transform = new THREE.Object3D();
   let yaw = 0;
-  return (seconds, camera) => {
+  return (seconds, camera, night = 0) => {
     if (seconds < lastTime) {
       nextDue = 120; retryAt = 0; started = -Infinity; pass = 0;
     }
@@ -16,7 +19,10 @@ export function createBirdFlight(birds, ground, reduced = false) {
     birds.visible = false;
     birds.material.opacity = 0;
     if (reduced) return;
-    if (seconds >= nextDue && seconds >= retryAt && camera) {
+    // Darkness defers a pass the way an obscured sky does: the flight stays
+    // due and retries, so one flock crosses after sunrise rather than a
+    // night's worth arriving together.
+    if (seconds >= nextDue && seconds >= retryAt && camera && night < roosting) {
       retryAt = seconds + 0.75;
       for (let i = 0; i < 8; i++) {
         const side = pass % 2 ? -1 : 1;
@@ -39,8 +45,10 @@ export function createBirdFlight(birds, ground, reduced = false) {
     const phase = seconds - started;
     if (phase < 0 || phase >= duration) return;
     birds.visible = true;
+    // A flock overtaken by nightfall fades with the light rather than popping.
     birds.material.opacity = THREE.MathUtils.smoothstep(phase, 0, 2)
-      * (1 - THREE.MathUtils.smoothstep(phase, duration - 3, duration));
+      * (1 - THREE.MathUtils.smoothstep(phase, duration - 3, duration))
+      * (1 - night);
     for (let i = 0; i < 7; i++) {
       const row = Math.ceil(i / 2);
       for (let wing = 0; wing < 2; wing++) {
