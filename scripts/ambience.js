@@ -87,6 +87,14 @@ function crossfade(to, frames = 150) {
   current = to;
   to.muted = muted;
   to.volume = 0;
+  // Whichever piece is coming in starts at its opening. Resuming the
+  // soundtrack from wherever it happened to pause drops the listener into
+  // the middle of it.
+  try {
+    to.currentTime = 0;
+  } catch {
+    // A source with no data yet defers the seek; it will start at zero.
+  }
   // Play even when muted, as the soundtrack does: a muted element is still
   // running, which is what makes unmuting mid-piece instant rather than silent.
   if (started) to.play().catch(() => {});
@@ -102,8 +110,6 @@ function crossfade(to, frames = 150) {
       return;
     }
     from.pause();
-    // The aurora piece plays once through, so rewind it for the next night.
-    if (from === auroraTrack) from.currentTime = 0;
   };
   requestAnimationFrame(step);
 }

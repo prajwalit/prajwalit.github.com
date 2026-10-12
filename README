@@ -201,7 +201,9 @@ Aurora
 Music
   Silent Trail is the background. Cloud Valley, 143.6 seconds and fading out
   on its own, plays under the aurora and hands back afterwards, crossfading
-  over 150 frames. The handback
+  over 150 frames. Whichever piece comes in starts at its opening, so the
+  soundtrack returns from the top rather than from wherever it paused. The
+  handback
   happens on whichever comes first, the track reaching its own end or the
   window closing; crossfading to the track already playing is a no-op. It is
   preload="none", so the 2.3MB is only fetched on a night that reaches 23:00.

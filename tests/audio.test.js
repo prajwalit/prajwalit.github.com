@@ -71,9 +71,13 @@ test("the aurora brings its own piece, and hands the soundtrack back", async () 
   await settle();
   assert.equal(env.audio.playCount, 1);
   assert.equal(env.aurora.playCount, 0);
-  // The aurora crosses in: its track starts, the soundtrack is left paused.
+  // Both pieces are part way through when the aurora arrives.
+  env.audio.currentTime = 42;
+  env.aurora.currentTime = 17;
+  // The aurora crosses in from its opening; the soundtrack is left paused.
   env.document.dispatchEvent(new Event("aurora:start"));
   assert.equal(env.aurora.playCount, 1);
+  assert.equal(env.aurora.currentTime, 0);
   assert.equal(env.aurora.volume, 0.8);
   assert.equal(env.audio.volume, 0);
   assert.equal(env.audio.pauseCount, 1);
@@ -83,7 +87,8 @@ test("the aurora brings its own piece, and hands the soundtrack back", async () 
   assert.equal(env.audio.volume, 0.8);
   assert.equal(env.aurora.volume, 0);
   assert.equal(env.aurora.pauseCount, 1);
-  assert.equal(env.aurora.currentTime, 0);
+  // And the soundtrack returns from its beginning, not from where it paused.
+  assert.equal(env.audio.currentTime, 0);
 });
 
 test("a muted visitor stays muted, and unmutes into the aurora's piece", async () => {
