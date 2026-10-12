@@ -4,23 +4,16 @@ varying highp vec3 vDirection;
 uniform vec3 sunDirection,moonDirection;
 uniform mat3 starRotation;
 uniform float uTime,uDusk,uNight,uDay,uAurora,uAuroraTime;
-// The shared hash feeds its coordinate into sin(), which mobile GPUs evaluate
-// badly once the argument is large: by the aurora's hours it is past 9,000 and
-// a whole lattice cell collapses to one value, which is what shows as flat
-// facets. This one never leaves [0,1) after the first fract, so it holds up at
-// any precision. Kept separate so the stars, clouds and Milky Way are
-// untouched.
-float auroraHash(vec2 p){
+// No sin(): mobile GPUs reduce a large argument badly, and the coordinates
+// here are enormous — the finest star layer hashes cells up to 1,700, which
+// is a sin() argument near 746,000. A whole neighbourhood then returns one
+// value, which is what shows as flat facets and blocky star patches. This
+// one never leaves [0,1) after its first fract.
+float hash(vec2 p){
  vec3 q=fract(vec3(p.xyx)*.1031);
  q+=dot(q,q.yzx+33.33);
  return fract((q.x+q.y)*q.z);
 }
-float auroraNoise(vec2 p){
- vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
- return mix(mix(auroraHash(i),auroraHash(i+vec2(1,0)),f.x),
-   mix(auroraHash(i+vec2(0,1)),auroraHash(i+vec2(1)),f.x),f.y);
-}
-float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1)),f.x),f.y);}
 float fbm(vec2 p){float f=0.,a=.5;for(int i=0;i<5;i++){f+=a*noise(p);p=p*2.02+4.7;a*=.5;}return f;}
 float stars(vec2 uv,float density,float threshold){
@@ -76,7 +69,7 @@ void main(){
    float cloudlets=smoothstep(.25,.74,coarse)*(.7+.6*fine);
    // Fine structure erodes the dust edges instead of cutting out solid blobs.
    float filaments=noise(gal*13.+vec2(43.,17.));
-   float grain=noise(gal*61.+vec2(8.,39.));
+   float grain=noise(gal*29.+vec2(8.,39.));
    float edgeWarp=(filaments-.5)*.018+(fine-.5)*.009;
    float dustLat=lat+edgeWarp;
    float riftCentre=(noise(vec2(longitude*7.,13.))-.5)*.075
@@ -115,12 +108,12 @@ void main(){
      vec2 aurQ=d.xz/max(.09,d.y+.10);
      // Warping the across-coordinate by a slow field running along the
      // ribbons is what folds them into draped sheets instead of stripes.
-     float aurW1=auroraNoise(vec2(aurQ.y*.30+uAuroraTime*.035,7.3))-.5;
-     float aurW2=auroraNoise(vec2(aurQ.y*.74-uAuroraTime*.024,19.1))-.5;
+     float aurW1=noise(vec2(aurQ.y*.30+uAuroraTime*.035,7.3))-.5;
+     float aurW2=noise(vec2(aurQ.y*.74-uAuroraTime*.024,19.1))-.5;
      float aurAcross=aurQ.x*1.6+aurW1*1.6+aurW2*.7+uAuroraTime*.048;
      float aurAlong=aurQ.y*.28-uAuroraTime*.064;
-     float aurR=auroraNoise(vec2(aurAcross,aurAlong))*.62
-       +auroraNoise(vec2(aurAcross*2.3+11.,aurAlong*1.6+5.))*.38;
+     float aurR=noise(vec2(aurAcross,aurAlong))*.62
+       +noise(vec2(aurAcross*2.3+11.,aurAlong*1.6+5.))*.38;
      float aurCore=smoothstep(.58,.88,aurR);
      float aurWash=smoothstep(.26,.74,aurR);
      // Lift clear of the horizon, thin out before the zenith.

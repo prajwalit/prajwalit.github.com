@@ -163,14 +163,23 @@ Aurora
   The whole term rides a uAurora uniform, so outside those hours it costs
   nothing at all. Reduced motion holds it still, as the cloud clock is what
   moves it.
-  It uses its own hash and its own clock, both for mobile precision. The
-  shared hash feeds its coordinate into sin(), which mobile GPUs evaluate
-  badly once the argument is large; by the aurora's hours it was past 9,000
-  and a whole lattice cell collapsed to a single value, which showed as flat
-  facets across the sky. auroraHash never leaves [0,1) after its first fract
-  and holds up at any precision, and uAuroraTime restarts with each event so
-  the coordinate stays under 25 rather than climbing with uTime all session.
-  Stars, clouds and the Milky Way still use the shared hash.
+  uAuroraTime restarts with each event, so the shader's coordinates stay
+  under 25 rather than climbing with uTime all session. See Mobile precision
+  for why that matters.
+
+Mobile precision
+  The sky's hash used sin(), which mobile GPUs reduce badly once the argument
+  is large, and the coordinates here are the largest in the project. A whole
+  neighbourhood then returns one value, which showed as flat facets in the
+  aurora and blocky patches in the star fields.
+  Worst arguments under the old hash: the aurora 9,260, the Milky Way's grain
+  592,143, and the finest star layer 745,960, which hashes cells up to 1,700.
+  The hash now never leaves [0,1) after its first fract and uses no sin, so it
+  holds at any coordinate. Keep new noise coordinates small anyway: at a cell
+  of 1,700 even this hash resolves only a few distinct values if a device
+  falls back to mediump, where at a coordinate of 25 it resolves all of them.
+  That is why the aurora counts its own seconds, and why grain dropped from
+  gal*61 to gal*29.
 
 Music
   Silent Trail is the background: a 108-second, volume-reduced AAC clip that

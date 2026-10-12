@@ -82,8 +82,12 @@ shape where you can.
   negative base is undefined. The sin-based `hash()` is the other trap: mobile GPUs
   evaluate `sin()` poorly for large arguments, so once a noise coordinate grows past a
   few hundred a whole lattice cell returns one value and the sky breaks into flat
-  facets. Keep noise coordinates small — never feed an unbounded clock into one — and
-  for anything new prefer `auroraHash`, which stays in [0,1) and needs no `sin`.
+  facets. The shared `hash()` no longer uses `sin` for that reason. Keep noise
+  coordinates small anyway — never feed an unbounded clock into one — since even a
+  fract-based hash resolves only a handful of values at a coordinate of 1,700 if a
+  device falls back to `mediump`.
+- **Nothing compiles the GLSL.** It lives in a template literal, so `node --check` and
+  the whole test suite pass happily on a shader with a missing function. Render it.
 
 ## Workflow
 
