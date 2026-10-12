@@ -182,10 +182,12 @@ Aurora
   cycle and 02:00 at 0.3973. Arriving anywhere in those hours starts it,
   including by dragging the dial there; it plays once and then stays dark,
   re-arming only after the sky has left them.
-  It runs 176 real seconds, the length of Cloud Valley, so the piece playing
-  underneath keeps its own pace whether the sky is paused or at 16x. The hours
-  still bound it: a sky running fast leaves the night early and the aurora
-  ends with it, cutting the music short. At 1x the two coincide.
+  The hours decide when it may start, not when it must stop. Once begun it
+  runs its full 176 seconds, the length of Cloud Valley, in real time, so the
+  piece underneath always finishes whether the sky is paused or at 16x. A sky
+  running fast can therefore carry the aurora past sunrise; at 1x it ends
+  around 01:07, well inside the night. Nothing can start a second one while
+  one is playing.
   Drawn inside the existing sky pass, so it adds no geometry, light, render
   target or texture, and the fjord reflects it. Projecting onto a plane far
   overhead makes the curtains converge toward the zenith and compress toward
@@ -198,7 +200,9 @@ Aurora
 
 Music
   Silent Trail is the background. Cloud Valley, 175.8 seconds, plays under the
-  aurora and hands back afterwards, crossfading over 150 frames. It is
+  aurora and hands back afterwards, crossfading over 150 frames. The handback
+  happens on whichever comes first, the track reaching its own end or the
+  window closing; crossfading to the track already playing is a no-op. It is
   preload="none", so the 3.1MB is only fetched on a night that reaches 23:00.
   Both tracks follow the one mute preference, and a muted element still runs,
   which is what makes unmuting mid-piece instant rather than silent.

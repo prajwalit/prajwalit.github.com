@@ -110,6 +110,10 @@ function crossfade(to, frames = 150) {
 // The aurora brings its own music, and hands the soundtrack back afterwards.
 document.addEventListener("aurora:start", () => crossfade(auroraTrack));
 document.addEventListener("aurora:end", () => crossfade(soundtrack));
+// Whichever comes first: the piece reaching its own end, or the window
+// closing. Crossfading to the track already playing is a no-op, so the
+// second of the two costs nothing.
+auroraTrack.addEventListener("ended", () => crossfade(soundtrack));
 
 document.addEventListener("visibilitychange", () => {
   if (document.hidden) {

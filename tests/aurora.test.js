@@ -74,7 +74,7 @@ test("it re-arms for the next night once the sky has left those hours", () => {
   assert.equal(starts, 2);
 });
 
-test("leaving the hours ends it early, however fast the sky is running", () => {
+test("once begun it runs its full length, whatever the sky does", () => {
   const seen = [];
   const event = createAuroraEvent({
     onStart: () => seen.push("start"),
@@ -82,10 +82,25 @@ test("leaving the hours ends it early, however fast the sky is running", () => {
   });
   event.update(MIDNIGHT, 1);
   run(event, MIDNIGHT, 30);
+  // A sky at speed reaches dawn, then noon, long before the piece is over.
+  assert.ok(event.update(0.62, 1) > 0, "still lit through sunrise");
+  assert.ok(event.update(0.75, 1) > 0, "still lit at noon");
   assert.ok(event.running);
-  // A sky at speed reaches dawn long before the piece would have finished.
-  assert.equal(event.update(0.62, 1), 0);
+  assert.deepEqual(seen, ["start"], "nothing has ended it");
+  // It ends on its own duration, and only then.
+  run(event, 0.75, AURORA_DURATION);
   assert.deepEqual(seen, ["start", "end"]);
+  assert.equal(event.running, false);
+});
+
+test("a fast sky cannot start a second one on top of the first", () => {
+  let starts = 0;
+  const event = createAuroraEvent({ onStart: () => starts++ });
+  event.update(MIDNIGHT, 1);
+  // Several whole cycles pass while the piece is still playing.
+  for (let i = 0; i < 400; i++)
+    for (const f of [MIDNIGHT, 0.5, 0.75, 0.95, 0.1]) event.update(f, 0.05);
+  assert.equal(starts, 1);
 });
 
 test("reset stops a running aurora and lets the next night have one", () => {
