@@ -118,6 +118,13 @@ void main(){
      // brightest cores. That is the order a real display reads in.
      vec3 aurTint=mix(vec3(.46,.24,.88),vec3(.16,.95,.52),smoothstep(.05,.34,aurI));
      aurTint=mix(aurTint,vec3(.72,1.,.80),smoothstep(.62,1.25,aurI));
+     // Nitrogen magenta rides above the oxygen green, the way a strong
+     // display stacks them: green low in the curtain, pink through the
+     // upper reach. Height, not intensity, is what separates the two.
+     // The summit view is level, so the sky it shows runs from d.y 0 at the
+     // horizon to about 0.45 at the top of the frame. The ramp has to sit
+     // inside that or the pink never appears on screen.
+     aurTint=mix(aurTint,vec3(.86,.30,.72),smoothstep(.05,.30,d.y)*.70);
      float aurClear=uNight*(1.-cloud*band*.8);
      col+=aurTint*aurI*aurClear*.55;
      // Violet reads only where it is not competing with green, so paint it

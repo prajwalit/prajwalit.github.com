@@ -145,11 +145,16 @@ Aurora
   target or texture, and the fjord reflects it. Projecting onto a plane far
   overhead makes the curtains converge toward the zenith and compress toward
   the horizon; warping the across-coordinate drapes them into sheets rather
-  than stripes. Colour follows intensity rather than height: violet through
-  the faint diffuse parts, oxygen green through the body, a pale wash in the
-  brightest cores, with violet also painted into the surround because the dim
-  end of a ramp goes black. A diffuse glow along the base keeps the ribbons
-  standing on a lit horizon instead of converging into a bare wedge.
+  than stripes.
+  Colour comes from two things. Intensity sets the body: violet through the
+  faint diffuse parts, oxygen green through the brighter curtain, a pale wash
+  in the cores, with violet also painted into the surround because the dim
+  end of a ramp goes black. Height then stacks nitrogen magenta above the
+  green, the way a strong display shows it. The ramp runs over d.y 0.05 to
+  0.30 because the level summit view spans only 0 to about 0.45; a higher
+  ramp puts the pink off the top of the frame.
+  A diffuse glow along the base keeps the ribbons standing on a lit horizon
+  instead of converging into a bare wedge.
   The whole term rides a uAurora uniform, so outside those hours it costs
   nothing at all. Reduced motion holds it still, as the cloud clock is what
   moves it.
