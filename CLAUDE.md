@@ -79,7 +79,11 @@ shape where you can.
   grain. When editing these, keep `customProgramCacheKey` in step with the shader source.
 - **Mobile GPU precision is a recurring bug class.** The sky vertex shader declares
   `highp`, and `sky-shader.js` squares signed distances directly because `pow()` with a
-  negative base is undefined. The most recent commit is a fix in exactly this area.
+  negative base is undefined. The sin-based `hash()` is the other trap: mobile GPUs
+  evaluate `sin()` poorly for large arguments, so once a noise coordinate grows past a
+  few hundred a whole lattice cell returns one value and the sky breaks into flat
+  facets. Keep noise coordinates small — never feed an unbounded clock into one — and
+  for anything new prefer `auroraHash`, which stays in [0,1) and needs no `sin`.
 
 ## Workflow
 

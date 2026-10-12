@@ -1,5 +1,5 @@
 import { createSkyClock, createTimeControls } from "./time-controls.js?v=13";
-import { skyFragmentShader } from "./sky-shader.js?v=14";
+import { skyFragmentShader } from "./sky-shader.js?v=15";
 import { createSunset, DAY_CYCLE_DURATION } from "./sunset.js?v=7";
 import { createAuroraEvent } from "./aurora.js?v=3";
 import { createWallpaper } from "./wallpaper.js?v=1";
@@ -380,7 +380,7 @@ async function start() {
     new THREE.ShaderMaterial({
       side: THREE.BackSide,
       depthWrite: false,
-      uniforms: { uTime: clock, starRotation: { value: new THREE.Matrix3() }, uDusk: { value: 0 }, uNight: { value: 0 }, uDay: { value: 0 }, uAurora: { value: 0 }, moonDirection: { value: new THREE.Vector3() }, sunDirection: { value: sunDirection } },
+      uniforms: { uTime: clock, starRotation: { value: new THREE.Matrix3() }, uDusk: { value: 0 }, uNight: { value: 0 }, uDay: { value: 0 }, uAurora: { value: 0 }, uAuroraTime: { value: 0 }, moonDirection: { value: new THREE.Vector3() }, sunDirection: { value: sunDirection } },
       // Keep interpolated sky directions bounded on mobile GPUs.
       vertexShader: `varying highp vec3 vDirection;void main(){vDirection=normalize(position);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
       fragmentShader: skyFragmentShader,
@@ -637,7 +637,8 @@ async function start() {
     approachGaze = new THREE.Vector3(),
     panoramaGaze = new THREE.Vector3();
   let previous = performance.now(),
-    elapsed = 0;
+    elapsed = 0,
+    auroraSeconds = 0;
   const panels = [
     $(".hero-content"),
     $("#building .story"),
@@ -701,10 +702,13 @@ async function start() {
       (((skyClock.time % DAY_CYCLE_DURATION) + DAY_CYCLE_DURATION) %
         DAY_CYCLE_DURATION) /
       DAY_CYCLE_DURATION;
-    sky.material.uniforms.uAurora.value = updateAurora(
-      cyclePoint,
-      Math.min(frameSeconds, 1),
-    );
+    const auroraLevel = updateAurora(cyclePoint, Math.min(frameSeconds, 1));
+    sky.material.uniforms.uAurora.value = auroraLevel;
+    // A clock of its own, restarting with each aurora, keeps the shader's
+    // noise coordinates small. The shared uTime grows without bound, and a
+    // large coordinate is what breaks the pattern up on mobile.
+    auroraSeconds = auroraLevel > 0 ? auroraSeconds + Math.min(frameSeconds, 1) : 0;
+    sky.material.uniforms.uAuroraTime.value = auroraSeconds;
     timeControls.update();
     // Cloud drift follows real time even when rendering falls below 20 fps.
     if (!reduced) clock.value += Math.min(frameSeconds, 1);

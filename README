@@ -163,6 +163,14 @@ Aurora
   The whole term rides a uAurora uniform, so outside those hours it costs
   nothing at all. Reduced motion holds it still, as the cloud clock is what
   moves it.
+  It uses its own hash and its own clock, both for mobile precision. The
+  shared hash feeds its coordinate into sin(), which mobile GPUs evaluate
+  badly once the argument is large; by the aurora's hours it was past 9,000
+  and a whole lattice cell collapsed to a single value, which showed as flat
+  facets across the sky. auroraHash never leaves [0,1) after its first fract
+  and holds up at any precision, and uAuroraTime restarts with each event so
+  the coordinate stays under 25 rather than climbing with uTime all session.
+  Stars, clouds and the Milky Way still use the shared hash.
 
 Music
   Silent Trail is the background: a 108-second, volume-reduced AAC clip that

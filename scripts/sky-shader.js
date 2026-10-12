@@ -3,7 +3,23 @@ export const skyFragmentShader = `
 varying highp vec3 vDirection;
 uniform vec3 sunDirection,moonDirection;
 uniform mat3 starRotation;
-uniform float uTime,uDusk,uNight,uDay,uAurora;
+uniform float uTime,uDusk,uNight,uDay,uAurora,uAuroraTime;
+// The shared hash feeds its coordinate into sin(), which mobile GPUs evaluate
+// badly once the argument is large: by the aurora's hours it is past 9,000 and
+// a whole lattice cell collapses to one value, which is what shows as flat
+// facets. This one never leaves [0,1) after the first fract, so it holds up at
+// any precision. Kept separate so the stars, clouds and Milky Way are
+// untouched.
+float auroraHash(vec2 p){
+ vec3 q=fract(vec3(p.xyx)*.1031);
+ q+=dot(q,q.yzx+33.33);
+ return fract((q.x+q.y)*q.z);
+}
+float auroraNoise(vec2 p){
+ vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+ return mix(mix(auroraHash(i),auroraHash(i+vec2(1,0)),f.x),
+   mix(auroraHash(i+vec2(0,1)),auroraHash(i+vec2(1)),f.x),f.y);
+}
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1)),f.x),f.y);}
 float fbm(vec2 p){float f=0.,a=.5;for(int i=0;i<5;i++){f+=a*noise(p);p=p*2.02+4.7;a*=.5;}return f;}
@@ -99,12 +115,12 @@ void main(){
      vec2 aurQ=d.xz/max(.09,d.y+.10);
      // Warping the across-coordinate by a slow field running along the
      // ribbons is what folds them into draped sheets instead of stripes.
-     float aurW1=noise(vec2(aurQ.y*.30+uTime*.035,7.3))-.5;
-     float aurW2=noise(vec2(aurQ.y*.74-uTime*.024,19.1))-.5;
-     float aurAcross=aurQ.x*1.6+aurW1*1.6+aurW2*.7+uTime*.048;
-     float aurAlong=aurQ.y*.28-uTime*.064;
-     float aurR=noise(vec2(aurAcross,aurAlong))*.62
-       +noise(vec2(aurAcross*2.3+11.,aurAlong*1.6+5.))*.38;
+     float aurW1=auroraNoise(vec2(aurQ.y*.30+uAuroraTime*.035,7.3))-.5;
+     float aurW2=auroraNoise(vec2(aurQ.y*.74-uAuroraTime*.024,19.1))-.5;
+     float aurAcross=aurQ.x*1.6+aurW1*1.6+aurW2*.7+uAuroraTime*.048;
+     float aurAlong=aurQ.y*.28-uAuroraTime*.064;
+     float aurR=auroraNoise(vec2(aurAcross,aurAlong))*.62
+       +auroraNoise(vec2(aurAcross*2.3+11.,aurAlong*1.6+5.))*.38;
      float aurCore=smoothstep(.58,.88,aurR);
      float aurWash=smoothstep(.26,.74,aurR);
      // Lift clear of the horizon, thin out before the zenith.
