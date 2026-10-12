@@ -182,13 +182,13 @@ export function addVegetation(scene, terrainGeometry, noise, random) {
       const density =
         THREE.MathUtils.smoothstep(patch, 0.48, 0.65) *
         THREE.MathUtils.smoothstep(grove, 0.48, 0.67);
-      const lakeside =
+      const shoreline =
         (1 - THREE.MathUtils.smoothstep(ground.height, 140, 280)) *
         (1 - THREE.MathUtils.smoothstep(Math.abs(px), 1800, 2800));
       if (
         pz > -4500 &&
         pz < 2600 &&
-        random(x + 147, z - 45) < forest * density * lakeside * 0.85
+        random(x + 147, z - 45) < forest * density * shoreline * 0.85
       ) {
         const height =
           (12 + random(x - 7, z + 4) * 23) *

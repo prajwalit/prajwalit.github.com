@@ -142,6 +142,17 @@ export function createExplorer(camera, ground, { reduced, onChange }) {
     document.body.classList.add("exploring");
     onChange(true);
     surface.focus({ preventScroll: true });
+    // A drag that started on the scenery continues as a look, rather than
+    // asking for the same gesture twice.
+    if (options.drag) {
+      drag = { ...options.drag };
+      try {
+        surface.setPointerCapture(options.drag.id);
+      } catch {
+        // Capture can be refused if the pointer has already been released.
+        drag = null;
+      }
+    }
   }
   surface.addEventListener("pointerdown", (event) => {
     if (

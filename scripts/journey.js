@@ -2,8 +2,8 @@ import { createSkyClock, createTimeControls } from "./time-controls.js?v=11";
 import { skyFragmentShader } from "./sky-shader.js?v=10";
 import { createSunset } from "./sunset.js?v=7";
 import { createWallpaper } from "./wallpaper.js?v=1";
-import { addDiscoveries } from "./discoveries.js?v=12";
-import { createExplorer } from "./explore.js?v=6";
+import { addDiscoveries } from "./discoveries.js?v=13";
+import { createExplorer } from "./explore.js?v=7";
 import { createScreenWakeLock } from "./screen-wake-lock.js";
 import { closeOnOutsidePress } from "./pointer.js?v=1";
 import * as THREE from "../assets/vendor/three.module.js";
@@ -13,7 +13,7 @@ import {
 } from "./camera-progress.js?v=2";
 import { Water } from "../assets/vendor/Water.js";
 import { advancePanorama, panoramaAngle } from "./panorama.js";
-import { addVegetation, habitat, sampleGround } from "./vegetation.js?v=5";
+import { addVegetation, habitat, sampleGround } from "./vegetation.js?v=6";
 
 const $ = (s) => document.querySelector(s);
 const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -108,13 +108,16 @@ play.onclick = () => {
   }
   updateJourneyControl();
 };
-function startExploring(trigger) {
+function startExploring(trigger, { announce = true, drag = null } = {}) {
   if (!explorer || explorer.active) return;
   explorationProgress = summitReady ? 1 : position;
   journeyStarted = true;
-  document.dispatchEvent(new Event("journey:start"));
+  // Only an explicit control may start the soundtrack. Flight entered by
+  // reaching for the keys or the scenery must never surprise anyone with audio.
+  if (announce) document.dispatchEvent(new Event("journey:start"));
   explorer.enter({
     trigger,
+    drag,
     returnLabel: summitReady ? "summit" : "journey",
   });
 }
@@ -238,6 +241,53 @@ addEventListener(
   },
   { passive: false },
 );
+// At the summit every chapter has been read, so the controls can give way to
+// flight. Reaching for the movement keys, or dragging the scenery, is an
+// unmistakable request to look around. Arrows and space stay page scrolling,
+// and touch stays scrolling too, or there would be no way back down.
+const flightKeys = new Set(["KeyW", "KeyA", "KeyS", "KeyD", "KeyQ", "KeyE"]);
+// Text and controls keep their own gestures, so the closing words stay
+// selectable and every button still clicks.
+const sheltered =
+  "header, .hud, dialog, #explore-toggle, .hero-content, .story, .closing, .scene-caption";
+function summitInvitesFlight(event) {
+  return Boolean(
+    summitReady &&
+      explorer &&
+      !explorer.active &&
+      !document.querySelector("dialog[open]") &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.altKey,
+  );
+}
+addEventListener("keydown", (event) => {
+  if (!flightKeys.has(event.code) || !summitInvitesFlight(event)) return;
+  // Entering first lets the explorer's own handler take this very keystroke,
+  // so the press that asked to fly is also the press that starts moving.
+  startExploring(exploreToggle, { announce: false });
+});
+let summitPress = null;
+addEventListener("pointerdown", (event) => {
+  summitPress = null;
+  if (event.pointerType === "touch" || event.button > 0) return;
+  if (!summitInvitesFlight(event)) return;
+  if (event.target?.closest?.(sheltered)) return;
+  summitPress = { id: event.pointerId, x: event.clientX, y: event.clientY };
+});
+addEventListener("pointermove", (event) => {
+  if (!summitPress || event.pointerId !== summitPress.id) return;
+  // A threshold keeps a plain click, and a small wobble during one, inert.
+  if (Math.hypot(event.clientX - summitPress.x, event.clientY - summitPress.y) < 12)
+    return;
+  const drag = summitPress;
+  summitPress = null;
+  if (summitInvitesFlight(event))
+    startExploring(exploreToggle, { announce: false, drag });
+});
+for (const type of ["pointerup", "pointercancel"])
+  addEventListener(type, () => (summitPress = null));
+
 $("#back-top").onclick = () => {
   explorer?.leave(true);
   stopPlayback();
@@ -336,7 +386,7 @@ async function start() {
     }),
   );
   scene.add(sky);
-  // Separate mountain chains leave an open, navigable lake through the centre.
+  // Separate mountain chains leave an open, navigable fjord through the centre.
   const peaks = [
     [-1300, 1200, 660, 850, 1150],
     [1350, 900, 920, 1000, 1400],
@@ -707,7 +757,7 @@ async function start() {
       THREE.MathUtils.lerp(230, summit.y + 120, lift),
       camera.position.z - 2300,
     );
-    // A level gaze. The lake is a flat plane, so its horizon lies exactly on
+    // A level gaze. The water is a flat plane, so its horizon lies exactly on
     // the horizontal, and holding the view level centres it at every heading.
     panoramaGaze
       .set(Math.sin(turn) * 3000, 0, -Math.cos(turn) * 3000)
@@ -763,11 +813,11 @@ async function start() {
         ? "THE SUMMIT"
         : position > 0.6
           ? "A LITTLE HIGHER"
-          : "BY THE LAKE",
+          : "BY THE FJORD",
     );
     setText(
       locationHint,
-      atSummit ? "SCROLL SIDEWAYS TO LOOK AROUND" : "SCROLL TO EXPLORE",
+      atSummit ? "SCROLL SIDEWAYS TO LOOK AROUND" : "EXPLORE FREELY",
     );
     renderer.render(scene, camera);
   }

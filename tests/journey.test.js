@@ -157,3 +157,97 @@ test("pause and replay discard the previous automatic camera target", async () =
   await env.get("#restart-journey").onclick();
   assert.equal(env.run("autoplayTarget"), null);
 });
+
+function fakeExplorer(env) {
+  env.run(
+    "explorer = { active:false, calls:[], enter(o){ this.calls.push(o); this.active = true; } };",
+  );
+  return {
+    calls: () => env.run("explorer.calls.length"),
+    last: (field) => env.run(`explorer.calls.at(-1)?.${field} ?? null`),
+  };
+}
+function key(env, code) {
+  const event = new Event("keydown");
+  Object.assign(event, { code });
+  env.events.dispatchEvent(event);
+}
+function pointer(env, type, props, outside = true) {
+  const event = new Event(type);
+  Object.assign(event, { pointerType: "mouse", button: 0, pointerId: 1, ...props });
+  Object.defineProperty(event, "target", {
+    value: { closest: () => (outside ? null : {}) },
+  });
+  env.events.dispatchEvent(event);
+}
+
+test("summit movement keys enter free flight; scrolling keys still scroll", async () => {
+  const env = await setup();
+  const explorer = fakeExplorer(env);
+  env.run("summitReady = true;");
+  for (const code of ["ArrowDown", "ArrowUp", "Space", "KeyZ"]) key(env, code);
+  assert.equal(explorer.calls(), 0);
+  key(env, "KeyW");
+  assert.equal(explorer.calls(), 1);
+  assert.equal(explorer.last("returnLabel"), "summit");
+  // Already flying, so a second press is the explorer's to handle.
+  key(env, "KeyD");
+  assert.equal(explorer.calls(), 1);
+});
+
+test("movement keys do nothing before the summit or behind a dialog", async () => {
+  const env = await setup();
+  const explorer = fakeExplorer(env);
+  key(env, "KeyW");
+  assert.equal(explorer.calls(), 0);
+  env.run("summitReady = true;");
+  env.get("#about").showModal();
+  key(env, "KeyW");
+  assert.equal(explorer.calls(), 0);
+  env.get("#about").close();
+  key(env, "KeyW");
+  assert.equal(explorer.calls(), 1);
+});
+
+test("entering by key or drag never starts the soundtrack", async () => {
+  const env = await setup();
+  env.load("scripts/ambience.js");
+  await settle();
+  fakeExplorer(env);
+  env.run("summitReady = true;");
+  let announced = 0;
+  env.document.addEventListener("journey:start", () => announced++);
+  key(env, "KeyW");
+  assert.equal(announced, 0);
+});
+
+test("dragging the scenery at the summit flies, past a threshold", async () => {
+  const env = await setup();
+  const explorer = fakeExplorer(env);
+  env.run("summitReady = true;");
+  // A click with a small wobble is not a drag.
+  pointer(env, "pointerdown", { clientX: 100, clientY: 100 });
+  pointer(env, "pointermove", { clientX: 106, clientY: 103 });
+  assert.equal(explorer.calls(), 0);
+  pointer(env, "pointerup", {});
+  pointer(env, "pointermove", { clientX: 300, clientY: 300 });
+  assert.equal(explorer.calls(), 0);
+  // A real drag enters, and hands the gesture over so looking continues.
+  pointer(env, "pointerdown", { clientX: 100, clientY: 100 });
+  pointer(env, "pointermove", { clientX: 140, clientY: 100 });
+  assert.equal(explorer.calls(), 1);
+  assert.equal(explorer.last("drag.x"), 100);
+  assert.equal(explorer.last("drag.id"), 1);
+});
+
+test("drags over text and controls, and touch drags, are left alone", async () => {
+  const env = await setup();
+  const explorer = fakeExplorer(env);
+  env.run("summitReady = true;");
+  pointer(env, "pointerdown", { clientX: 100, clientY: 100 }, false);
+  pointer(env, "pointermove", { clientX: 300, clientY: 100 }, false);
+  assert.equal(explorer.calls(), 0);
+  pointer(env, "pointerdown", { clientX: 100, clientY: 100, pointerType: "touch" });
+  pointer(env, "pointermove", { clientX: 300, clientY: 100, pointerType: "touch" });
+  assert.equal(explorer.calls(), 0);
+});

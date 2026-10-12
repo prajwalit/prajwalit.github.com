@@ -5,10 +5,14 @@ Local preview
   Open http://localhost:8081
 
 Static GitHub Pages site; no build step.
-Scroll, or use “Start the journey”, to fly across an imagined mountain lake.
+Scroll, or use “Start the journey”, to fly up an imagined mountain fjord.
 Five chapters: introduction, current work, career background, journeys, and the summit.
 The terrain is intentionally sculptural, with coral sunset light, cool mountain
 silhouettes, reflective water, and a continuous camera route toward a summit.
+The central arm is a fjord, not a lake: roughly 5,000 units long and 900 to
+2,000 wide, walled by slopes that rise 200 to 1,100 straight off the shore, and
+open at its seaward end to water that runs past the terrain to the horizon.
+About 65% of the mapped area lies below the waterline.
 The camera climbs to the central summit, then turns continuously at one revolution
 every 90 seconds. The panorama can be paused and resumed.
 No photographs, satellite imagery, or Trolltunga reconstruction appear in the
@@ -42,7 +46,7 @@ Accessibility and fallbacks
   If WebGL cannot initialize, the text becomes a normal readable page.
 
 Current scope
-  One continuous landscape journey from lake level to a summit panorama.
+  One continuous landscape journey from the water to a summit panorama.
   The summit is derived from the actual central terrain vertices. The camera
   uses terrain clearance during ascent and settles above the peak, holding a
   level gaze so the horizon rests on the centre line throughout the turn.
@@ -93,10 +97,13 @@ Screen wake lock
 Optional exploration (experiment)
   At the summit, Explore freely opens a bounded free-flight camera. Drag to look;
   WASD/arrows move relative to the view, E/Q rise/descend. The on-screen joystick
-  and +/- controls work with pointer/touch input. Escape or Return to summit
+  and +/- controls work with pointer/touch input. The key badges name WASD and
+  E/Q themselves, so the hint carries only the gesture nothing labels, "Drag to
+  look", which sits under the badges on a mouse and under the title on touch.
+  That leaves "A view of your own." alone in the middle of the view. Escape or Return to summit
   restores the guided departure pose in 1.8 seconds (instant with reduced motion).
   Terrain clearance samples rendered triangles; altitude and horizontal bounds
-  keep the camera above the lake and inside the scenery. Inputs clear on blur,
+  keep the camera above the water and inside the scenery. Inputs clear on blur,
   hidden tabs, pointer cancellation, and dialogs. The guided journey stays at
   the departure point while exploring; returning leaves automatic motion paused.
   No wake lock is held in free exploration. Music preference is preserved.
@@ -106,7 +113,7 @@ Optional exploration (experiment)
   with clearance sampled from the same visible mesh throughout the larger area.
 
 Landscape discoveries
-  A cairn sits on a western ridge. Wildflowers grow on the opening lakeshore
+  A cairn sits on a western ridge. Wildflowers grow on the opening shoreline
   near x 576 / z 984, about 15 units above the water, close to the early route.
   Seven distant birds cross the visible sky every two minutes; a shooting star appears
   first becomes due at 20 active seconds, then 20 seconds after each launch.
@@ -127,8 +134,17 @@ Landscape discoveries
   reflections may draw them again. No added lights or shadow casters.
   Reduced motion hides birds and shooting stars.
 
+  At the summit, W A S D and Q E enter free flight directly, and so does
+  dragging the scenery past twelve pixels; the gesture carries over, so the
+  press that asked to fly is the one that starts moving or looking. Arrows,
+  space and touch stay page scrolling, or there would be no way back down,
+  and text and controls keep their own gestures. Neither entry starts the
+  soundtrack: only an explicit control may do that.
+
   The compass beside the location label opens free exploration from any point,
-  including the beginning. Return to journey restores the point of departure;
+  including the beginning, and the line under the place name names that action
+  rather than restating the scroll. At the summit it returns to the sideways
+  pan hint, where the Explore freely button is already on screen. Return to journey restores the point of departure;
   summit entry still returns to the summit. Sound follows the saved preference.
 
 Wildflowers
@@ -138,7 +154,7 @@ Wildflowers
   been removed.
 
   Fifteen additional wildflower patches grow on meadow-compatible lower slopes
-  and lake banks, between elevations 25 and 650. Each uses 30–54 flowers with
+  and fjord banks, between elevations 25 and 650. Each uses 30–54 flowers with
   varied orientation, height and cluster size. Roots follow actual terrain.
   The original opening patch remains in place, for sixteen locations total.
 

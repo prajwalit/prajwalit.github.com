@@ -2,7 +2,7 @@ import { createBirdFlight } from "./bird-flight.js?v=3";
 import { createShootingStarFlight } from "./shooting-star.js?v=4";
 import { createAlpineFlowers, createFlowerPatchFactory } from "./natural-landmarks.js?v=4";
 import * as THREE from "../assets/vendor/three.module.js";
-import { sampleGround, habitat } from "./vegetation.js?v=5";
+import { sampleGround, habitat } from "./vegetation.js?v=6";
 
 // Fixed neighbourhoods keep the discoveries apart; actual mesh samples keep
 // them on the visible terrain. Never place a prop when no suitable spot exists.

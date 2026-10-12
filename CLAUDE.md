@@ -1,7 +1,7 @@
 # CLAUDE.md
 
 Personal site at **prajwalit.com** — static GitHub Pages, no build step, no runtime
-dependencies. Five chapters of plain HTML with a Three.js procedural mountain-lake
+dependencies. Five chapters of plain HTML with a Three.js procedural mountain-fjord
 landscape layered over them, flown through on scroll.
 
 `README` is the living design spec: bounds, timings, instance counts, rationale.
