@@ -1071,6 +1071,13 @@ dialog p {
 #time-panel::backdrop { background: transparent; backdrop-filter: none; }
 #time-panel h2 { font-size: 28px; margin: 0 20px 12px 0; }
 #time-close { position: absolute; right: 12px; top: 8px; font-size: 24px; }
+/* A drag on any of these moves a control, so it must not also start a text
+   selection — the dial's own markers were being swept up by one. */
+#time-dial, #time-status, #wallpaper-preview, #explore-look, #explore-stick,
+.explore-altitude {
+  -webkit-user-select: none;
+  user-select: none;
+}
 #time-dial { position: relative; width: 220px; height: 220px; margin: 0 auto 14px; touch-action: none; cursor: grab; border-radius: 50%; }
 #time-dial:active { cursor: grabbing; }
 #time-dial:focus-visible { outline: 1px solid var(--accent); outline-offset: 3px; }

@@ -123,7 +123,10 @@ Day and night cycle
   it facing the equator: sunrise on the left, noon at the top, sunset on the
   right, midnight underneath. Positions come straight from the solar angle,
   so the markers cannot drift out of step with the sky. Selecting a time smoothly changes the light and holds
-  it until Resume cycle, at speeds from 1x to 16x. Sunset lasts the first
+  it until Resume cycle, at speeds from 1x to 16x. Dragging a control never
+  starts a text selection: the dial, the wallpaper preview and the flight
+  surfaces all opt out, and the dial also suppresses the press's default,
+  focusing itself explicitly instead so its arrow keys still work. Sunset lasts the first
   eight minutes of the loop. Camera and music controls remain independent.
 
 Aurora

@@ -104,6 +104,9 @@ export function createTimeControls(clock) {
   }
   dial.addEventListener('pointerdown', event => {
     if (event.button !== 0 || pointer !== null) return;
+    // Suppress the selection the press would otherwise begin. Focus is set
+    // here explicitly, which is the only thing preventDefault would cost.
+    event.preventDefault();
     pointer = event.pointerId;
     dial.focus(); dial.setPointerCapture(pointer); fromPointer(event);
   });
