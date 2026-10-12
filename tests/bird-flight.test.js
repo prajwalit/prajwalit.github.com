@@ -62,3 +62,36 @@ test("a flock overtaken by nightfall fades out with the light",()=>{
   update(124,camera,0.5);assert.ok(Math.abs(birds.material.opacity-0.5)<1e-9);
   update(125,camera,1);assert.equal(birds.material.opacity,0);
 });
+test("the first flock waits for the camera to settle, then keeps its rhythm",()=>{
+  const {birds,camera,update}=setup();
+  // Nothing during the climb, however long it takes.
+  update(40,camera,0,false);assert.equal(birds.visible,false);
+  update(76,camera,0,false);assert.equal(birds.visible,false);
+  // Summit reached: the pass is pulled forward, but not to this instant.
+  update(76.5,camera,0,true);assert.equal(birds.visible,false);
+  update(86,camera,0,true);assert.equal(birds.visible,false);
+  update(86.5,camera,0,true);assert.equal(birds.visible,true);
+  update(90,camera,0,true);assert.equal(birds.material.opacity,1);
+  // Staying settled must not re-arm it into a flock every ten seconds.
+  update(105,camera,0,true);assert.equal(birds.visible,false);
+  update(200,camera,0,true);assert.equal(birds.visible,false);
+  update(206.5,camera,0,true);assert.equal(birds.visible,true);
+});
+test("a visitor who never settles still sees the standing two-minute flock",()=>{
+  const {birds,camera,update}=setup();
+  update(119,camera,0,false);assert.equal(birds.visible,false);
+  update(120,camera,0,false);assert.equal(birds.visible,true);
+});
+test("arriving late still earns a crossing shortly after settling",()=>{
+  const {birds,camera,update}=setup();
+  // A slow climb sees the standing pass before the summit.
+  update(120,camera,0,false);assert.equal(birds.visible,true);
+  update(139,camera,0,false);assert.equal(birds.visible,false);
+  // Arriving afterwards pulls the next one in rather than waiting for 240.
+  update(150,camera,0,true);assert.equal(birds.visible,false);
+  update(160,camera,0,true);assert.equal(birds.visible,true);
+  // The rhythm then runs from that crossing, not the earlier one.
+  update(179,camera,0,true);assert.equal(birds.visible,false);
+  update(279,camera,0,true);assert.equal(birds.visible,false);
+  update(280,camera,0,true);assert.equal(birds.visible,true);
+});

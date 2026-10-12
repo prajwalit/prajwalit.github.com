@@ -1,4 +1,4 @@
-import { createBirdFlight } from "./bird-flight.js?v=3";
+import { createBirdFlight } from "./bird-flight.js?v=4";
 import { createShootingStarFlight } from "./shooting-star.js?v=4";
 import { createAlpineFlowers, createFlowerPatchFactory } from "./natural-landmarks.js?v=4";
 import * as THREE from "../assets/vendor/three.module.js";
@@ -239,9 +239,9 @@ export function addDiscoveries(
   stone.dispose();
 
   const updateStar = createShootingStarFlight(streak, ground, reduced);
-  function update(seconds, camera, night = 0) {
+  function update(seconds, camera, night = 0, settled = false) {
     const t = reduced ? 0 : seconds;
-    updateBirds(t, camera, night);
+    updateBirds(t, camera, night, settled);
     updateStar(t, camera);
   }
   update(0);

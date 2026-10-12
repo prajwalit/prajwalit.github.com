@@ -6,19 +6,30 @@ export function createBirdFlight(birds, ground, reduced = false) {
   // Birds fly while the sun still gives real light, through sunrise and
   // sunset, and roost once it sits a couple of degrees below the horizon.
   const roosting = 0.15;
+  // The first flock belongs where the camera has come to rest, so the crossing
+  // is actually noticed rather than passed through at speed.
+  const arrival = 10;
   let nextDue = 120, retryAt = 0, started = -Infinity, lastTime = 0, pass = 0;
+  let armed = false;
   const origin = new THREE.Vector3(), travel = new THREE.Vector3();
   const heading = new THREE.Vector3(), lateral = new THREE.Vector3();
   const transform = new THREE.Object3D();
   let yaw = 0;
-  return (seconds, camera, night = 0) => {
+  return (seconds, camera, night = 0, settled = false) => {
     if (seconds < lastTime) {
-      nextDue = 120; retryAt = 0; started = -Infinity; pass = 0;
+      nextDue = 120; retryAt = 0; started = -Infinity; pass = 0; armed = false;
     }
     lastTime = seconds;
     birds.visible = false;
     birds.material.opacity = 0;
     if (reduced) return;
+    // Settling pulls the first pass forward, once, and never later than the
+    // standing two minutes — a visitor who neither summits nor explores still
+    // sees one. Arming once keeps the rhythm from collapsing to ten seconds.
+    if (settled && !armed) {
+      armed = true;
+      nextDue = Math.min(nextDue, seconds + arrival);
+    }
     // Darkness defers a pass the way an obscured sky does: the flight stays
     // due and retries, so one flock crosses after sunrise rather than a
     // night's worth arriving together.

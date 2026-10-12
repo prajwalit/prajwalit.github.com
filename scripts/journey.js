@@ -2,7 +2,7 @@ import { createSkyClock, createTimeControls } from "./time-controls.js?v=11";
 import { skyFragmentShader } from "./sky-shader.js?v=10";
 import { createSunset } from "./sunset.js?v=7";
 import { createWallpaper } from "./wallpaper.js?v=1";
-import { addDiscoveries } from "./discoveries.js?v=13";
+import { addDiscoveries } from "./discoveries.js?v=14";
 import { createExplorer } from "./explore.js?v=7";
 import { createScreenWakeLock } from "./screen-wake-lock.js";
 import { closeOnOutsidePress } from "./pointer.js?v=1";
@@ -767,7 +767,7 @@ async function start() {
     explorer.update(dt);
     updateJourneyControl();
     sky.position.copy(camera.position);
-    discoveries.update(elapsed, camera, skyState.night);
+    discoveries.update(elapsed, camera, skyState.night, atSummit || explorer.active);
     water.material.uniforms.time.value = reduced ? 0 : elapsed * 0.2;
     panels.forEach((panel, i) => {
       const [a, b, c, d] = ranges[i];

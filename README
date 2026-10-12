@@ -122,6 +122,11 @@ Landscape discoveries
   the world-space path stays fixed for its 1.15-second duration. The flock first becomes due at 120 seconds and crosses for 18 seconds,
   fading in and out. It waits for clear sky, then keeps its chosen world-space
   route even if the camera turns. Subsequent launches are 120 seconds apart.
+  The first flock waits for the camera to come to rest, at the summit or in
+  free exploration, and crosses ten seconds later: the guided route takes 75
+  seconds, so arriving by autoplay brings one at about 86 seconds. It is never
+  later than the standing 120, so a visitor who neither summits nor explores
+  still sees one.
   Birds roost once the sun is a couple of degrees below the horizon. Darkness
   defers a pass the way an obscured sky does, so a single flock crosses after
   sunrise rather than a night's worth arriving together; a flock overtaken by
