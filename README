@@ -6,29 +6,36 @@ Local preview
 
 Static GitHub Pages site; no build step.
 Scroll, or use “Start the journey”, to fly up an imagined mountain fjord.
-Five chapters: introduction, current work, career background, journeys, and the summit.
-The terrain is intentionally sculptural, with coral sunset light, cool mountain
-silhouettes, reflective water, and a continuous camera route toward a summit.
+Five chapters: introduction, current work, career background, journeys, and
+the summit. The terrain is intentionally sculptural, with coral sunset light,
+cool mountain silhouettes, reflective water, and a continuous camera route
+toward a summit.
+
 The central arm is a fjord, not a lake: roughly 5,000 units long and 900 to
-2,000 wide, walled by slopes that rise 200 to 1,100 straight off the shore, and
-open at its seaward end to water that runs past the terrain to the horizon.
-About 65% of the mapped area lies below the waterline.
-The camera climbs to the central summit, then turns continuously at one revolution
-every 90 seconds. The panorama can be paused and resumed.
+2,000 wide, walled by slopes that rise 200 to 1,100 straight off the shore,
+and open at its seaward end to water that runs past the terrain to the
+horizon. About 65% of the mapped area lies below the waterline.
+
 No photographs, satellite imagery, or Trolltunga reconstruction appear in the
 landscape; the only photograph on the site is the portrait in the about dialog.
 
 Implementation
   scripts/journey.js — deterministic procedural terrain, sky shader,
-    planar-reflection water, scroll camera, chapter fades, and dialogs.
-  styles/journey.css — desktop/mobile layout with fixed chapter panels.
-  scripts/vegetation.js — instanced conifers and grass, with slope/height limits
-    and roots sampled from the rendered terrain triangles. Meadow color fades
-    into exposed rock higher up; trees become smaller and sparser at the treeline.
+    planar-reflection water, scroll camera, chapter fades, and dialogs. The
+    only place a renderer, light or render target is created.
+  scripts/sky-shader.js — sky, clouds, stars, Milky Way, moon and aurora, all
+    in one fragment pass, so the water reflection carries every one of them.
+  scripts/sunset.js — the day cycle. DAY_CYCLE_DURATION lives here.
+  scripts/vegetation.js — instanced conifers and grass, with slope/height
+    limits and roots sampled from the rendered terrain triangles. Meadow
+    colour fades into exposed rock higher up; trees become smaller and
+    sparser at the treeline.
+  scripts/aurora.js — when the aurora may start, and how long it lasts.
   scripts/pointer.js — the shared release-gesture and dismiss-on-outside-press
     helpers used by the overlays and every dialog.
   scripts/seeded-random.js — the one deterministic hash behind procedural
     placement, so a seed gives the same detail in every module.
+  styles/journey.css — desktop/mobile layout with fixed chapter panels.
   assets/water-normal.jpg — water normal map from the Three.js examples.
   assets/vendor — locally vendored Three.js 0.170.0 and Water; MIT license.
     Water includes a local extension for multisampled, mipmapped reflections
@@ -38,183 +45,201 @@ Implementation
   Typography — Google Fonts: Italiana and DM Sans.
 
 Accessibility and fallbacks
-  Reduced-motion preferences disable ambient animation and camera smoothing.
-  Inactive panels are inert and hidden. Dialogs use native modal focus handling
-  and share one dismissal gesture: a press that both starts and ends outside the
-  panel. Dragging a dial, preview or control past the edge never closes it.
+  Reduced-motion preferences disable ambient animation and camera smoothing,
+  start the panorama and the sky clock paused, hide birds and shooting stars,
+  hold the aurora still, and make returns instant.
+  Inactive panels are inert and hidden. Dialogs use native modal focus
+  handling and share one dismissal gesture: a press that both starts and ends
+  outside the panel, so dragging a dial, preview or control past the edge
+  never closes it.
   Manual scrolling, touch, or key input stops automatic playback.
   If WebGL cannot initialize, the text becomes a normal readable page.
 
-Current scope
-  One continuous landscape journey from the water to a summit panorama.
-  The summit is derived from the actual central terrain vertices. The camera
-  uses terrain clearance during ascent and settles above the peak, holding a
-  level gaze so the horizon rests on the centre line throughout the turn.
-  Reduced-motion mode starts the panorama paused. Scrolling away from the
-  summit stops the turn; dialogs and background tabs also pause its clock.
-  At the summit, horizontal trackpad scrolling (or Shift + mouse wheel) pans
-  the view and pauses the automatic turn. Resume panorama continues from that
-  heading. Vertical scrolling still moves back down the journey.
+The journey
+  One continuous route from the water to a summit panorama, 75 seconds end to
+  end under automatic playback. The summit is derived from the actual central
+  terrain vertices. The camera uses terrain clearance during ascent and
+  settles above the peak, holding a level gaze so the horizon rests on the
+  centre line throughout the turn.
+  At the summit the view turns at one revolution every 90 seconds. Scrolling
+  away stops the turn; dialogs and background tabs pause its clock. Horizontal
+  trackpad scrolling, or Shift with a mouse wheel, pans the view and pauses
+  the automatic turn, and Resume panorama continues from that heading.
+  Vertical scrolling still moves back down the journey.
 
-Background music
-  Silent Trail is the only soundtrack. The 108-second, volume-reduced AAC clip
-  loops in the background and attempts to play on page load. Browsers that block
-  autoplay show a start control. Mute preference is saved in local storage.
+Free exploration
+  Explore freely opens a bounded free-flight camera. Drag to look; WASD or
+  arrows move relative to the view, E/Q rise and descend. The on-screen
+  joystick and +/- controls work with pointer and touch input.
+  The key badges name WASD and E/Q themselves, so the hint carries only the
+  gesture nothing labels, “Drag to look”, which sits under the badges on a
+  mouse and under the title on touch. That leaves “A view of your own.” alone
+  in the middle of the view.
+  Escape or Return to summit restores the guided departure pose in 1.8
+  seconds, instantly with reduced motion. Terrain clearance samples rendered
+  triangles; altitude and horizontal bounds keep the camera above the water
+  and inside the scenery. Inputs clear on blur, hidden tabs, pointer
+  cancellation, and dialogs. The guided journey stays at the departure point
+  while exploring; returning leaves automatic motion paused. No wake lock is
+  held in free exploration, and the music preference is preserved.
+
+  Bounds: x ±7,800; z -13,500 to +4,200; altitude cap 3,300. The extended
+  terrain grid preserves the original spacing and vertex alignment, with
+  clearance sampled from the same visible mesh throughout the larger area.
+
+  Three ways in. The compass beside the place name opens exploration from any
+  point, including the beginning, and the line under the place name names
+  that action rather than restating the scroll; at the summit that line
+  returns to the sideways pan hint, where the Explore freely button is
+  already on screen. The button itself appears at the summit. And at the
+  summit alone, W A S D or Q E enter flight directly, as does dragging the
+  scenery past twelve pixels — the gesture carries over, so the press that
+  asked to fly is the one that starts moving or looking.
+  Arrows, space and touch stay page scrolling, or there would be no way back
+  down, and text and controls keep their own gestures. Neither of those last
+  two entries starts the soundtrack: only an explicit control may do that.
+  Return to journey restores the point of departure; summit entry still
+  returns to the summit.
+
+Day and night cycle
+  A 48-minute cycle begins at the opening sunset, passes through moonlit
+  night with stars and a soft Milky Way band, then sunrise and daylight,
+  before returning to sunset. It pauses while the tab is hidden. Reduced
+  motion keeps the opening sky until a visitor changes it.
+  Celestial detail uses the existing sky shader and water reflection. The one
+  shadowed directional light alternates between sun and moon; no extra
+  lights, textures or rendering passes are added. Ambient light keeps night
+  navigable. Sun and moon motion uses continuous positive tangents across
+  phases and the loop seam.
+  Stars and the Milky Way rotate together around a tilted celestial axis,
+  once per cycle. Atmospheric clouds and the horizon remain independent. The
+  galaxy has variable width, an asymmetric core and fragmented dust lanes.
+  The sunset update returns the state it has already computed, and the frame
+  threads night through to the discoveries; read the cycle from that return
+  rather than calling dayCycleState again.
+
+  Time controls. The moon icon beside Save a view opens a dial and a
+  pause/resume control. Selecting a time smoothly changes the light and holds
+  it until Resume cycle, at speeds from 1x to 16x. Sunset lasts the first
+  eight minutes of the loop. Camera and music controls remain independent.
+
+Aurora
+  One aurora a night, starting between 23:00 and 02:00. Solar angle fixes the
+  hours: it is PI at midnight, so an hour is PI/12, which puts 23:00 at 0.3014
+  of the cycle and 02:00 at 0.3973. Arriving anywhere in those hours starts
+  it, including by dragging the dial there. It plays once and then stays dark,
+  re-arming only after the sky has left those hours with nothing running, so
+  holding the dial inside them cannot loop it and a fast sky cannot stack a
+  second one on the first.
+  The hours decide when it may start, not when it must stop. Once begun it
+  runs its full 144 seconds in real time, the length of Cloud Valley, so the
+  piece underneath always finishes whether the sky is paused or at 16x. At 1x
+  it ends around 00:45, well inside the night. A sky running fast carries the
+  event past sunrise so the music is never cut, but the sky's own darkness
+  still decides what is seen: the term is multiplied by night, so a sky run
+  round to daylight shows nothing while the piece plays out.
+  Drawn inside the existing sky pass, so it adds no geometry, light, render
+  target or texture, and the fjord reflects it. Projecting onto a plane far
+  overhead makes the curtains converge toward the zenith and compress toward
+  the horizon; warping the across-coordinate drapes them into sheets rather
+  than stripes. Colour follows intensity rather than height: violet through
+  the faint diffuse parts, oxygen green through the body, a pale wash in the
+  brightest cores, with violet also painted into the surround because the dim
+  end of a ramp goes black. A diffuse glow along the base keeps the ribbons
+  standing on a lit horizon instead of converging into a bare wedge.
+  The whole term rides a uAurora uniform, so outside those hours it costs
+  nothing at all. Reduced motion holds it still, as the cloud clock is what
+  moves it.
+
+Music
+  Silent Trail is the background: a 108-second, volume-reduced AAC clip that
+  loops and attempts to play on page load. Browsers that block autoplay show
+  a start control. The mute preference is saved in local storage.
+  Cloud Valley, 143.6 seconds and fading out on its own, plays under the
+  aurora and hands back afterwards, crossfading over 150 frames. The handback
+  happens on whichever comes first, the track reaching its own end or the
+  window closing; crossfading to the track already playing is a no-op.
+  Whichever piece comes in starts at its opening, so the soundtrack returns
+  from the top rather than from wherever it paused. Tab switches resume
+  instead, and the render loop stops the clock while hidden, so the event and
+  its music stay in step.
+  Cloud Valley is preload="none", so the 2.3MB is only fetched on a night
+  that reaches 23:00. Both tracks follow the one mute preference, and a muted
+  element still runs, which is what makes unmuting mid-piece instant rather
+  than silent.
+
+Landscape discoveries
+  A cairn sits on a western ridge. Wildflowers grow on the opening shoreline
+  near x 576 / z 984, about 15 units above the water, close to the early
+  route. Ground discoveries use actual terrain samples and distance culling,
+  and total about 31,300 instanced triangles across the map. No added lights
+  or shadow casters.
+
+  Wildflowers. Small cream and dusty pink cups, basal leaves and varied stem
+  heights, planted against the actual terrain. The opening patch is culled
+  beyond 400 units and adds no image download. Fifteen more grow on
+  meadow-compatible lower slopes and fjord banks, between elevations 25 and
+  650, each with 30–54 flowers of varied orientation, height and cluster
+  size — sixteen locations in all. They share two tiny geometry buffers and
+  are culled beyond 280 units; their centres are more than 600 units apart,
+  so at most one added patch renders at a time, two draw calls, which
+  reflections may draw again.
+
+  Birds. Seven distant birds cross the visible sky in a loose flock, fading
+  in and out over an 18-second crossing, then every 120 seconds. The flock
+  waits for clear sky and keeps its chosen world-space route even if the
+  camera turns. The first waits for the camera to come to rest, at the summit
+  or in free exploration, and crosses ten seconds later: the guided route
+  takes 75 seconds, so arriving by autoplay brings one at about 86. It is
+  never later than the standing 120, so a visitor who neither summits nor
+  explores still sees one.
+  Birds roost once the sun is a couple of degrees below the horizon.
+  Darkness defers a pass the way an obscured sky does, so a single flock
+  crosses after sunrise rather than a night's worth arriving together, and a
+  flock overtaken by nightfall fades out with the light.
+
+  Shooting stars. First due at 20 active seconds, then 20 seconds after each
+  launch. A varied path is chosen in the current camera view, above the
+  terrain. If the sky is obscured the launch waits without accumulating a
+  backlog; once launched, the world-space path stays fixed for its
+  1.15-second duration.
+
+  Hidden tabs stop all of these clocks. Reduced motion hides birds and
+  shooting stars.
+
+Screen wake lock
+  Automatic travel requests a screen wake lock on supporting secure browsers.
+  Pause, manual navigation, hidden tabs, and summit arrival release it.
+  Returning to the tab reacquires it only if automatic travel is still
+  active. The summit panorama does not keep the display awake. Unsupported
+  browsers, battery-saving denials, and OS revocation are handled quietly
+  without a repeated retry loop. Unit tests mock the browser API; verify
+  actual dimming behaviour on a phone.
 
 Maintenance and SEO
-  Content and metadata are delivered in index.html without JavaScript.
-  The default readable layout also handles unavailable JavaScript or WebGL.
+  Content and metadata are delivered in index.html without JavaScript, and
+  the default readable layout also handles unavailable JavaScript or WebGL.
   A canonical URL, description, Open Graph/Twitter metadata, and ProfilePage
   structured data identify the public site at https://prajwalit.com/.
   images/social-preview.jpg supplies the landscape preview for shared links.
   images/profile-pic.png introduces the about dialog; it is lazy, so visitors
-  who never open the dialog never download it. The legacy social icons and the
-  retained Trolltunga photo have been removed; both remain in git history.
-  robots.txt advertises sitemap.xml; update both if the production domain changes.
-  Keep the local Three.js license and Water customizations when updating the vendor.
+  who never open the dialog never download it. The legacy social icons and
+  the retained Trolltunga photo have been removed; both remain in git history.
+  robots.txt advertises sitemap.xml; update both if the production domain
+  changes. Keep the local Three.js license and Water customizations when
+  updating the vendor.
 
 Validation
   Requires Node.js 20 or newer; no npm install or build step is needed.
   npm test
   npm run check
+  git diff --check
   The dependency-free Node tests cover panorama continuity, journey controls,
-  reduced motion, panning, audio/storage behavior, WebGL fallback, refresh reset,
-  metadata, sitemap consistency, and local asset/anchor references.
+  reduced motion, panning, audio and storage behaviour, the aurora window,
+  bird and shooting-star scheduling, vegetation placement, wallpaper export,
+  WebGL fallback, refresh reset, metadata, sitemap consistency, and local
+  asset and anchor references.
   Browser boundaries are mocked; these tests do not validate GPU rendering,
   browser autoplay policy, CSS layout, or actual search-engine indexing.
-  git diff --check
-  Preview the five chapters, sound controls, dialog, and summit pan.
+  Preview the five chapters, sound controls, dialogs, and the summit pan.
   Also check with JavaScript disabled and at a narrow viewport.
-
-Screen wake lock
-  Automatic travel requests a screen wake lock on supporting secure browsers.
-  Pause, manual navigation, hidden tabs, and summit arrival release it. Returning
-  to the tab reacquires it only if automatic travel is still active. The summit
-  panorama does not keep the display awake. Unsupported browsers, battery-saving
-  denials, and OS revocation are handled quietly without a repeated retry loop.
-  Unit tests mock the browser API; verify actual dimming behaviour on a phone.
-
-Optional exploration (experiment)
-  At the summit, Explore freely opens a bounded free-flight camera. Drag to look;
-  WASD/arrows move relative to the view, E/Q rise/descend. The on-screen joystick
-  and +/- controls work with pointer/touch input. The key badges name WASD and
-  E/Q themselves, so the hint carries only the gesture nothing labels, "Drag to
-  look", which sits under the badges on a mouse and under the title on touch.
-  That leaves "A view of your own." alone in the middle of the view. Escape or Return to summit
-  restores the guided departure pose in 1.8 seconds (instant with reduced motion).
-  Terrain clearance samples rendered triangles; altitude and horizontal bounds
-  keep the camera above the water and inside the scenery. Inputs clear on blur,
-  hidden tabs, pointer cancellation, and dialogs. The guided journey stays at
-  the departure point while exploring; returning leaves automatic motion paused.
-  No wake lock is held in free exploration. Music preference is preserved.
-
-  Exploration bounds: x ±7,800; z -13,500 to +4,200; altitude cap 3,300.
-  The extended terrain grid preserves the original spacing and vertex alignment,
-  with clearance sampled from the same visible mesh throughout the larger area.
-
-Landscape discoveries
-  A cairn sits on a western ridge. Wildflowers grow on the opening shoreline
-  near x 576 / z 984, about 15 units above the water, close to the early route.
-  Seven distant birds cross the visible sky every two minutes; a shooting star appears
-  first becomes due at 20 active seconds, then 20 seconds after each launch.
-  A varied path is chosen in the current camera view, above the terrain. If
-  sky is obscured, launch waits without accumulating a backlog. Once launched,
-  the world-space path stays fixed for its 1.15-second duration. The flock first becomes due at 120 seconds and crosses for 18 seconds,
-  fading in and out. It waits for clear sky, then keeps its chosen world-space
-  route even if the camera turns. Subsequent launches are 120 seconds apart.
-  The first flock waits for the camera to come to rest, at the summit or in
-  free exploration, and crosses ten seconds later: the guided route takes 75
-  seconds, so arriving by autoplay brings one at about 86 seconds. It is never
-  later than the standing 120, so a visitor who neither summits nor explores
-  still sees one.
-  Birds roost once the sun is a couple of degrees below the horizon. Darkness
-  defers a pass the way an obscured sky does, so a single flock crosses after
-  sunrise rather than a night's worth arriving together; a flock overtaken by
-  nightfall fades out with the light. Hidden tabs stop the clock.
-  Ground discoveries use actual terrain samples and distance culling. These
-  details total about 31,300 instanced triangles across the map. Additional
-  wildflower patches share two tiny geometry buffers and are culled beyond
-  280 units; their centres are more than 600 units apart, so at most one added
-  patch renders at a time (two draw calls);
-  reflections may draw them again. No added lights or shadow casters.
-  Reduced motion hides birds and shooting stars.
-
-  At the summit, W A S D and Q E enter free flight directly, and so does
-  dragging the scenery past twelve pixels; the gesture carries over, so the
-  press that asked to fly is the one that starts moving or looking. Arrows,
-  space and touch stay page scrolling, or there would be no way back down,
-  and text and controls keep their own gestures. Neither entry starts the
-  soundtrack: only an explicit control may do that.
-
-  The compass beside the location label opens free exploration from any point,
-  including the beginning, and the line under the place name names that action
-  rather than restating the scroll. At the summit it returns to the sideways
-  pan hint, where the Explore freely button is already on screen. Return to journey restores the point of departure;
-  summit entry still returns to the summit. Sound follows the saved preference.
-
-Wildflowers
-  Small cream and dusty pink cups, basal leaves and varied stem heights are
-  planted against the actual terrain. The static patch is culled beyond 400
-  units and adds no image download. The tree, sailboat and reindeer trials have
-  been removed.
-
-  Fifteen additional wildflower patches grow on meadow-compatible lower slopes
-  and fjord banks, between elevations 25 and 650. Each uses 30–54 flowers with
-  varied orientation, height and cluster size. Roots follow actual terrain.
-  The original opening patch remains in place, for sixteen locations total.
-
-Day and night cycle
-  A 48-minute cycle begins at the existing sunset, passes through moonlit night
-  with stars and a soft Milky Way band, then sunrise and daylight, before
-  returning to sunset. It pauses while the tab is hidden. Reduced motion keeps
-  the opening sky until a visitor changes it. DAY_CYCLE_DURATION lives in scripts/sunset.js.
-  Celestial detail uses the existing sky shader and water reflection. The one
-  shadowed directional light alternates between sun and moon; no extra lights,
-  textures or rendering passes are added. Ambient light keeps night navigable.
-
-  Stars and the Milky Way rotate together around a tilted celestial axis, once
-  per 48-minute cycle. Atmospheric clouds and the horizon remain independent.
-  The galaxy has variable width, an asymmetric core and fragmented dust lanes.
-
-Aurora
-  One aurora a night, between 23:00 and 02:00. Solar angle fixes the hours:
-  it is PI at midnight, so an hour is PI/12, which puts 23:00 at 0.3014 of the
-  cycle and 02:00 at 0.3973. Arriving anywhere in those hours starts it,
-  including by dragging the dial there; it plays once and then stays dark,
-  re-arming only after the sky has left them.
-  The hours decide when it may start, not when it must stop. Once begun it
-  runs its full 144 seconds, the length of Cloud Valley, in real time, so the
-  piece underneath always finishes whether the sky is paused or at 16x. A sky
-  running fast carries the event past sunrise so the music is never cut, but
-  the sky's own darkness still decides what is seen: the term is multiplied
-  by night, so a sky run round to daylight shows nothing while the piece
-  plays out. At 1x it ends around 00:45, well inside the night. Nothing can
-  start a second one while one is playing.
-  Drawn inside the existing sky pass, so it adds no geometry, light, render
-  target or texture, and the fjord reflects it. Projecting onto a plane far
-  overhead makes the curtains converge toward the zenith and compress toward
-  the horizon; warping the across-coordinate drapes them. Colour follows
-  intensity rather than height: violet through the faint diffuse parts, oxygen
-  green through the body, a pale wash in the brightest cores, with violet also
-  painted into the surround because the dim end of a ramp goes black. The
-  whole term rides a uAurora uniform, so outside those hours it costs nothing.
-  Reduced motion holds it still, as the cloud clock is what moves it.
-
-Music
-  Silent Trail is the background. Cloud Valley, 143.6 seconds and fading out
-  on its own, plays under the aurora and hands back afterwards, crossfading
-  over 150 frames. Whichever piece comes in starts at its opening, so the
-  soundtrack returns from the top rather than from wherever it paused. The
-  handback
-  happens on whichever comes first, the track reaching its own end or the
-  window closing; crossfading to the track already playing is a no-op. It is
-  preload="none", so the 2.3MB is only fetched on a night that reaches 23:00.
-  Both tracks follow the one mute preference, and a muted element still runs,
-  which is what makes unmuting mid-piece instant rather than silent.
-
-Time controls in Explore freely
-  The moon icon beside Save a view opens a time slider and pause/resume control.
-  Selecting a time smoothly changes the light and holds it until Resume cycle.
-  Sunset lasts the first eight minutes of the 48-minute loop. Camera and music
-  controls remain independent; reduced motion starts the sky clock paused.
-  Sun and moon motion uses continuous positive tangents across phases and the loop seam.

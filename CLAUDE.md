@@ -124,6 +124,37 @@ python3 -m http.server 8081 --bind 127.0.0.1
 - Comments explain *why* — GPU precision, autoplay policy, pixel-rounding feedback,
   what a constant protects against. Not what the line does. Follow that.
 
+## Seeing the render
+
+There is no GPU in the loop by default, and "I can't see it" has been the
+limiting factor on every visual change. Headless Chrome plus CDP solves it, with
+no dependencies — Node 22+ has a global `WebSocket`:
+
+```
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+  --headless=new --disable-gpu --enable-unsafe-swiftshader \
+  --user-data-dir=<scratch>/chrome-profile --remote-debugging-port=9222 \
+  --window-size=1200,675 about:blank &
+# poll http://127.0.0.1:9222/json/version until it answers, then over the
+# websocket from /json/list: Page.enable -> Page.navigate -> wait -> Page.captureScreenshot
+```
+
+Then `Read` the PNG and actually look at it. Hard-won details:
+
+- **`--virtual-time-budget` hangs this page.** The render loop never idles, so
+  virtual time never completes. Drive it over CDP and wait in real time
+  (~14s covers scene build), rather than using Chrome's bare `--screenshot`.
+- **To reach a state, patch a copy, never the repo.** `tar` the project to the
+  scratchpad, patch `createSkyClock`'s initial `time` there, serve that on
+  another port. A patch in the working tree *will* be left behind when a
+  command times out.
+- `#hello` as the URL fragment deep-links to the summit, since `scroll-margin-top:
+  -30vh` carries anchor navigation past the end of the route.
+- SwiftShader says nothing about real GPU performance. Phone framerate still
+  needs a phone.
+- A standalone harness page that imports just `sky-shader.js` renders far
+  faster than the whole site, when only the sky is in question.
+
 ## Constraints
 
 - **Phone must work properly; desktop should feel premium.** A visual gain that breaks
