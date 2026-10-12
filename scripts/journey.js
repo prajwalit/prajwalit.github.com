@@ -1,5 +1,5 @@
 import { createSkyClock, createTimeControls } from "./time-controls.js?v=11";
-import { skyFragmentShader } from "./sky-shader.js?v=11";
+import { skyFragmentShader } from "./sky-shader.js?v=12";
 import { createSunset } from "./sunset.js?v=7";
 import { createWallpaper } from "./wallpaper.js?v=1";
 import { addDiscoveries } from "./discoveries.js?v=14";
