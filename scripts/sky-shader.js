@@ -124,7 +124,10 @@ void main(){
      // The summit view is level, so the sky it shows runs from d.y 0 at the
      // horizon to about 0.45 at the top of the frame. The ramp has to sit
      // inside that or the pink never appears on screen.
-     aurTint=mix(aurTint,vec3(.86,.30,.72),smoothstep(.05,.30,d.y)*.70);
+     // About seventy green to thirty magenta across the visible sky: the
+     // level summit frame spans d.y 0 to roughly 0.45, and this ramp
+     // averages near a third of it while letting the top reach a real pink.
+     aurTint=mix(aurTint,vec3(.86,.30,.72),smoothstep(.12,.38,d.y)*.55);
      float aurClear=uNight*(1.-cloud*band*.8);
      col+=aurTint*aurI*aurClear*.55;
      // Violet reads only where it is not competing with green, so paint it

@@ -150,9 +150,11 @@ Aurora
   faint diffuse parts, oxygen green through the brighter curtain, a pale wash
   in the cores, with violet also painted into the surround because the dim
   end of a ramp goes black. Height then stacks nitrogen magenta above the
-  green, the way a strong display shows it. The ramp runs over d.y 0.05 to
-  0.30 because the level summit view spans only 0 to about 0.45; a higher
-  ramp puts the pink off the top of the frame.
+  green, the way a strong display shows it. The ramp runs over d.y 0.12 to
+  0.38 at 0.55 strength, which averages close to 30% magenta across the
+  visible sky and leaves 70% green. The level summit view spans only d.y 0
+  to about 0.45, so the ramp has to sit inside that: pitched higher the pink
+  lands off the top of the frame, pitched lower it tints everything.
   A diffuse glow along the base keeps the ribbons standing on a lit horizon
   instead of converging into a bare wedge.
   The whole term rides a uAurora uniform, so outside those hours it costs
