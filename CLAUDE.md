@@ -13,10 +13,10 @@ Read the section relevant to your change before touching code, and update it aft
 ```
 index.html          all content + metadata, server-rendered; GA4; reload-scroll shim
 styles/journey.css  dark-only; :root tokens --ivory/--muted/--accent
-scripts/journey.js  the only place Three.js scene setup lives (~790 lines)
+scripts/journey.js  the only place Three.js scene setup lives; by far the largest
 scripts/*.js        mostly pure modules, unit-tested in plain node
 assets/vendor/      Three.js 0.170.0 + Water, locally vendored and patched
-tests/*.test.js     77 tests, node --test, ~144 lines of hand-rolled DOM mocks
+tests/*.test.js     node --test, against hand-rolled DOM mocks in helpers.js
 ```
 
 ## Architecture
@@ -43,7 +43,8 @@ dismissal gesture every dialog uses.
 `sunset.js` (`dayCycleState`), `time-controls.js` (`cycleToDial`/`dialToCycle`),
 `vegetation.js` (`habitat`/`sampleGround`), `explore.js` (`explorerFloor`/
 `constrainExplorer`/`moveExplorer`), `wallpaper.js` (`wallpaperSize`/`renderWallpaper`),
-`visible-sky.js`. These are the parts with real test coverage — keep new logic in this
+`visible-sky.js`, `aurora.js` (`createAuroraEvent`). These are the parts with real test
+coverage — keep new logic in this
 shape where you can.
 
 ### Load-bearing details
@@ -99,7 +100,7 @@ shape where you can.
 Node 20+. No install step.
 
 ```
-npm test                              # 77 tests, must stay green
+npm test                              # must stay green
 npm run check                         # node --check on every script
 git diff --check                      # whitespace
 python3 -m http.server 8081 --bind 127.0.0.1
