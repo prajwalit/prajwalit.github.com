@@ -3,7 +3,7 @@ export const skyFragmentShader = `
 varying highp vec3 vDirection;
 uniform vec3 sunDirection,moonDirection;
 uniform mat3 starRotation;
-uniform float uTime,uDusk,uNight,uDay;
+uniform float uTime,uDusk,uNight,uDay,uAurora;
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1)),f.x),f.y);}
 float fbm(vec2 p){float f=0.,a=.5;for(int i=0;i<5;i++){f+=a*noise(p);p=p*2.02+4.7;a*=.5;}return f;}
@@ -94,15 +94,15 @@ void main(){
    // it because the sky sphere is already reflected.
    float aurAzimuth=atan(d.x,-d.z);
    // Ascending edges only: GLSL leaves smoothstep undefined when edge0>edge1.
-   float aurFacing=1.-smoothstep(1.15,2.65,abs(aurAzimuth));
+   float aurFacing=(1.-smoothstep(1.15,2.65,abs(aurAzimuth)))*uAurora;
    if(aurFacing>.002){
      vec2 aurQ=d.xz/max(.09,d.y+.10);
      // Warping the across-coordinate by a slow field running along the
      // ribbons is what folds them into draped sheets instead of stripes.
-     float aurW1=noise(vec2(aurQ.y*.30+uTime*.022,7.3))-.5;
-     float aurW2=noise(vec2(aurQ.y*.74-uTime*.015,19.1))-.5;
-     float aurAcross=aurQ.x*1.6+aurW1*1.6+aurW2*.7+uTime*.030;
-     float aurAlong=aurQ.y*.28-uTime*.040;
+     float aurW1=noise(vec2(aurQ.y*.30+uTime*.035,7.3))-.5;
+     float aurW2=noise(vec2(aurQ.y*.74-uTime*.024,19.1))-.5;
+     float aurAcross=aurQ.x*1.6+aurW1*1.6+aurW2*.7+uTime*.048;
+     float aurAlong=aurQ.y*.28-uTime*.064;
      float aurR=noise(vec2(aurAcross,aurAlong))*.62
        +noise(vec2(aurAcross*2.3+11.,aurAlong*1.6+5.))*.38;
      float aurCore=smoothstep(.58,.88,aurR);

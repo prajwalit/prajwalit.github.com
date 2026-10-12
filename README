@@ -176,6 +176,33 @@ Day and night cycle
   per 48-minute cycle. Atmospheric clouds and the horizon remain independent.
   The galaxy has variable width, an asymmetric core and fragmented dust lanes.
 
+Aurora
+  One aurora a night, between 23:00 and 02:00. Solar angle fixes the hours:
+  it is PI at midnight, so an hour is PI/12, which puts 23:00 at 0.3014 of the
+  cycle and 02:00 at 0.3973. Arriving anywhere in those hours starts it,
+  including by dragging the dial there; it plays once and then stays dark,
+  re-arming only after the sky has left them.
+  It runs 176 real seconds, the length of Cloud Valley, so the piece playing
+  underneath keeps its own pace whether the sky is paused or at 16x. The hours
+  still bound it: a sky running fast leaves the night early and the aurora
+  ends with it, cutting the music short. At 1x the two coincide.
+  Drawn inside the existing sky pass, so it adds no geometry, light, render
+  target or texture, and the fjord reflects it. Projecting onto a plane far
+  overhead makes the curtains converge toward the zenith and compress toward
+  the horizon; warping the across-coordinate drapes them. Colour follows
+  intensity rather than height: violet through the faint diffuse parts, oxygen
+  green through the body, a pale wash in the brightest cores, with violet also
+  painted into the surround because the dim end of a ramp goes black. The
+  whole term rides a uAurora uniform, so outside those hours it costs nothing.
+  Reduced motion holds it still, as the cloud clock is what moves it.
+
+Music
+  Silent Trail is the background. Cloud Valley, 175.8 seconds, plays under the
+  aurora and hands back afterwards, crossfading over 150 frames. It is
+  preload="none", so the 3.1MB is only fetched on a night that reaches 23:00.
+  Both tracks follow the one mute preference, and a muted element still runs,
+  which is what makes unmuting mid-piece instant rather than silent.
+
 Time controls in Explore freely
   The moon icon beside Save a view opens a time slider and pause/resume control.
   Selecting a time smoothly changes the light and holds it until Resume cycle.

@@ -83,17 +83,24 @@ export function environment({
   inertPanel.inert = true;
   document.querySelectorAll = (selector) =>
     selector === "[inert]" ? [inertPanel] : [];
-  const audio = get("#background-track");
-  audio.playCount = 0;
-  audio.pauseCount = 0;
-  audio.blocked = blockedAudio;
-  audio.play = async () => {
-    audio.playCount++;
-    if (audio.blocked) throw new Error("Autoplay blocked");
+  const track = (selector, blocked) => {
+    const el = get(selector);
+    el.playCount = 0;
+    el.pauseCount = 0;
+    el.volume = 0;
+    el.currentTime = 0;
+    el.blocked = blocked;
+    el.play = async () => {
+      el.playCount++;
+      if (el.blocked) throw new Error("Autoplay blocked");
+    };
+    el.pause = () => {
+      el.pauseCount++;
+    };
+    return el;
   };
-  audio.pause = () => {
-    audio.pauseCount++;
-  };
+  const audio = track("#background-track", blockedAudio);
+  const aurora = track("#aurora-track", blockedAudio);
   const storage = new Map(
     storedMute === null ? [] : [["prajwalit-sound-muted", storedMute]],
   );
@@ -137,6 +144,7 @@ export function environment({
     document,
     get,
     audio,
+    aurora,
     storage,
     events,
     scrolls,

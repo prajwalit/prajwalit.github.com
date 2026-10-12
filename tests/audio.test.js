@@ -64,3 +64,55 @@ test("entering exploration retries blocked audio and preserves saved mute", asyn
     if (!muted) assert.equal(env.get("#sound-toggle").getAttribute("aria-pressed"), "true");
   }
 });
+
+test("the aurora brings its own piece, and hands the soundtrack back", async () => {
+  const env = environment();
+  env.load("scripts/ambience.js");
+  await settle();
+  assert.equal(env.audio.playCount, 1);
+  assert.equal(env.aurora.playCount, 0);
+  // The aurora crosses in: its track starts, the soundtrack is left paused.
+  env.document.dispatchEvent(new Event("aurora:start"));
+  assert.equal(env.aurora.playCount, 1);
+  assert.equal(env.aurora.volume, 0.8);
+  assert.equal(env.audio.volume, 0);
+  assert.equal(env.audio.pauseCount, 1);
+  // And back again afterwards, with the aurora's piece rewound for next night.
+  env.document.dispatchEvent(new Event("aurora:end"));
+  assert.equal(env.audio.playCount, 2);
+  assert.equal(env.audio.volume, 0.8);
+  assert.equal(env.aurora.volume, 0);
+  assert.equal(env.aurora.pauseCount, 1);
+  assert.equal(env.aurora.currentTime, 0);
+});
+
+test("a muted visitor stays muted, and unmutes into the aurora's piece", async () => {
+  const env = environment({ storedMute: "true" });
+  env.load("scripts/ambience.js");
+  await settle();
+  env.document.dispatchEvent(new Event("aurora:start"));
+  // Running but silent, exactly as the soundtrack behaves while muted.
+  assert.equal(env.aurora.muted, true);
+  assert.equal(env.aurora.playCount, 1);
+  env.get("#sound-toggle").dispatchEvent(new Event("click"));
+  await settle();
+  // So unmuting is instant, and lands on the aurora's piece, not the other one.
+  assert.equal(env.aurora.muted, false);
+  assert.equal(env.aurora.volume, 0.8);
+  assert.equal(env.audio.volume, 0);
+});
+
+test("a hidden tab pauses whichever piece is playing", async () => {
+  const env = environment();
+  env.load("scripts/ambience.js");
+  await settle();
+  env.document.dispatchEvent(new Event("aurora:start"));
+  const before = env.aurora.pauseCount;
+  env.document.hidden = true;
+  env.document.dispatchEvent(new Event("visibilitychange"));
+  assert.equal(env.aurora.pauseCount, before + 1);
+  env.document.hidden = false;
+  env.document.dispatchEvent(new Event("visibilitychange"));
+  await settle();
+  assert.equal(env.aurora.playCount, 2);
+});

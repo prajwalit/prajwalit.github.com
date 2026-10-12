@@ -1,6 +1,7 @@
 import { createSkyClock, createTimeControls } from "./time-controls.js?v=11";
-import { skyFragmentShader } from "./sky-shader.js?v=12";
-import { createSunset } from "./sunset.js?v=7";
+import { skyFragmentShader } from "./sky-shader.js?v=13";
+import { createSunset, DAY_CYCLE_DURATION } from "./sunset.js?v=7";
+import { createAuroraEvent } from "./aurora.js?v=1";
 import { createWallpaper } from "./wallpaper.js?v=1";
 import { addDiscoveries } from "./discoveries.js?v=14";
 import { createExplorer } from "./explore.js?v=7";
@@ -379,7 +380,7 @@ async function start() {
     new THREE.ShaderMaterial({
       side: THREE.BackSide,
       depthWrite: false,
-      uniforms: { uTime: clock, starRotation: { value: new THREE.Matrix3() }, uDusk: { value: 0 }, uNight: { value: 0 }, uDay: { value: 0 }, moonDirection: { value: new THREE.Vector3() }, sunDirection: { value: sunDirection } },
+      uniforms: { uTime: clock, starRotation: { value: new THREE.Matrix3() }, uDusk: { value: 0 }, uNight: { value: 0 }, uDay: { value: 0 }, uAurora: { value: 0 }, moonDirection: { value: new THREE.Vector3() }, sunDirection: { value: sunDirection } },
       // Keep interpolated sky directions bounded on mobile GPUs.
       vertexShader: `varying highp vec3 vDirection;void main(){vDirection=normalize(position);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
       fragmentShader: skyFragmentShader,
@@ -608,6 +609,11 @@ async function start() {
   scene.add(water);
   const updateSunset = createSunset({sun, ambient, sunDirection, sky, water, fog: scene.fog, reduced: false});
   const skyClock = createSkyClock(reduced);
+  // One aurora a night, with its own piece of music under it.
+  const auroraEvent = createAuroraEvent({
+    onStart: () => document.dispatchEvent(new Event("aurora:start")),
+    onEnd: () => document.dispatchEvent(new Event("aurora:end")),
+  });
   timeControls = createTimeControls(skyClock);
   const discoveries = addDiscoveries(scene, terrainGeometry, { reduced });
   const summitEye = summit.clone().add(new THREE.Vector3(0, 38, 0));
@@ -689,6 +695,16 @@ async function start() {
     elapsed += dt;
     const modalOpen = Boolean(document.querySelector("dialog[open]"));
     const skyState = updateSunset(skyClock.tick(Math.min(frameSeconds, 1)));
+    // The window is counted in real seconds, so the sky may be paused or
+    // running at 16x while the music underneath plays at its own pace.
+    const cyclePoint =
+      (((skyClock.time % DAY_CYCLE_DURATION) + DAY_CYCLE_DURATION) %
+        DAY_CYCLE_DURATION) /
+      DAY_CYCLE_DURATION;
+    sky.material.uniforms.uAurora.value = auroraEvent.update(
+      cyclePoint,
+      Math.min(frameSeconds, 1),
+    );
     timeControls.update();
     // Cloud drift follows real time even when rendering falls below 20 fps.
     if (!reduced) clock.value += Math.min(frameSeconds, 1);
