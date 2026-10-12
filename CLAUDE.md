@@ -111,7 +111,14 @@ python3 -m http.server 8081 --bind 127.0.0.1
   `closeOnOutsidePress` appear there.
 - **Commits:** sentence-case imperative, no prefix or scope — "Fix mobile galaxy shader
   math and coordinate precision", "Soften cloud overlap while preserving sunset glow".
-  Commit when the change is done and tested; **push only when asked** — master is live.
+  **One logical change per commit**, even across several asks in one session.
+  Commit each one as it is finished and tested, before starting the next — then
+  its `?v=` bumps and doc edits land with the change that caused them. Batching
+  the work and splitting afterwards does not work: `index.html`, `scripts/journey.js`
+  and the `README` are touched by almost everything, so the version strings
+  interleave and no hunk-level split leaves each commit self-consistent. The
+  overlap is an argument for committing sooner, never for one combined commit.
+  **Push only when asked** — master is live.
 - Code style is Prettier-default-ish (2-space, double quotes, semicolons) but several
   newer modules are hand-compacted. Match the file you are in rather than reformatting.
 - Comments explain *why* — GPU precision, autoplay policy, pixel-rounding feedback,
