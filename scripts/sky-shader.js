@@ -87,6 +87,33 @@ void main(){
    float population=envelope*(.4+.6*cloudlets)*(1.-dust*.65);
    col+=(vec3(.72,.79,1.)*points+mix(vec3(.57,.65,.85),vec3(.85,.78,.65),core)
      *(dense*.8+fineStars*.35)*population)*uNight*skyMask;
+   // Aurora over the far peaks, opposite the early-night moon. Drawn in this
+   // same pass, so it adds no geometry, light or render target, and the fjord
+   // reflects it because the sky sphere is already reflected.
+   float aurAzimuth=atan(d.x,-d.z);
+   // Ascending edges only: GLSL leaves smoothstep undefined when edge0>edge1.
+   float aurFacing=1.-smoothstep(.5,1.75,abs(aurAzimuth));
+   if(aurFacing>.002){
+     float aurDrift=uTime*.013;
+     // The arc wanders along the horizon, deepening and thinning as it goes.
+     float aurBase=.105+.07*noise(vec2(aurAzimuth*1.3+aurDrift,2.7));
+     float aurSpread=.16+.10*noise(vec2(aurAzimuth*2.3-aurDrift,8.1));
+     // Square the signed distance directly: pow is undefined for negative
+     // bases, which shows up as artifacts on mobile GPUs.
+     float aurFall=(d.y-aurBase)/aurSpread;
+     float aurCurtain=exp(-aurFall*aurFall);
+     // Two octaves of vertical streaks is enough for curtains, and costs a
+     // quarter of the sin calls an fbm would.
+     float aurRays=noise(vec2(aurAzimuth*8.5+aurDrift*2.,d.y*6.-uTime*.045))*.62
+       +noise(vec2(aurAzimuth*19.-aurDrift*3.,d.y*13.+uTime*.028))*.38;
+     aurRays=smoothstep(.3,.82,aurRays);
+     // A slow swell, so it breathes rather than hanging there.
+     float aurPulse=.55+.45*noise(vec2(uTime*.035,4.2));
+     float aurVeil=aurCurtain*(.25+.95*aurRays)*aurFacing*aurPulse;
+     // Oxygen green through the body, a thin rose flush where it thins out.
+     vec3 aurTint=mix(vec3(.16,.92,.52),vec3(.62,.28,.78),smoothstep(-.3,1.5,aurFall));
+     col+=aurTint*aurVeil*uNight*skyMask*.45;
+   }
    // Subtle mottling in the moon, with a small halo rather than a glowing orb.
    float moonFacing=max(dot(d,moonDirection),0.);
    vec3 right=normalize(cross(moonDirection,vec3(0.,1.,.001)));
