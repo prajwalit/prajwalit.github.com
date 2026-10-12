@@ -1,16 +1,20 @@
 import { DAY_CYCLE_DURATION, dayCycleState } from "./sunset.js?v=7";
 import { closeOnOutsidePress, onPointerRelease } from "./pointer.js?v=1";
-// Put sunset at the top, midnight right, sunrise bottom, and noon left.
-// Using the solar angle keeps all four markers aligned with the actual sky.
+// The sun's own arc, as you would watch it facing the equator: it rises on
+// the left, crosses the top at noon, sets on the right, and passes under at
+// midnight. Reading the dial straight from the solar angle keeps all four
+// markers aligned with the actual sky.
 const turn = Math.PI * 2;
 const wrap = value => ((value % 1) + 1) % 1;
 export function cycleToDial(fraction) {
-  return wrap((dayCycleState(fraction * DAY_CYCLE_DURATION).angle - Math.PI / 2) / turn);
+  return wrap(dayCycleState(fraction * DAY_CYCLE_DURATION).angle / turn);
 }
 export function dialToCycle(fraction) {
-  let angle = wrap(fraction) * turn + Math.PI / 2;
+  let angle = wrap(fraction) * turn;
   const start = dayCycleState(0).angle;
-  if (angle >= start + turn) angle -= turn;
+  // The solar angle runs from the opening sunset through one full turn, so
+  // lift anything below that into the same range before searching it.
+  if (angle < start) angle += turn;
   let low = 0, high = 1;
   for (let i = 0; i < 32; i++) {
     const middle = (low + high) / 2;
@@ -75,8 +79,10 @@ export function createTimeControls(clock) {
   function display(fraction) {
     selected = fraction;
     const angle = cycleToDial(fraction) * turn;
-    handle.setAttribute('cx', 110 + 74 * Math.sin(angle));
-    handle.setAttribute('cy', 110 - 74 * Math.cos(angle));
+    // Radius 68, not the box's 74: Sunrise and Sunset are long enough to
+    // cross a wider ring.
+    handle.setAttribute('cx', 110 + 68 * Math.sin(angle));
+    handle.setAttribute('cy', 110 - 68 * Math.cos(angle));
     dial.setAttribute('aria-valuenow', Math.round(fraction * 1000));
     dial.setAttribute('aria-valuetext', label(fraction));
     status.textContent = label(fraction);

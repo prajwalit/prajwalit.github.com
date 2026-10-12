@@ -51,11 +51,17 @@ test('manual selection remains exact at accelerated speed and resumes at that ra
   assert.equal(clock.tick(1), DAY_CYCLE_DURATION / 4 + 8);
 });
 
-test('dial cardinal points match the sun and opening position is northwest', () => {
-  assert.ok(cycleToDial(0) > .875 && cycleToDial(0) < 1);
-  for (const [dial, elevation] of [[0,0],[.25,-1],[.5,0],[.75,1]]) {
-    assert.ok(Math.abs(dayCycleState(dialToCycle(dial)*DAY_CYCLE_DURATION).elevation-elevation)<1e-8);
+test('the dial traces the sun: noon up, sunset right, midnight down, sunrise left', () => {
+  const elevationAt = dial => dayCycleState(dialToCycle(dial)*DAY_CYCLE_DURATION).elevation;
+  for (const [dial, elevation] of [[0,1],[.25,0],[.5,-1],[.75,0]]) {
+    assert.ok(Math.abs(elevationAt(dial)-elevation)<1e-8, `dial ${dial}`);
   }
+  // Elevation alone cannot tell the two horizon crossings apart, so check
+  // which way the sun is going: falling on the right, rising on the left.
+  assert.ok(elevationAt(.25) < elevationAt(.24), 'right-hand mark is sunset');
+  assert.ok(elevationAt(.75) > elevationAt(.74), 'left-hand mark is sunrise');
+  // The opening light is late afternoon, so it sits just short of sunset.
+  assert.ok(cycleToDial(0) > .19 && cycleToDial(0) < .25);
   for (const fraction of [0,.02,.2,.5,.8,.99]) {
     const difference = Math.abs(dialToCycle(cycleToDial(fraction))-fraction);
     assert.ok(Math.min(difference, 1-difference)<1e-8);

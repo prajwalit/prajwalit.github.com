@@ -119,7 +119,10 @@ Day and night cycle
   rather than calling dayCycleState again.
 
   Time controls. The moon icon beside Save a view opens a dial and a
-  pause/resume control. Selecting a time smoothly changes the light and holds
+  pause/resume control. The dial traces the sun's own arc as you would watch
+  it facing the equator: sunrise on the left, noon at the top, sunset on the
+  right, midnight underneath. Positions come straight from the solar angle,
+  so the markers cannot drift out of step with the sky. Selecting a time smoothly changes the light and holds
   it until Resume cycle, at speeds from 1x to 16x. Sunset lasts the first
   eight minutes of the loop. Camera and music controls remain independent.
 
