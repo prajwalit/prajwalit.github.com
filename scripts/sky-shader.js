@@ -52,17 +52,25 @@ void main(){
    vec3 across=cross(normal,axis);
    float latitude=dot(celestial,normal);
    float longitude=atan(dot(celestial,across),dot(celestial,axis));
-   // Near-isotropic coordinates avoid stretching noise into cloud streaks.
-   vec2 gal=vec2(longitude,latitude)*7.;
+   // atan wraps from +PI to -PI along one meridian, and every noise below
+   // would jump 20 to 70 lattice cells across it — a straight seam over the
+   // whole sky. Use the position on the galactic circle instead: continuous
+   // the whole way round, with the radius carrying latitude so the two sides
+   // of the band stay distinct. longitude survives only inside cos(), which
+   // is continuous across the cut.
+   vec2 ring=vec2(dot(celestial,axis),dot(celestial,across));
+   // Radius 7 at the band, +-7 across it: the same cell counts the old
+   // vec2(longitude,latitude)*7. gave, so the structure keeps its scale.
+   vec2 gal=ring*(7.+latitude*7.);
    float warp=(noise(gal*.65+17.)-.5)*.045;
    float lat=latitude+warp;
-   float width=.085+.055*noise(vec2(longitude*3.2,6.));
+   float width=.085+.055*noise(ring*3.2+6.);
    // Signed distances must be squared directly: GLSL pow is undefined
    // for negative bases, even with an exponent of two (mobile GPU artifacts).
    float envelopeDistance=lat/width;
    float envelope=exp(-envelopeDistance*envelopeDistance);
    float core=pow(max(0.,.5+.5*cos(longitude+2.1)),22.);
-   float shoulder=lat-.028-.018*noise(vec2(longitude*4.,26.));
+   float shoulder=lat-.028-.018*noise(ring*4.+26.);
    float bulge=exp(-shoulder*shoulder*27.)*core*(.65+.55*noise(gal*1.3+42.));
    float coarse=fbm(gal+vec2(7.,11.));
    float fine=noise(gal*17.+31.);
@@ -72,13 +80,13 @@ void main(){
    float grain=noise(gal*29.+vec2(8.,39.));
    float edgeWarp=(filaments-.5)*.018+(fine-.5)*.009;
    float dustLat=lat+edgeWarp;
-   float riftCentre=(noise(vec2(longitude*7.,13.))-.5)*.075
+   float riftCentre=(noise(ring*7.+13.)-.5)*.075
      +(noise(gal*2.8+23.)-.5)*.035;
-   float riftWidth=.012+.024*noise(vec2(longitude*11.,47.));
-   float breaks=smoothstep(.28,.68,noise(vec2(longitude*8.,37.)));
+   float riftWidth=.012+.024*noise(ring*11.+47.);
+   float breaks=smoothstep(.28,.68,noise(ring*8.+37.));
    float riftDistance=(dustLat-riftCentre)/riftWidth;
    float rift=exp(-riftDistance*riftDistance)*breaks;
-   float branchCentre=riftCentre+.035+.045*noise(vec2(longitude*5.,4.));
+   float branchCentre=riftCentre+.035+.045*noise(ring*5.+4.);
    float branchDistance=(dustLat-branchCentre)/.026;
    float branch=exp(-branchDistance*branchDistance)
      *smoothstep(.42,.72,noise(gal*2.+11.));

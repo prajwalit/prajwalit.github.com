@@ -111,6 +111,12 @@ Day and night cycle
   lights, textures or rendering passes are added. Ambient light keeps night
   navigable. Sun and moon motion uses continuous positive tangents across
   phases and the loop seam.
+  The galaxy is placed by position on its own circle, not by an angle. An
+  atan wraps from +PI to -PI along one meridian, and noise sampled on that
+  angle jumps 20 to 70 lattice cells across the wrap, which draws a straight
+  seam over the whole sky. The circle has no such edge; its radius carries
+  latitude so the two sides of the band stay distinct, at the same cell
+  counts the angle gave.
   Stars and the Milky Way rotate together around a tilted celestial axis,
   once per cycle. Atmospheric clouds and the horizon remain independent. The
   galaxy has variable width, an asymmetric core and fragmented dust lanes.

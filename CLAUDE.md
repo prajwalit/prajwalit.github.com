@@ -86,6 +86,11 @@ shape where you can.
   coordinates small anyway — never feed an unbounded clock into one — since even a
   fract-based hash resolves only a handful of values at a coordinate of 1,700 if a
   device falls back to `mediump`.
+- **Never sample noise on an angle.** `atan` wraps from +PI to -PI, and a lattice
+  sampled across that wrap jumps by whole cells, drawing a straight seam across the
+  sky. Sample position on the circle instead — `vec2(dot(d,a),dot(d,b))` — which is
+  continuous the whole way round. This bit the Milky Way for a long time before anyone
+  named it.
 - **Nothing compiles the GLSL.** It lives in a template literal, so `node --check` and
   the whole test suite pass happily on a shader with a missing function. Render it.
 
