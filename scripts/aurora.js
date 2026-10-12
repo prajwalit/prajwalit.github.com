@@ -19,34 +19,26 @@ function envelope(elapsed) {
 export function createAuroraEvent({ onStart, onEnd } = {}) {
   let armed = true,
     elapsed = -1;
-  const inside = (f) => f >= AURORA_FROM && f <= AURORA_UNTIL;
-  return {
-    get running() {
-      return elapsed >= 0;
-    },
-    update(fraction, realSeconds) {
-      const within = inside(fraction);
-      if (elapsed >= 0) {
-        elapsed += Math.max(0, realSeconds);
-        if (elapsed >= AURORA_DURATION) {
-          elapsed = -1;
-          onEnd?.();
-        }
-      } else if (armed && within) {
-        armed = false;
-        elapsed = 0;
-        onStart?.();
+  return (fraction, realSeconds) => {
+    const within = fraction >= AURORA_FROM && fraction <= AURORA_UNTIL;
+    if (elapsed >= 0) {
+      elapsed += Math.max(0, realSeconds);
+      if (elapsed >= AURORA_DURATION) {
+        elapsed = -1;
+        onEnd?.();
       }
-      // Re-arms only once the sky has left those hours with nothing running,
-      // so holding the dial inside them plays it once rather than on a loop,
-      // and a fast sky cannot start a second one on top of the first.
-      if (!within && elapsed < 0) armed = true;
-      return envelope(elapsed);
-    },
-    reset() {
-      if (elapsed >= 0) onEnd?.();
-      armed = true;
-      elapsed = -1;
-    },
+    } else if (armed && within) {
+      armed = false;
+      elapsed = 0;
+      onStart?.();
+    }
+    // Re-arms only once the sky has left those hours with nothing running,
+    // so holding the dial inside them plays it once rather than on a loop,
+    // and a fast sky cannot start a second one on top of the first.
+    if (!within && elapsed < 0) armed = true;
+    // The sky's own darkness still decides whether this is seen: the shader
+    // multiplies it by uNight, so a sky run round to daylight shows nothing
+    // even while the event, and the piece under it, are still running.
+    return envelope(elapsed);
   };
 }

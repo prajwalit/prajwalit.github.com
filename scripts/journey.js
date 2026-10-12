@@ -1,7 +1,7 @@
 import { createSkyClock, createTimeControls } from "./time-controls.js?v=11";
 import { skyFragmentShader } from "./sky-shader.js?v=13";
 import { createSunset, DAY_CYCLE_DURATION } from "./sunset.js?v=7";
-import { createAuroraEvent } from "./aurora.js?v=2";
+import { createAuroraEvent } from "./aurora.js?v=3";
 import { createWallpaper } from "./wallpaper.js?v=1";
 import { addDiscoveries } from "./discoveries.js?v=14";
 import { createExplorer } from "./explore.js?v=7";
@@ -610,7 +610,7 @@ async function start() {
   const updateSunset = createSunset({sun, ambient, sunDirection, sky, water, fog: scene.fog, reduced: false});
   const skyClock = createSkyClock(reduced);
   // One aurora a night, with its own piece of music under it.
-  const auroraEvent = createAuroraEvent({
+  const updateAurora = createAuroraEvent({
     onStart: () => document.dispatchEvent(new Event("aurora:start")),
     onEnd: () => document.dispatchEvent(new Event("aurora:end")),
   });
@@ -701,7 +701,7 @@ async function start() {
       (((skyClock.time % DAY_CYCLE_DURATION) + DAY_CYCLE_DURATION) %
         DAY_CYCLE_DURATION) /
       DAY_CYCLE_DURATION;
-    sky.material.uniforms.uAurora.value = auroraEvent.update(
+    sky.material.uniforms.uAurora.value = updateAurora(
       cyclePoint,
       Math.min(frameSeconds, 1),
     );

@@ -185,9 +185,11 @@ Aurora
   The hours decide when it may start, not when it must stop. Once begun it
   runs its full 144 seconds, the length of Cloud Valley, in real time, so the
   piece underneath always finishes whether the sky is paused or at 16x. A sky
-  running fast can therefore carry the aurora past sunrise; at 1x it ends
-  around 00:45, well inside the night. Nothing can start a second one while
-  one is playing.
+  running fast carries the event past sunrise so the music is never cut, but
+  the sky's own darkness still decides what is seen: the term is multiplied
+  by night, so a sky run round to daylight shows nothing while the piece
+  plays out. At 1x it ends around 00:45, well inside the night. Nothing can
+  start a second one while one is playing.
   Drawn inside the existing sky pass, so it adds no geometry, light, render
   target or texture, and the fjord reflects it. Projecting onto a plane far
   overhead makes the curtains converge toward the zenith and compress toward
