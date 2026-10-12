@@ -6,7 +6,7 @@ export const AURORA_UNTIL = 0.3973; // 02:00
 // Once begun it runs its full length in real seconds, so the piece playing
 // underneath always finishes, whether the sky is paused or at sixteen times.
 // The hours decide when it may start, not when it must stop.
-export const AURORA_DURATION = 176; // Cloud Valley runs 175.8s
+export const AURORA_DURATION = 144; // Cloud Valley runs 143.6s
 const FADE_IN = 10;
 const FADE_OUT = 20;
 
